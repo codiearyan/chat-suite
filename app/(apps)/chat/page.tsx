@@ -31,7 +31,7 @@ export default async function Page() {
         credits = await getUserCredits(user.id);
   
         if (credits < toolConfig.credits) {
-          return <PaymentModal />;
+          return <PaymentModal userEmail={user?.email || ""} />;
         }
       }
     }

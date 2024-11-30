@@ -3,6 +3,7 @@ import { createClient } from "@/lib/utils/supabase/server";
 import Link from "next/link";
 import SignOutButton from "@/components/auth/SignOut";
 
+
 interface NavbarConfig {
   bgColor: string;
   textColor: string;
@@ -30,6 +31,7 @@ export default async function Navbar({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
 
   return (
     <div className={`navbar bg-${navbarConfig.bgColor} px-12`}>
@@ -62,6 +64,8 @@ export default async function Navbar({
                 </Link>
               </li>
             ))}
+
+
             {user && (
               <li className="text-base-content">
                 <SignOutButton />

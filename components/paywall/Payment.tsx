@@ -1,8 +1,10 @@
 import Section from "@/components/Section";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
+import { getSession } from "@/lib/db/cached-queries";
 
-export default function PaymentModal() {
+export default function PaymentModal(userEmail ?: string) {
+  
   const pricing = [
     {
       duration: "50 credits",
@@ -19,7 +21,7 @@ export default function PaymentModal() {
         "Chat",
         "Chat with PDF",
       ],
-      link: "https://buy.stripe.com/test_dR6bKTbzRau63EAbII",
+      link: `https://buy.stripe.com/test_dR6bKTbzRau63EAbII?prefilled_email=${userEmail}`,
       buttonText: "Buy credits",
       subscriptionInfo:
         "Each generation costs 5 credits, regardless of the model. Good for 10 tests.",
@@ -40,7 +42,7 @@ export default function PaymentModal() {
         "Chat",
         "Chat with PDF",
       ],
-      link: "https://buy.stripe.com/test_dR6bKTbzRau63EAbII",
+      link: `https://buy.stripe.com/test_dR6bKTbzRau63EAbII?prefilled_email=${userEmail}`,
       buttonText: "Buy credits",
       subscriptionInfo:
         "Each generation costs 5 credits, regardless of the model. Good for 20 tests.",

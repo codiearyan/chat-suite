@@ -9,6 +9,7 @@ import {
   favicon,
   defaultKeywords,
 } from "@/config";
+import Navbar from "@/components/navbars/Navbar-1";
 
 // SEO Optimization
 export const metadata = {
@@ -38,6 +39,10 @@ export default function RootLayout({
 }) {
   return (
     <Providers>
+        <Navbar
+        companyConfig={companyConfig.company!}
+        navbarConfig={companyConfig.navbarLanding!}
+      />
       <main
         className={GeistSans.className + " text-base-content"}
         data-theme={companyConfig.company.theme}
