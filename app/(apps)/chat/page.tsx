@@ -2,12 +2,14 @@ import { cookies } from "next/headers";
 import { Chat } from "@/components/chat/chat";
 import { generateUUID } from "@/lib/ai/chat";
 import { availableModels } from "@/lib/ai/models";
-import { getSession } from "@/lib/db/cached-queries";
+import { getSession,   getUserCredits } from "@/lib/db/cached-queries";
 import { toolConfig } from "./toolConfig";
+import PaymentModal from "@/components/paywall/Payment";
 
 export default async function Page() {
   // Get user session
   const user = await getSession();
+  let credits;
 
   // No paywall check here, it's handled in the chat route + the chat component for more flexibility
 
@@ -22,6 +24,17 @@ export default async function Page() {
   const selectedModelId =
     availableModels.find((model) => model.id === modelIdFromCookie)?.id ||
     toolConfig.aiModel;
+
+
+    if (user) {
+      if (toolConfig.paywall) {
+        credits = await getUserCredits(user.id);
+  
+        if (credits < toolConfig.credits) {
+          return <PaymentModal />;
+        }
+      }
+    }
 
   return (
     <Chat

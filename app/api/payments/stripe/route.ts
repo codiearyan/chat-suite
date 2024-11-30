@@ -132,9 +132,9 @@ async function handleCheckoutSessionCompleted(
   await updateUserProfile(userEmail, purchaseType);
 
   // Add credits for credit products
-  if (purchaseType === "credits-small") {
+  if (purchaseType === "basic-plan") {
     await addUserCredits(userEmail, 50);
-  } else if (purchaseType === "credits-large") {
+  } else if (purchaseType === "standard-plan") {
     await addUserCredits(userEmail, 100);
   }
 
