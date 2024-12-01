@@ -20,16 +20,6 @@ export function AppInfo() {
       description: "OpenAI, Anthropic and Groq via Vercel AI SDK",
     },
     {
-      icon: <SparklesIcon className="w-4 h-4" />,
-      title: "Generative UI",
-      description: "Dynamic components and interactive app suggestions",
-    },
-    {
-      icon: <SearchIcon className="w-4 h-4" />,
-      title: "Smart Browsing",
-      description: "Real-time web search with content analysis",
-    },
-    {
       icon: <ImageIcon className="w-4 h-4" />,
       title: "Multimodal",
       description: "Interact with images and files via Cloudflare Storage",
@@ -37,7 +27,7 @@ export function AppInfo() {
     {
       icon: <GlobeIcon className="w-4 h-4" />,
       title: "Web Search",
-      description: "Real-time information via Serper API and Jina AI",
+      description: "Real-time web search with content analysis",
     },
     {
       icon: <FileTextIcon className="w-4 h-4" />,
@@ -59,10 +49,10 @@ export function AppInfo() {
           {/* Title */}
           <div className="text-center space-y-1">
             <h1 className="text-xl font-semibold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Advanced AI Assistant
+              Chat Suite
             </h1>
             <p className="text-sm text-muted-foreground/80">
-              A powerful chatbot with generative UI and smart browsing
+              A powerful chatbot with multi-model support and smart browsing
               capabilities
             </p>
           </div>
@@ -92,41 +82,6 @@ export function AppInfo() {
             ))}
           </div>
 
-          {/* Technical Info */}
-          <div className="space-y-2 bg-gradient-to-br from-zinc-50/80 to-white/60 rounded-xl p-3 border">
-            <div className="flex items-center gap-2 px-1">
-              <WrenchIcon className="w-4 h-4 text-primary/70" />
-              <span className="text-sm font-medium text-foreground/90">
-                Technical Details
-              </span>
-            </div>
-
-            <div className="flex gap-2 p-2 rounded-lg hover:bg-white/80 transition-all duration-300">
-              <div className="shrink-0 text-muted-foreground mt-0.5">
-                <WrenchIcon className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-foreground/90 leading-none mb-1">
-                  Project Structure
-                </h3>
-                <p className="text-xs text-muted-foreground/70 leading-tight">
-                  UI in app/(apps)/chat, components in components/chat. API
-                  routes under api/(apps)/chat/*
-                </p>
-              </div>
-            </div>
-
-            <div className="text-xs text-muted-foreground/70 pt-2 border-t border-border/40">
-              Read more in the{" "}
-              <Link
-                href="https://docs.anotherwrapper.com/ai/chat"
-                target="_blank"
-                className="text-primary hover:text-primary/80 font-medium transition-colors hover:underline"
-              >
-                documentation →
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </motion.div>

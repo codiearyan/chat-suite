@@ -22,7 +22,7 @@ export default async function Layout({
   const user = await getSession();
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="flex items-center">
       <UnifiedSidebar user={user} showChatHistory={true} />
       <div className="lg:pl-2 lg:pt-2 bg-gray-100 flex-1 overflow-y-auto">
         <SidebarInset

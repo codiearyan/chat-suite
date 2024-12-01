@@ -39,10 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <Providers>
-        <Navbar
-        companyConfig={companyConfig.company!}
-        navbarConfig={companyConfig.navbarLanding!}
-      />
+   
       <main
         className={GeistSans.className + " text-base-content"}
         data-theme={companyConfig.company.theme}

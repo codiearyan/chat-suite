@@ -214,19 +214,7 @@ export function Chat({
   return (
     <>
       <div className="flex flex-col min-w-0 h-dvh bg-background">
-        <header className="flex sticky top-0 bg-background py-1.5 items-center px-2 md:px-2 gap-2">
-          <Button
-            variant="ghost"
-            className="order-2 hover:bg-primary/10 hover:text-primary md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
-            onClick={() => {
-              router.push("/chat");
-              router.refresh();
-            }}
-          >
-            <PlusIcon />
-            <span className="md:sr-only">New Chat</span>
-          </Button>
-        </header>
+       
         <div
           ref={messagesContainerRef}
           className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
