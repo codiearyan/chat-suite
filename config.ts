@@ -2,15 +2,15 @@
 export const companyConfig = {
   ////// Base config used mainly for layout (@/components/navbar/Navbar-1.tsx and @/components/footer/Footer-1.tsx)
   company: {
-    name: "AnotherWrapper",
+    name: "Pivot With AI",
     theme: "anotherwrapper",
     homeUrl: "/",
     appUrl: "/",
-    description: "Build your AI startup in hours using our demo apps!",
+    description: "Experience AI-powered conversations with ChatSuite",
     logo: "/logo.png",
     navbarLinks: [
       { label: "Home", href: "/" },
-      { label: "Chat AI", href: "/chat" },
+      { label: "Chat Suite", href: "/chat" },
       { label: "Training", href: "/training" },
     ],
   },

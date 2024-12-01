@@ -41,7 +41,7 @@ export default function RootLayout({
     <Providers>
    
       <main
-        className={GeistSans.className + " text-base-content"}
+        className={`${GeistSans.className} overflow-hidden`}
         data-theme={companyConfig.company.theme}
       >
         {children}
