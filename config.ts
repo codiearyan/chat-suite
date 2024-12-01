@@ -31,7 +31,7 @@ export const companyConfig = {
 /// Core Website config
 export const companyName = "Holding Company Name";
 export const defaultTitle =
-  "Build your AI startup in hours using our customizable demo apps";
+  "Pivot with AI - AI tools to make your life easier";
 export const defaultDescription =
   "Use one of our 8 customizable AI demo apps to build your AI SaaS quickly. A Next.js starter kit with AI integrations, Supabase, payments, emails & more! ";
 export const defaultKeywords =

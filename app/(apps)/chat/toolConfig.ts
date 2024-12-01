@@ -4,10 +4,10 @@ import { ToolConfig } from "@/lib/types/toolconfig";
 export const toolConfig: ToolConfig = {
   ////// Base config
   company: {
-    name: "Advanced AI Assistant",
+    name: "ChatSuite",
     theme: "anotherwrapper",
-    homeUrl: "/apps/chat",
-    appUrl: "/apps/chat",
+    homeUrl: "/chat",
+    appUrl: "/chat",
     description:
       "Advanced AI Assistant with multiple models, multimodal capabilities, web search, and document generation features.",
     logo: "https://cdn3.iconfinder.com/data/icons/aami-web-internet/64/aami4-68-512.png",
@@ -21,7 +21,7 @@ export const toolConfig: ToolConfig = {
 
   ////// Metadata for SEO
   metadata: {
-    title: "Advanced AI Assistant | Multiple Models, Multimodal, Web Search",
+    title: "ChatSuite - AI Assistant",
     description:
       "AI Assistant powered by OpenAI, Anthropic and Groq, featuring multimodal capabilities, web search via Serper API and Jina AI, and document generation with Canvas.",
     og_image: "https://anotherwrapper.com/og.png",
@@ -36,5 +36,5 @@ export const toolConfig: ToolConfig = {
   toolPath: "(apps)/chat",
 
   ////// Default AI model
-  aiModel: "gpt-4o-mini",
+  aiModel: "gpt-4o",
 };
