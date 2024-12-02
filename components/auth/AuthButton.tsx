@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getUserCredits } from "@/lib/db/cached-queries";
 
 interface AuthButtonProps {
   classProps?: {
@@ -24,7 +23,7 @@ export default async function AuthButton({ classProps }: AuthButtonProps) {
 
     const supabase = createClient();
     await supabase.auth.signOut();
-    return redirect("/auth");
+    return redirect("/");
   };
 
   const primaryTextColor = classProps?.primaryTextColor || "primary-content";
@@ -33,22 +32,8 @@ export default async function AuthButton({ classProps }: AuthButtonProps) {
     classProps?.buttonClassName || "hidden sm:flex relative group scale-[.9]";
   const svgClassName = classProps?.svgClassName || "";
 
-  let credits = 0;
-  if (user && user.id) {
-    credits = await getUserCredits(user.id);
-  }
-
   return user ? (
     <div className="flex items-center gap-4">
-      {credits  && (
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500/40 animate-pulse" />
-                    <span className="text-sm text-grey-600">
-                      {credits.toLocaleString()} credits
-                    </span>
-                  </div>
-                )}
-          
       <span
         className={`hidden sm:block text-${primaryTextColor} menu menu-horizontal px-1`}
       >

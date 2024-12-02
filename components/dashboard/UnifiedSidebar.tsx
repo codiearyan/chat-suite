@@ -11,6 +11,7 @@ import { isMobile } from "@/lib/utils";
 import { SidebarHistory } from "@/components/chat/sidebar/sidebar-history";
 import { Heading } from "./Heading";
 import { IconChevronLeft } from "@tabler/icons-react";
+import { Credits } from "@/components/ui/credits";
 
 interface UnifiedSidebarProps {
   user: User | null;
@@ -20,49 +21,15 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
   const [open, setOpen] = useState(!isMobile());
   const [isChatExpanded, setIsChatExpanded] = useState(true);
   const [showAllHistory, setShowAllHistory] = useState(false);
-  const [credits, setCredits] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
-
-  const checkCredits = async () => {
-    if (user) {
-      try {
-        const baseUrl = window.location.origin;
-        const response = await fetch(`${baseUrl}/api/user/credits`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setCredits(data.credits || 0);
-      } catch (error) {
-        console.error("Error fetching credits:", error);
-        setCredits(0);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      checkCredits();
-    } else {
-      setCredits(0);
-    }
-  }, [user]);
 
   return (
     <>
       <div className={`lg:block ${open ? "block" : "hidden"}`}>
-        <div className="px-3 z-40 pb-4 bg-background/80 w-[220px] fixed lg:relative h-screen left-0 flex flex-col justify-between border-r border-border/50">
+        <div className="px-3 z-40 pb-4 bg-background/80 w-[220px] fixed lg:relative h-screen left-0 flex flex-col justify-between border-r border-border/50 lg:rounded-tl-xl">
           <div className="flex-1 overflow-auto no-scrollbar">
-            <header className="flex sticky top-0 py-3 items-center justify-between px-3 border-b border-border/50 bg-background/80 backdrop-blur-sm">
+            <header className="flex sticky top-0 py-3 items-center justify-between px-3 border-b border-border/50 bg-background/80 backdrop-blur-sm lg:rounded-tl-xl">
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
@@ -121,24 +88,17 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
                 </div>
               </div>
 
-              {credits > 0 && (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-sm text-grey-600 dark:text-black">
-                    {credits.toLocaleString()} credits
-                  </span>
-                </div>
-              )}
+              <Credits user={user} />
             </div>
           </div>
         </div>
       </div>
 
       <button
-        className="fixed lg:hidden bottom-4 left-4 h-8 w-8 border border-neutral-200 rounded-full backdrop-blur-sm flex items-center justify-center z-40"
+        className="fixed lg:hidden bottom-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-40 bg-background/80"
         onClick={() => setOpen(!open)}
       >
-        <IconChevronLeft className="h-4 w-4 text-primary" />
+        <IconChevronLeft className="h-4 w-4 text-foreground" />
       </button>
     </>
   );

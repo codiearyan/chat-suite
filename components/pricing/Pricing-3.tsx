@@ -2,8 +2,7 @@ export default function Pricing() {
   const pricingInfo = [
     {
       title: "Free",
-      description:
-        "Perfect for trying out our AI chat capabilities.",
+      description: "Perfect for trying out our AI chat capabilities.",
       price: "₹0",
       period: "/50 credits",
       features: [
@@ -11,10 +10,10 @@ export default function Pricing() {
         "Up to 50 message exchanges",
         "Standard response time",
         "Basic file attachments",
-        "Community support"
+        "Community support",
       ],
       special: false,
-      buttonText: "Start Free"
+      buttonText: "Start Free",
     },
     {
       title: "Basic",
@@ -26,10 +25,10 @@ export default function Pricing() {
         "Faster response times",
         "Advanced AI capabilities",
         "Priority email support",
-        "Enhanced file handling"
+        "Enhanced file handling",
       ],
       special: true,
-      buttonText: "Upgrade to Basic"
+      buttonText: "Upgrade to Basic",
     },
     {
       title: "Premium",
@@ -41,22 +40,26 @@ export default function Pricing() {
         "Unlimited message exchanges",
         "Fastest response times",
         "24/7 priority support",
-        "Custom AI model fine-tuning"
+        "Custom AI model fine-tuning",
       ],
       special: false,
-      buttonText: "Go Premium"
+      buttonText: "Go Premium",
     },
   ];
 
   return (
     <>
-      <div id="pricing" className="mx-auto px-4 py-24 sm:px-6 lg:px-8 max-w-7xl gap-16 sm:gap-y-24 flex flex-col bg-neutral-50">
+      <div
+        id="pricing"
+        className="mx-auto px-4 py-24 sm:px-6 lg:px-8 w-full gap-16 sm:gap-y-24 flex flex-col bg-background"
+      >
         <div className="text-center flex flex-col items-center">
-          <h2 className="text-3xl font-bold tracking-tight text-base-content sm:text-4xl lg:text-5xl font-display">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl font-display">
             Choose Your Plan
           </h2>
-          <h3 className="text-lg tracking-tight text-neutral-600 sm:text-lg mt-5 sm:mt-3 max-w-2xl">
-            Select the perfect plan for your needs. Upgrade or downgrade anytime as your requirements change.
+          <h3 className="text-lg tracking-tight text-muted-foreground sm:text-lg mt-5 sm:mt-3 max-w-2xl">
+            Select the perfect plan for your needs. Upgrade or downgrade anytime
+            as your requirements change.
           </h3>
         </div>
         <div className="flex flex-col lg:grid lg:grid-cols-3 w-full justify-center items-center gap-8">
@@ -122,9 +125,7 @@ export default function Pricing() {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <span className="text-neutral-700">
-                          {feature}
-                        </span>
+                        <span className="text-neutral-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
