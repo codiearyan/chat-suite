@@ -14,7 +14,7 @@ import { useScrollToBottom } from "@/components/chat/use-scroll-to-bottom";
 import { Block, UIBlock } from "./canvas/canvas";
 import { BlockStreamHandler } from "./canvas/canvas-stream-handler";
 import { MultimodalInput } from "./multimodal-input";
-import { AppInfo } from "@/app/(apps)/chat/info";
+import { AppInfo } from "@/app/chat/info";
 import { setCookie } from "@/lib/utils/cookies";
 import { useToast } from "@/components/ui/use-toast";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
@@ -92,29 +92,25 @@ export function Chat({
           title: "Out of Credits",
           description: (
             <div className="flex flex-col gap-2">
-              <p className="font-medium">
+              <p className="font-medium text-foreground">
                 {error.message
                   .replace('{"error":"Insufficient credits","message":"', "")
                   .replace('"}', "")}
               </p>
-              <p>
-                You can still use GPT-4o mini and Claude 3.5 Haiku for free!
-                However, premium models and features (like web browsing) require
-                credits.
-              </p>
-              <p>
-                To prevent abuse, we use a credit system for premium features.
-              </p>
+              <div className="space-y-2 text-muted-foreground">
+                <p>Each message costs 1 credit when using our AI models.</p>
+                <p>Purchase more credits to continue your conversation.</p>
+              </div>
               <a
-                href="https://buy.stripe.com/8wM6px1Rebnt0ladQR"
-                className="text-primary hover:underline font-medium"
-                target="_blank"
+                href="/"
+                className="text-primary hover:underline font-medium inline-flex items-center gap-1 mt-1"
               >
-                Get more credits →
+                Get more credits <span aria-hidden="true">→</span>
               </a>
             </div>
           ),
-          duration: 10000,
+          duration: 7000,
+          className: "bg-background border-border",
         });
       }
     },
@@ -132,16 +128,15 @@ export function Chat({
             })
           );
 
-          if (usage.remaining < 10) {
+          if (usage.remaining <= 5) {
             toast({
               description: (
                 <div className="flex flex-col gap-4 p-1">
-                  {/* Credit Usage Section */}
                   <div className="flex items-start gap-3">
-                    <InfoCircledIcon className="h-5 w-5 text-blue-500 mt-0.5" />
+                    <InfoCircledIcon className="h-5 w-5 text-blue-500 dark:text-blue-400" />
                     <div className="space-y-1">
-                      <p className="font-medium text-[15px]">
-                        -{usage.cost} credits used for this message
+                      <p className="font-medium text-[15px] text-foreground">
+                        -{usage.cost} credit used for this message
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {usage.remaining} credits remaining
@@ -149,35 +144,31 @@ export function Chat({
                     </div>
                   </div>
 
-                  {/* Explanation Section */}
                   <div className="ml-8 space-y-4">
-                    <p className="text-[15px] text-blue-600 font-medium">
+                    <p className="text-[15px] font-medium text-blue-600 dark:text-blue-400">
                       You're running low on credits
                     </p>
 
                     <div className="space-y-2.5">
                       <div className="flex items-start gap-2.5">
-                        <div className="h-2 w-2 rounded-full bg-emerald-500 mt-1.5" />
+                        <div className="h-2 w-2 rounded-full bg-emerald-500 dark:bg-emerald-400 mt-1.5" />
                         <p className="text-[14px] text-muted-foreground">
-                          Premium models cost 1 credit per message
-                        </p>
-                      </div>
-                      <div className="flex items-start gap-2.5">
-                        <div className="h-2 w-2 rounded-full bg-emerald-500 mt-1.5" />
-                        <p className="text-[14px] text-muted-foreground">
-                          Web browsing costs 1 credit per message
+                          Each message costs 1 credit
                         </p>
                       </div>
 
-                      <p className="text-[14px] text-green-600 leading-normal pl-1 font-medium">
-                        Turn off browsing and switch to GPT-4o mini or Claude
-                        Haiku to chat for free
-                      </p>
+                      <a
+                        href="/"
+                        className="text-[14px] text-green-600 dark:text-green-400 leading-normal pl-1 font-medium hover:underline"
+                      >
+                        Purchase more credits to continue chatting →
+                      </a>
                     </div>
                   </div>
                 </div>
               ),
               duration: 5000,
+              className: "bg-background border-border",
             });
           }
         } catch (error) {

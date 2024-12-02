@@ -33,9 +33,9 @@ export const companyName = "Holding Company Name";
 export const defaultTitle =
   "Pivot with AI - AI tools to make your life easier";
 export const defaultDescription =
-  "Use one of our 8 customizable AI demo apps to build your AI SaaS quickly. A Next.js starter kit with AI integrations, Supabase, payments, emails & more! ";
+  "We provide AI tools to make your life easier";
 export const defaultKeywords =
-  "openai, gpt-3, llama, replicate, groq, mixtral, ai app, boilerplate, api endpoint, next.js, react, starter kit, boilerplate, ai, artificial intelligence, node.js, express, stripe";
+  "ai, ai tools, ai apps, ai services, ai solutions, ai products, ai tools for life, ai tools for business, ai tools for marketing, ai tools for sales, ai tools for customer support, ai tools for product development, ai tools for research, ai tools for education, ai tools for healthcare, ai tools for finance, ai tools for legal, ai tools for creative, ai tools for entertainment, ai tools for travel, ai tools for personal, ai tools for small business, ai tools for enterprise, ai tools for startups, ai tools for non-profits, ai tools for government, ai tools for research, ai tools for education, ai tools for healthcare, ai tools for finance, ai tools for legal, ai tools for creative, ai tools for entertainment, ai tools for travel, ai tools for personal, ai tools for small business, ai tools for enterprise, ai tools for startups, ai tools for non-profits, ai tools for government";
 export const defaultOgImage = "/og.png";
 export const favicon = "/favicon.ico";
 

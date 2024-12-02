@@ -12,10 +12,8 @@ export const toolConfig: ToolConfig = {
       "Advanced AI Assistant with multiple models, multimodal capabilities, web search, and document generation features.",
     logo: "https://cdn3.iconfinder.com/data/icons/aami-web-internet/64/aami4-68-512.png",
     navbarLinks: [
-      { label: "App", href: `/apps/chat` },
+      { label: "App", href: `/chat` },
       { label: "Home", href: "/" },
-      { label: "Other apps", href: "/apps" },
-      { label: "Blog", href: "/blog" },
     ],
   },
 
@@ -30,10 +28,10 @@ export const toolConfig: ToolConfig = {
 
   ////// Payments
   paywall: true,
-  credits: 5,
+  credits: 10,
 
   ////// Location
-  toolPath: "(apps)/chat",
+  toolPath: "/chat",
 
   ////// Default AI model
   aiModel: "gpt-4o",

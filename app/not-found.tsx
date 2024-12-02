@@ -1,6 +1,5 @@
 import { Dock, DockIcon } from "@/components/magicui/dock";
-import { IconMoneybag } from "@tabler/icons-react";
-import { FileCodeIcon, HomeIcon, LaptopIcon } from "lucide-react";
+import { HomeIcon, BotIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function NotFoundPage() {
@@ -15,15 +14,8 @@ export default function NotFoundPage() {
           <DockIcon href="/">
             <HomeIcon className="h-6 w-6" />
           </DockIcon>
-          <DockIcon href="https://docs.anotherwrapper.com">
-            <FileCodeIcon className="h-6 w-6" />
-          </DockIcon>
-          <DockIcon href="https://anotherwrapper.lemonsqueezy.com/affiliates">
-            <IconMoneybag className="h-6 w-6" />
-          </DockIcon>
-
-          <DockIcon href="https://apps.anotherwrapper.com/">
-            <LaptopIcon className="h-6 w-6" />
+          <DockIcon href="/chat">
+            <BotIcon className="h-6 w-6" />
           </DockIcon>
         </Dock>
       </div>

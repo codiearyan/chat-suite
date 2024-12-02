@@ -9,8 +9,14 @@ interface CreditsProps {
   className?: string;
 }
 
-// Create a custom event name
 const CREDIT_UPDATE_EVENT = "CREDIT_UPDATE";
+
+// Helper function to determine credit status
+function getCreditStatus(credits: number) {
+  if (credits <= 3) return "danger";
+  if (credits <= 5) return "warning";
+  return "success";
+}
 
 export function Credits({ user, className }: CreditsProps) {
   const [credits, setCredits] = useState<number>(0);
@@ -55,6 +61,8 @@ export function Credits({ user, className }: CreditsProps) {
 
   if (!user || isLoading) return null;
 
+  const creditStatus = getCreditStatus(credits);
+
   return (
     <div
       className={cn(
@@ -62,13 +70,24 @@ export function Credits({ user, className }: CreditsProps) {
         className
       )}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
-      <span className="text-sm text-gray-600 dark:text-gray-300">
+      <span
+        className={cn("w-1.5 h-1.5 rounded-full animate-pulse", {
+          "bg-red-500 dark:bg-red-400": creditStatus === "danger",
+          "bg-yellow-500 dark:bg-yellow-400": creditStatus === "warning",
+          "bg-green-500 dark:bg-green-400": creditStatus === "success",
+        })}
+      />
+      <span
+        className={cn("text-sm", {
+          "text-red-600 dark:text-red-400": creditStatus === "danger",
+          "text-yellow-600 dark:text-yellow-400": creditStatus === "warning",
+          "text-gray-600 dark:text-gray-300": creditStatus === "success",
+        })}
+      >
         {credits.toLocaleString()} credits
       </span>
     </div>
   );
 }
 
-// Export the event name for use in other components
 export { CREDIT_UPDATE_EVENT };

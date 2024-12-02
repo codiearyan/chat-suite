@@ -51,14 +51,13 @@ import {
   getMostRecentUserMessage,
   sanitizeResponseMessages,
 } from "@/lib/ai/chat";
-import { createSystemPrompt } from "@/app/(apps)/chat/prompt";
-import { createTools, allTools } from "@/app/(apps)/chat/tools";
+import { createSystemPrompt } from "@/app/chat/prompt";
+import { createTools, allTools } from "@/app/chat/tools";
 import { customModel } from "@/lib/ai/ai-utils";
 import { getUserCreditsQuery } from "@/lib/db/queries/general";
 import {
   canUseConfiguration,
-  FREE_MODELS,
-} from "@/app/(apps)/chat/usage-limits";
+} from "@/app/chat/usage-limits";
 import { AIModel } from "@/lib/ai/models";
 
 /**
@@ -200,13 +199,6 @@ export async function POST(request: Request) {
     isBrowseEnabled: boolean;
   } = await request.json();
 
-  console.log("Chat route params:", {
-    id,
-    selectedModelId,
-    isBrowseEnabled,
-    messageCount: messages.length,
-  });
-
   const user = await getUser();
 
   if (!user?.email) {
@@ -264,19 +256,11 @@ export async function POST(request: Request) {
 
     const streamingData = new StreamData();
 
-    const modelToUse = selectedModelId || "gpt-4o-mini";
+    const modelToUse = selectedModelId || "gpt-4o";
 
-    // Filter tools based on isBrowseEnabled
-    const activeTools = isBrowseEnabled
-      ? allTools
-      : allTools.filter((tool) => tool !== "browseInternet");
-
-    console.log("Active tools:", activeTools);
-
-    // Credit check and usage
+    // Credit check and usage - simplified since all messages cost 1 credit
     const usageCheck = canUseConfiguration(credits, {
       modelId: selectedModelId as AIModel,
-      isBrowseEnabled,
     });
 
     if (!usageCheck.canUse) {
@@ -289,13 +273,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // Handle response (works for both premium and free features)
+    // Handle response
     const result = await streamText({
       model: customModel(modelToUse),
       system: createSystemPrompt(isBrowseEnabled),
       messages: coreMessages,
       maxSteps: 5,
-      experimental_activeTools: activeTools,
+      experimental_activeTools: allTools,
       tools: createTools(streamingData, user.id, modelToUse, isBrowseEnabled),
       onFinish: async ({ responseMessages }) => {
         if (user && user.id) {
@@ -338,26 +322,21 @@ export async function POST(request: Request) {
       },
     });
 
-    // Add credit usage data to headers only if credits were used
-    const headers: Record<string, string> = {};
-    if (usageCheck.requiredCredits > 0) {
-      await reduceUserCredits(user.email, usageCheck.requiredCredits);
-      const updatedCredits = await getUserCreditsQuery(supabase, user.id);
-      
-      headers["x-credit-usage"] = JSON.stringify({
+    // Deduct credits and update headers
+    await reduceUserCredits(user.email, usageCheck.requiredCredits);
+    const updatedCredits = await getUserCreditsQuery(supabase, user.id);
+    
+    const headers: Record<string, string> = {
+      "x-credit-usage": JSON.stringify({
         cost: usageCheck.requiredCredits,
         remaining: updatedCredits,
-        features: [
-          !FREE_MODELS.includes(selectedModelId as any) ? "Premium Model" : null,
-          isBrowseEnabled ? "Web Browsing" : null,
-        ].filter(Boolean),
-      });
+      }),
+    };
 
-      console.log("Credit update in headers:", {
-        remaining: updatedCredits,
-        cost: usageCheck.requiredCredits
-      });
-    }
+    console.log("Credit update in headers:", {
+      remaining: updatedCredits,
+      cost: usageCheck.requiredCredits
+    });
 
     return result.toDataStreamResponse({
       data: streamingData,

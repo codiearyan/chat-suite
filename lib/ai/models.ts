@@ -1,9 +1,9 @@
 export const AI_MODEL_DISPLAY = {
-  "gpt-4o-mini": {
-    name: "GPT-4o mini",
-    logo: "/providers/openai.webp",
-    vision: true,
-  },
+  // "gpt-4o-mini": {
+  //   name: "GPT-4o mini",
+  //   logo: "/providers/openai.webp",
+  //   vision: true,
+  // },
   "gpt-4o": {
     name: "GPT-4o",
     logo: "/providers/openai.webp",
@@ -14,26 +14,26 @@ export const AI_MODEL_DISPLAY = {
     logo: "/providers/anthropic.jpeg",
     vision: true,
   },
-  "claude-3-5-haiku-latest": {
-    name: "Claude 3.5 Haiku",
-    logo: "/providers/anthropic.jpeg",
-    vision: false,
-  },
-  "llama-3.2-90b-vision-preview": {
-    name: "Llama 3.2 Vision",
-    logo: "/providers/meta.jpeg",
-    vision: false,
-  },
-  "llama-3.1-70b-versatile": {
-    name: "Llama 3.1 (Pro)",
-    logo: "/providers/meta.jpeg",
-    vision: false,
-  },
-  "grok-beta": {
-    name: "Grok",
-    logo: "/providers/xai.png",
-    vision: false,
-  },
+  // "claude-3-5-haiku-latest": {
+  //   name: "Claude 3.5 Haiku",
+  //   logo: "/providers/anthropic.jpeg",
+  //   vision: false,
+  // },
+  // "llama-3.2-90b-vision-preview": {
+  //   name: "Llama 3.2 Vision",
+  //   logo: "/providers/meta.jpeg",
+  //   vision: false,
+  // },
+  // "llama-3.1-70b-versatile": {
+  //   name: "Llama 3.1 (Pro)",
+  //   logo: "/providers/meta.jpeg",
+  //   vision: false,
+  // },
+  // "grok-beta": {
+  //   name: "Grok",
+  //   logo: "/providers/xai.png",
+  //   vision: false,
+  // },
   // "grok-vision-beta": {
   //   name: "Grok Vision",
   //   logo: "/providers/xai.png",

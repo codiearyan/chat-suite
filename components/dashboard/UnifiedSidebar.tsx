@@ -15,9 +15,13 @@ import { Credits } from "@/components/ui/credits";
 
 interface UnifiedSidebarProps {
   user: User | null;
+  showChatHistory?: boolean;
 }
 
-export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
+export function UnifiedSidebar({
+  user,
+  showChatHistory = false,
+}: UnifiedSidebarProps) {
   const [open, setOpen] = useState(!isMobile());
   const [isChatExpanded, setIsChatExpanded] = useState(true);
   const [showAllHistory, setShowAllHistory] = useState(false);
@@ -50,41 +54,45 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
             <div className="flex justify-between flex-col h-[90%]">
               <div className="flex flex-col space-y-1 relative z-40">
                 <div className="flex flex-col">
-                  <Heading
-                    as="p"
-                    className="text-sm md:text-sm lg:text-sm px-2 pt-2 mb-2"
-                  >
-                    Previous Chats
-                  </Heading>
-                  <div className="mb-1">
-                    <button
-                      onClick={() => {
-                        router.push("/chat");
-                        router.refresh();
-                      }}
-                      className={twMerge(
-                        "w-full text-primary hover:text-primary/50 transition duration-200 flex items-center justify-between py-2 px-4 rounded-md text-sm",
-                        pathname.includes("/chat") &&
-                          "bg-white shadow-lg text-primary"
-                      )}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <PlusIcon className="h-4 w-4" />
-                        <span>New Chat</span>
-                      </div>
-                    </button>
+                  {showChatHistory && (
+                    <>
+                      <Heading
+                        as="p"
+                        className="text-sm md:text-sm lg:text-sm px-2 pt-2 mb-2 text-foreground"
+                      >
+                        Previous Chats
+                      </Heading>
+                      <div className="mb-1">
+                        <button
+                          onClick={() => {
+                            router.push("/chat");
+                            router.refresh();
+                          }}
+                          className={twMerge(
+                            "w-full text-primary hover:text-primary/50 transition duration-200 flex items-center justify-between py-2 px-4 rounded-md text-sm",
+                            pathname.includes("/chat") &&
+                              "bg-white shadow-lg text-primary"
+                          )}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <PlusIcon className="h-4 w-4" />
+                            <span>New Chat</span>
+                          </div>
+                        </button>
 
-                    {isChatExpanded && (
-                      <div className="ml-4">
-                        <SidebarHistory
-                          user={user ?? undefined}
-                          limit={6}
-                          showAllHistory={showAllHistory}
-                          setShowAllHistory={setShowAllHistory}
-                        />
+                        {isChatExpanded && (
+                          <div className="ml-4">
+                            <SidebarHistory
+                              user={user ?? undefined}
+                              limit={6}
+                              showAllHistory={showAllHistory}
+                              setShowAllHistory={setShowAllHistory}
+                            />
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  )}
                 </div>
               </div>
 

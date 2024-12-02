@@ -12,7 +12,7 @@ import { apps as demoApps } from "@/lib/ai/apps";
  * - createDocument: Creates new documents
  * - updateDocument: Updates existing documents
  * - browseInternet: Searches the internet for information
- * - suggestApps: Demonstrates how to implement generative UI in a chatbot
+ *
  *
  * Generative UI Implementation Example:
  * The suggestApps tool shows how to create dynamic UI components in chat:
@@ -44,17 +44,14 @@ import { apps as demoApps } from "@/lib/ai/apps";
 type AllowedTools =
   | "createDocument"
   | "updateDocument"
-  | "browseInternet"
-  | "suggestApps";
+  | "browseInternet";
 
 // Group tools by functionality for better organization and potential feature flags
 export const canvasTools: AllowedTools[] = ["createDocument", "updateDocument"];
 export const internetTools: AllowedTools[] = ["browseInternet"];
-export const appTools: AllowedTools[] = ["suggestApps"];
 export const allTools: AllowedTools[] = [
   ...canvasTools,
-  ...internetTools,
-  ...appTools,
+  ...internetTools
 ];
 
 // Add schema for Serper response
@@ -64,11 +61,6 @@ const SerperJSONSchema = z.object({
 
 // Define the tool types
 type BaseTools = {
-  suggestApps: {
-    description: string;
-    parameters: z.ZodObject<any>;
-    execute: (params: { query: string; tags?: string[] }) => Promise<any>;
-  };
   createDocument: {
     description: string;
     parameters: z.ZodObject<any>;
@@ -289,108 +281,6 @@ export function createTools(
           title: document.title,
           content: "The document has been updated successfully.",
         };
-      },
-    },
-    suggestApps: {
-      description:
-        "Suggest relevant demo applications based on user requirements",
-      parameters: z.object({
-        query: z.string().describe("The user's requirements or use case"),
-        tags: z
-          .array(z.string())
-          .optional()
-          .describe("Specific technologies or features to filter by"),
-      }),
-      execute: async ({ query, tags }: { query: string; tags?: string[] }) => {
-        try {
-          // First, do a lightweight pre-filtering of apps
-          const requiredKeywords = query.toLowerCase().split(" ");
-          const potentialApps = demoApps.filter((app) => {
-            const appText = [
-              app.title,
-              app.shortDesc,
-              ...app.tags,
-              ...app.useCases,
-            ]
-              .join(" ")
-              .toLowerCase();
-
-            return requiredKeywords.some(
-              (keyword) =>
-                appText.includes(keyword) ||
-                app.tags.some((tag) => tag.toLowerCase().includes(keyword))
-            );
-          });
-
-          // Prepare minimal app data for LLM analysis
-          const appsData = potentialApps.map((app) => ({
-            id: app.shortTitle,
-            title: app.title,
-            shortDesc: app.shortDesc,
-            tags: app.tags,
-            primaryUseCases: app.useCases,
-            keyFeatures: app.features,
-          }));
-
-          streamingData.append({
-            type: "status",
-            content: "Analyzing requirements...",
-          });
-
-          // Get LLM analysis with structured output
-          const { object: analysis } = await generateObject({
-            model: customModel("gpt-4o-mini"),
-            schema: AppAnalysisSchema,
-            system: `You are an expert at matching user requirements to software capabilities.
-                    Analyze if a single app can fulfill the requirements before suggesting combinations.
-                    Only suggest combining apps if a single app cannot provide all needed capabilities.
-                    Focus on core functionality matches rather than peripheral features. If the user is asking for all demo apps, suggest all apps.`,
-            prompt: JSON.stringify({
-              query,
-              requirements: query,
-              availableApps: appsData,
-              requiredTags: tags || [],
-            }),
-          });
-
-          // Map analysis back to full app data
-          const relevantApps = analysis.matches
-            .sort((a, b) => b.relevanceScore - a.relevanceScore)
-            .map((match) => {
-              const app = demoApps.find((a) => a.shortTitle === match.id);
-              if (!app) return null;
-
-              return {
-                ...app,
-                _analysis: {
-                  relevanceScore: match.relevanceScore,
-                  reasoning: match.reasoning,
-                  isStandaloneMatch: match.isStandaloneMatch,
-                  requiredCapabilities: match.requiredCapabilities,
-                },
-              };
-            })
-            .filter(Boolean);
-
-          return {
-            toolCallId: generateUUID(),
-            apps: relevantApps,
-            total: relevantApps.length,
-            metadata: {
-              needsCombination: analysis.needsCombination,
-              analysis: analysis.summary,
-              recommendedWorkflow: analysis.recommendedWorkflow,
-            },
-          };
-        } catch (error) {
-          console.error("Error in suggestApps tool:", error);
-          return {
-            toolCallId: generateUUID(),
-            apps: [],
-            total: 0,
-            error: "Failed to analyze and fetch relevant apps",
-          };
-        }
       },
     },
   };

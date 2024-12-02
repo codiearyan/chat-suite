@@ -4,14 +4,14 @@ import { Message, Attachment } from "ai";
 import cx from "classnames";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useState, useMemo } from "react";
-import { ChevronDown, ChevronUp, Globe, Bot } from "lucide-react";
+import { ChevronDown, ChevronUp, Globe } from "lucide-react";
 import { UIBlock } from "./canvas/canvas";
 import { DocumentToolCall, DocumentToolResult } from "./agent-actions";
 import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { Button } from "@/components/ui/button";
-import { AppCards } from "./widgets/app-cards";
+import Image from "next/image";
 
 type ToolState = "running" | "result" | "partial-call";
 
@@ -116,8 +116,13 @@ export function PreviewMessage({
       >
         {message.role === "assistant" && (
           <div className="flex items-start pt-1">
-            <div className="size-8 flex items-center rounded-full justify-center shrink-0">
-              <Bot size={16} className="text-muted-foreground" />
+            <div className="size-8 flex bg-black dark:bg-none items-center rounded-full justify-center shrink-0">
+              <Image
+                src="/chatsuite_nobg.png"
+                alt="Pivot with AI"
+                width={24}
+                height={24}
+              />
             </div>
           </div>
         )}
@@ -228,8 +233,13 @@ export const ThinkingMessage = () => {
           }
         )}
       >
-        <div className="size-8 flex items-center rounded-full justify-center shrink-0">
-          <Bot size={16} className="text-foreground" />
+        <div className="size-8 flex items-center bg-black dark:bg-none rounded-full justify-center shrink-0">
+          <Image
+            src="/chatsuite_nobg.png"
+            alt="Pivot with AI"
+            width={24}
+            height={24}
+          />
         </div>
 
         <div className="flex flex-col gap-2 w-full">

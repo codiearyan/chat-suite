@@ -1,147 +1,92 @@
 import Section from "@/components/Section";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
-import { CheckIcon } from "lucide-react";
-import { getSession } from "@/lib/db/cached-queries";
+import { CheckCircle2 } from "lucide-react";
+import { getPaymentPlans } from "@/config/pricing";
 
-export default function PaymentModal(userEmail ?: string) {
-  
-  const pricing = [
-    {
-      duration: "50 credits",
-      highlight: false,
-      previousPrice: 20,
-      price: 10,
-      benefits: [
-        "Structured LLM Generator (GPT)",
-        "Structured LLM Generator (LlaMA)",
-        "SDXL Studio",
-        "DALL-E Studio",
-        "GPT-4o Vision App",
-        "Voice to text (Whisper)",
-        "Chat",
-        "Chat with PDF",
-      ],
-      link: `https://buy.stripe.com/test_dR6bKTbzRau63EAbII?prefilled_email=${userEmail}`,
-      buttonText: "Buy credits",
-      subscriptionInfo:
-        "Each generation costs 5 credits, regardless of the model. Good for 10 tests.",
-    },
-
-    {
-      duration: "100 credits",
-      highlight: true,
-      previousPrice: 40,
-      price: 15,
-      benefits: [
-        "Structured LLM Generator (GPT)",
-        "Structured LLM Generator (LlaMA)",
-        "SDXL Studio",
-        "DALL-E Studio",
-        "GPT-4o Vision App",
-        "Voice to text (Whisper)",
-        "Chat",
-        "Chat with PDF",
-      ],
-      link: `https://buy.stripe.com/test_dR6bKTbzRau63EAbII?prefilled_email=${userEmail}`,
-      buttonText: "Buy credits",
-      subscriptionInfo:
-        "Each generation costs 5 credits, regardless of the model. Good for 20 tests.",
-    },
-  ];
+export default function PaymentModal({ userEmail }: { userEmail: string }) {
+  const pricingInfo = getPaymentPlans(userEmail);
 
   return (
     <Section>
-      <div>
-        <div className="max-w-3xl mx-auto">
-          <div className="max-md:px-8 max-w-3xl">
-            <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight mb-2">
-              Your
-              <span className="bg-primary text-primary-content px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-nowrap">
-                free trial credits
-              </span>{" "}
-              have run out
-            </h2>
-            <p className="mt-4 md:mt-8 text-base-content max-w-[600px] mx-auto">
-              If you want to test other demo apps, please consider purchasing
-              some credits below or have a look at the landing page + docs for
-              more info.
-            </p>
-          </div>
-        </div>
-        <div className="w-full">
-          <div className="mt-5 flex justify-center">
-            <div className="flex flex-col md:flex-row justify-center items-center">
-              {pricing.map((plan, index) => (
-                <div
-                  key={index}
-                  className={`bg-white mx-auto md:mx-2 mb-5 rounded-xl w-80 p-8 border border-base-200 ${
-                    plan.highlight ? "shadow" : ""
+      <div className="max-w-3xl mx-auto text-center">
+        <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight mb-2">
+          You're out of
+          <span className="bg-primary text-primary-foreground px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-nowrap">
+            credits
+          </span>
+        </h2>
+        <p className="mt-4 md:mt-8 text-base text-muted-foreground max-w-xl mx-auto">
+          Purchase more credits to continue using ChatSuite. Each message costs
+          1 credit.
+        </p>
+
+        <div className="mt-10 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {pricingInfo.map((plan, index) => (
+            <div
+              key={index}
+              className={`rounded-xl shadow-lg bg-card relative flex flex-col ${
+                plan.special
+                  ? "border-2 border-primary md:scale-[1.02] md:z-10"
+                  : "border border-border"
+              }`}
+            >
+              {plan.special && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full">
+                    Best Value
+                  </span>
+                </div>
+              )}
+              <div className="flex-1 p-6 space-y-4">
+                <div>
+                  <h3 className="text-xl font-bold">{plan.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {plan.description}
+                  </p>
+                </div>
+                <div className="flex items-baseline gap-x-1">
+                  <span className="text-3xl font-bold">{plan.price}</span>
+                  <span className="text-muted-foreground text-sm">
+                    {plan.period}
+                  </span>
+                </div>
+                <ul className="space-y-2.5 text-sm">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-x-2">
+                      <CheckCircle2
+                        className={`h-4 w-4 ${
+                          plan.special
+                            ? "text-primary"
+                            : "text-muted-foreground"
+                        }`}
+                      />
+                      <span className="text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={plan.link}
+                  className={`mt-4 block px-4 py-2.5 text-sm font-semibold rounded-lg text-center transition-all duration-200 ${
+                    plan.special
+                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                   }`}
                 >
-                  <h3
-                    id={`tier-${plan.duration}`}
-                    className="text-accent text-lg font-semibold leading-8"
-                  >
-                    {plan.duration}
-                  </h3>
-
-                  <p className="mt-4 text-sm leading-6 text-gray-600">
-                    {plan.subscriptionInfo}
-                  </p>
-
-                  <div className="flex gap-2 mt-5">
-                    <div className="flex flex-col justify-end mb-[4px] text-lg">
-                      <p className="relative">
-                        <span className="absolute bg-gray-600 h-[1.5px] inset-x-0 top-[53%]"></span>
-                        <span className="text-gray-600">
-                          €{plan.previousPrice}
-                        </span>
-                      </p>
-                    </div>
-                    <p className="text-4xl text-gray-900 tracking-tight font-extrabold">
-                      €{plan.price}
-                    </p>
-                    <div className="flex flex-col justify-end mb-[4px]">
-                      <p className="text-xs text-gray-900 opacity-60 uppercase font-semibold">
-                        EUR
-                      </p>
-                    </div>
-                  </div>
-
-                  <a
-                    href={plan.link}
-                    className="font-semibold text-primary-content rounded-xl bg-primary hover:bg-primary/80 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg no-underline text-center transition ease-in-out duration-150 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none active:ring active:ring-offset-2 inline-flex items-center justify-center py-2 px-4 text-sm mt-6 w-full !rounded-md group/button-link"
-                  >
-                    <span className="inline-flex items-center">
-                      <span className="inline-flex shrink-0 items-center gap-2">
-                        {plan.buttonText}
-                        <ArrowRightIcon className="w-5 h-5" />
-                      </span>
-                    </span>
-                  </a>
-
-                  <ul className="mt-8 space-y-3 text-sm leading-6 text-gray-600">
-                    {plan.benefits.map((benefit) => (
-                      <li key={benefit} className="flex gap-x-3">
-                        <CheckIcon className="w-5 h-6 text-green-500" />
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                  {plan.buttonText}
+                </a>
+              </div>
             </div>
-          </div>
-          <p className="mt-4 text-center text-xs text-base-content/60">
-            Please make sure to make the purchase{" "}
-            <span className="underline">with the same email</span> as the one
-            you're using for this account. When making a purchase, you agree to
-            the{" "}
-            <a href="/terms" className="underline" target="_blank">
-              terms of service.
-            </a>
-          </p>
+          ))}
         </div>
+
+        <p className="mt-8 text-sm text-muted-foreground">
+          Need help? Contact us at{" "}
+          <a
+            href="mailto:support@pivotwith.ai"
+            className="text-primary hover:underline"
+          >
+            support@pivotwith.ai
+          </a>
+        </p>
       </div>
     </Section>
   );
