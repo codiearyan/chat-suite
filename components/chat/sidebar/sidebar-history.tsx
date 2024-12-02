@@ -75,7 +75,7 @@ export function SidebarHistory({
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1 text-2xl">
             {[44, 32, 28, 64, 52].map((item) => (
               <div key={item} className="h-8 flex gap-2 px-2 items-center">
                 <div

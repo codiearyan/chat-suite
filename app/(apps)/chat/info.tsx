@@ -50,7 +50,7 @@ export function AppInfo() {
                 height={40}
                 className="object-contain"
               />
-              <h1 className="text-2xl font-inter-medium xs:text-3xl">
+              <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
                 CHATSUITE
               </h1>
             </div>
