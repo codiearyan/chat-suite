@@ -343,17 +343,20 @@ export async function POST(request: Request) {
     if (usageCheck.requiredCredits > 0) {
       await reduceUserCredits(user.email, usageCheck.requiredCredits);
       const updatedCredits = await getUserCreditsQuery(supabase, user.id);
-      const creditUsageData = {
+      
+      headers["x-credit-usage"] = JSON.stringify({
         cost: usageCheck.requiredCredits,
         remaining: updatedCredits,
         features: [
-          !FREE_MODELS.includes(selectedModelId as any)
-            ? "Premium Model"
-            : null,
+          !FREE_MODELS.includes(selectedModelId as any) ? "Premium Model" : null,
           isBrowseEnabled ? "Web Browsing" : null,
         ].filter(Boolean),
-      };
-      headers["x-credit-usage"] = JSON.stringify(creditUsageData);
+      });
+
+      console.log("Credit update in headers:", {
+        remaining: updatedCredits,
+        cost: usageCheck.requiredCredits
+      });
     }
 
     return result.toDataStreamResponse({

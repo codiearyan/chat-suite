@@ -4,19 +4,9 @@ import { Message, Attachment } from "ai";
 import cx from "classnames";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useState, useMemo } from "react";
-import {
-  BrainCircuitIcon,
-  ChevronDown,
-  ChevronUp,
-  Globe,
-  ComputerIcon,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Globe, Bot } from "lucide-react";
 import { UIBlock } from "./canvas/canvas";
-import {
-  DocumentToolCall,
-  DocumentToolResult,
-  AppSuggestionToolCall,
-} from "./agent-actions";
+import { DocumentToolCall, DocumentToolResult } from "./agent-actions";
 import { Markdown } from "./markdown";
 import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
@@ -117,9 +107,9 @@ export function PreviewMessage({
         className={cx(
           "flex gap-4 rounded-2xl",
           {
-            "bg-base-100 text-primary px-4 py-3 w-fit ml-auto max-w-2xl":
+            "bg-base-100 px-4 py-3 w-fit ml-auto max-w-2xl text-white":
               message.role === "user",
-            "w-full": message.role === "assistant",
+            "w-full text-foreground": message.role === "assistant",
           },
           className
         )}
@@ -127,10 +117,7 @@ export function PreviewMessage({
         {message.role === "assistant" && (
           <div className="flex items-start pt-1">
             <div className="size-8 flex items-center rounded-full justify-center shrink-0">
-              <BrainCircuitIcon
-                size={14}
-                className="text-muted-foreground/70"
-              />
+              <Bot size={16} className="text-muted-foreground" />
             </div>
           </div>
         )}
@@ -150,7 +137,8 @@ export function PreviewMessage({
             </div>
           )}
 
-          <div className="prose dark:prose-invert group-data-[role=user]/message:text-primary">
+          <div className="prose text-foreground dark:prose-invert group-data-[role=user]/message:text-white">
+            {" "}
             <Markdown>{message.content}</Markdown>
           </div>
 
@@ -184,12 +172,6 @@ export function PreviewMessage({
                             result={result}
                             status={status?.content}
                           />
-                        ) : toolName === "suggestApps" ? (
-                          <AppSuggestionResult
-                            isLoading={state !== "result"}
-                            result={result}
-                            status={status?.content}
-                          />
                         ) : (
                           <pre>{JSON.stringify(result, null, 2)}</pre>
                         )}
@@ -212,8 +194,6 @@ export function PreviewMessage({
                             isLoading={true}
                             status={status?.content}
                           />
-                        ) : toolName === "suggestApps" ? (
-                          <AppSuggestionToolCall args={args} />
                         ) : null}
                       </div>
                     );
@@ -242,14 +222,14 @@ export const ThinkingMessage = () => {
     >
       <div
         className={cx(
-          "flex gap-4 items-center w-full group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl",
+          "flex gap-4 items-center group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl",
           {
             "group-data-[role=user]/message:bg-muted": true,
           }
         )}
       >
         <div className="size-8 flex items-center rounded-full justify-center shrink-0">
-          <BrainCircuitIcon size={14} className="text-muted-foreground/70" />
+          <Bot size={16} className="text-foreground" />
         </div>
 
         <div className="flex flex-col gap-2 w-full">
@@ -293,7 +273,7 @@ const InternetSearchResult = ({
           <div className="text-muted-foreground/70 flex items-center">
             <Globe className="h-[15px] w-[15px]" />
           </div>
-          <div className="text-[13px] leading-[15px] text-muted-foreground/90">
+          <div className="text-[13px] leading-[15px] text-foreground/90">
             <span className="opacity-90 font-medium">
               {result.sources.length} sources found
             </span>
@@ -346,43 +326,6 @@ const InternetSearchResult = ({
             ))}
           </div>
         </>
-      )}
-    </div>
-  );
-};
-
-const AppSuggestionResult = ({
-  result,
-  isLoading,
-  status,
-}: {
-  result?: { apps: any[]; total: number };
-  isLoading: boolean;
-  status?: string;
-}) => {
-  console.log("AppSuggestionResult:", { result, isLoading, status });
-
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="w-fit bg-background/50 border-[0.5px] border-border/40 py-2.5 px-3.5 rounded-lg flex flex-row items-center gap-3 shadow-[0_1px_3px_0_rgb(0,0,0,0.02)] backdrop-blur-[2px]">
-        <div className="text-muted-foreground/70 flex items-center">
-          <ComputerIcon
-            className={cx("h-[15px] w-[15px]", {
-              "animate-pulse": isLoading,
-            })}
-          />
-        </div>
-        <div className="text-[13px] leading-[15px] text-muted-foreground/90">
-          <span className="opacity-90 font-medium">
-            {isLoading
-              ? status || "Finding relevant demo apps..."
-              : `Found ${result?.total || 0} demo apps`}
-          </span>
-        </div>
-      </div>
-
-      {result?.apps && result.apps.length > 0 && (
-        <AppCards apps={result.apps} />
       )}
     </div>
   );

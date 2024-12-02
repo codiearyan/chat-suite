@@ -18,6 +18,7 @@ import { AppInfo } from "@/app/(apps)/chat/info";
 import { setCookie } from "@/lib/utils/cookies";
 import { useToast } from "@/components/ui/use-toast";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Credits, CREDIT_UPDATE_EVENT } from "@/components/ui/credits";
 
 interface ExtendedMessage extends Message {
   attachments?: Attachment[];
@@ -124,6 +125,13 @@ export function Chat({
         try {
           const usage = JSON.parse(creditUsageHeader);
 
+          // Dispatch credit update event
+          window.dispatchEvent(
+            new CustomEvent(CREDIT_UPDATE_EVENT, {
+              detail: usage.remaining,
+            })
+          );
+
           if (usage.remaining < 10) {
             toast({
               description: (
@@ -211,33 +219,35 @@ export function Chat({
 
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh">
-        <div
-          ref={messagesContainerRef}
-          className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 px-4"
-        >
-          {messages.length === 0 && <AppInfo />}
-
-          {messages.map((message, index) => (
-            <PreviewMessage
-              key={message.id}
-              message={message}
-              block={block}
-              setBlock={setBlock}
-              isLoading={isLoading && messages.length - 1 === index}
-            />
-          ))}
-
-          {isLoading &&
-            messages.length > 0 &&
-            messages[messages.length - 1].role === "user" && (
-              <ThinkingMessage />
-            )}
-
+      <div className="flex flex-col h-full overflow-hidden">
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
           <div
-            ref={messagesEndRef}
-            className="shrink-0 min-w-[24px] min-h-[24px]"
-          />
+            ref={messagesContainerRef}
+            className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll custom-scrollbar pt-4 px-4"
+          >
+            {messages.length === 0 && <AppInfo />}
+
+            {messages.map((message, index) => (
+              <PreviewMessage
+                key={message.id}
+                message={message}
+                block={block}
+                setBlock={setBlock}
+                isLoading={isLoading && messages.length - 1 === index}
+              />
+            ))}
+
+            {isLoading &&
+              messages.length > 0 &&
+              messages[messages.length - 1].role === "user" && (
+                <ThinkingMessage />
+              )}
+
+            <div
+              ref={messagesEndRef}
+              className="shrink-0 min-w-[24px] min-h-[24px]"
+            />
+          </div>
         </div>
         <div className=" bg-background/50 backdrop-blur-sm">
           <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">

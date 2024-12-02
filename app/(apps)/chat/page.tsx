@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { Chat } from "@/components/chat/chat";
 import { generateUUID } from "@/lib/ai/chat";
 import { availableModels } from "@/lib/ai/models";
-import { getSession,   getUserCredits } from "@/lib/db/cached-queries";
+import { getSession, getUserCredits } from "@/lib/db/cached-queries";
 import { toolConfig } from "./toolConfig";
 import PaymentModal from "@/components/paywall/Payment";
 
@@ -25,16 +25,15 @@ export default async function Page() {
     availableModels.find((model) => model.id === modelIdFromCookie)?.id ||
     toolConfig.aiModel;
 
+  if (user) {
+    if (toolConfig.paywall) {
+      credits = await getUserCredits(user.id);
 
-    if (user) {
-      if (toolConfig.paywall) {
-        credits = await getUserCredits(user.id);
-  
-        if (credits < toolConfig.credits) {
-          return <PaymentModal userEmail={user?.email || ""} />;
-        }
+      if (credits < toolConfig.credits) {
+        return <PaymentModal userEmail={user?.email || ""} />;
       }
     }
+  }
 
   return (
     <Chat

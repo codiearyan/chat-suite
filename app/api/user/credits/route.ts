@@ -1,37 +1,28 @@
 import { createClient } from "@/lib/utils/supabase/server";
-import { NextResponse } from "next/server";
-import { getSession,   getUserCredits } from "@/lib/db/cached-queries";
-
-export const dynamic = 'force-dynamic';
+import { cookies } from "next/headers";
 
 export async function GET() {
   try {
-
-    const user = await getSession();
-
+    const supabase = createClient();
     
-    if (!user) {
-      return NextResponse.json({ credits: 0 }, { status: 401 });
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return Response.json({ credits: 0 }, { status: 401 });
     }
 
-    const credits = await getUserCredits(user.id);
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('credits')
+      .eq('id', user.id)
+      .single();
 
-
-    if (!credits) {
-      return NextResponse.json({ credits: 0 }, { status: 500 });
+    if (error) {
+      throw error;
     }
 
-    return NextResponse.json({ 
-      credits: credits || 0,
-      userId: user.id 
-    });
+    return Response.json({ credits: profile?.credits || 0 });
   } catch (error) {
-    console.error("Error fetching user credits:", error);
-    return NextResponse.json({ 
-      credits: 0,
-      error: "Internal server error" 
-    }, { 
-      status: 500 
-    });
+    console.error("Error fetching credits:", error);
+    return Response.json({ credits: 0 }, { status: 500 });
   }
 }

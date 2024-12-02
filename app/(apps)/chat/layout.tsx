@@ -23,13 +23,13 @@ export default async function Layout({
   const user = await getSession();
 
   return (
-    <SidebarProvider className="flex items-center bg-background">
+    <SidebarProvider className="flex h-screen bg-background">
       <UnifiedSidebar user={user} showChatHistory={true} />
-      <div className="lg:pl-2 lg:pt-2 flex-1 overflow-y-auto bg-muted/50">
+      <div className="flex-1 flex flex-col lg:pl-2 lg:pt-2 bg-muted/50">
         <div className="absolute top-4 right-4 z-50">
           <ThemeToggle />
         </div>
-        <SidebarInset className="flex-1 lg:rounded-tl-xl border border-border overflow-y-auto bg-background">
+        <SidebarInset className="flex-1 lg:rounded-tl-xl border border-border bg-background relative">
           {children}
         </SidebarInset>
       </div>

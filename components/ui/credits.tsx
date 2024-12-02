@@ -1,89 +1,74 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState, useCallback } from "react";
 import { User } from "@supabase/supabase-js";
+import { cn } from "@/lib/utils";
 
 interface CreditsProps {
   user: User | null;
   className?: string;
 }
 
+// Create a custom event name
+const CREDIT_UPDATE_EVENT = "CREDIT_UPDATE";
+
 export function Credits({ user, className }: CreditsProps) {
-  const [credits, setCredits] = useState(0);
+  const [credits, setCredits] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkCredits = async () => {
-    if (user) {
-      try {
-        const baseUrl = window.location.origin;
-        const response = await fetch(`${baseUrl}/api/user/credits`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setCredits(data.credits || 0);
-      } catch (error) {
-        console.error("Error fetching credits:", error);
-        setCredits(0);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      checkCredits();
-    } else {
-      setCredits(0);
+  const fetchCredits = useCallback(async () => {
+    if (!user) return;
+    try {
+      const response = await fetch("/api/user/credits");
+      const data = await response.json();
+      setCredits(data.credits);
+    } catch (error) {
+      console.error("Failed to fetch credits:", error);
+    } finally {
       setIsLoading(false);
     }
   }, [user]);
 
+  useEffect(() => {
+    // Handle credit updates
+    const handleCreditUpdate = (event: CustomEvent<number>) => {
+      setCredits(event.detail);
+    };
+
+    // Add event listener
+    window.addEventListener(
+      CREDIT_UPDATE_EVENT,
+      handleCreditUpdate as EventListener
+    );
+
+    // Initial fetch
+    fetchCredits();
+
+    // Cleanup
+    return () => {
+      window.removeEventListener(
+        CREDIT_UPDATE_EVENT,
+        handleCreditUpdate as EventListener
+      );
+    };
+  }, [fetchCredits]);
+
   if (!user || isLoading) return null;
-
-  const getStatusColor = (credits: number) => {
-    if (credits <= 10) return "bg-red-500";
-    if (credits <= 25) return "bg-yellow-500";
-    return "bg-green-500";
-  };
-
-  const getTextColor = (credits: number) => {
-    if (credits <= 10) return "text-red-500";
-    if (credits <= 25) return "text-yellow-500";
-    return "text-green-500";
-  };
 
   return (
     <div
       className={cn(
-        "flex items-center gap-2 px-3 py-1.5 rounded-full bg-background border border-border/50",
+        "flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800",
         className
       )}
     >
-      <span
-        className={cn(
-          "w-1.5 h-1.5 rounded-full animate-pulse",
-          getStatusColor(credits)
-        )}
-      />
-      <span
-        className={cn(
-          "text-sm font-medium transition-colors",
-          getTextColor(credits)
-        )}
-      >
+      <span className="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400 animate-pulse" />
+      <span className="text-sm text-gray-600 dark:text-gray-300">
         {credits.toLocaleString()} credits
       </span>
     </div>
   );
 }
+
+// Export the event name for use in other components
+export { CREDIT_UPDATE_EVENT };
