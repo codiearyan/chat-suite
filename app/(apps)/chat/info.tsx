@@ -11,22 +11,26 @@ export function AppInfo() {
     {
       icon: <BrainCircuitIcon className="w-4 h-4" />,
       title: "Multiple AI Models",
-      description: "OpenAI, Anthropic, Groq and more",
+      description:
+        "Choose from leading AI models for optimal performance and cost",
     },
     {
       icon: <ImageIcon className="w-4 h-4" />,
-      title: "Multimodal",
-      description: "Interact with images and files",
+      title: "Visual Intelligence",
+      description:
+        "Analyze images, compare visuals, and process screenshots instantly",
     },
     {
       icon: <GlobeIcon className="w-4 h-4" />,
       title: "Web Search",
-      description: "Real-time web search with content analysis",
+      description:
+        "Get real-time insights with smart web browsing and fact-checking",
     },
     {
       icon: <FileTextIcon className="w-4 h-4" />,
       title: "Canvas",
-      description: "Generate and edit documents with AI",
+      description:
+        "Create, edit, and collaborate on AI-powered documents seamlessly",
     },
   ];
 
@@ -39,24 +43,24 @@ export function AppInfo() {
       transition={{ duration: 0.3 }}
     >
       <div className="rounded-2xl bg-gradient-to-b from-background/50 to-background/80 backdrop-blur-sm border border-border/50 shadow-sm dark:shadow-lg dark:shadow-background/5">
-        <div className="p-4 space-y-3">
+        <div className="p-4 space-y-2">
           {/* Title */}
-          <div className="text-center space-y-1">
-            <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-3">
               <Image
-                src="/chatsuite.jpg"
+                src="/chatsuite_nobg.png"
                 alt="ChatSuite Logo"
-                width={40}
-                height={40}
+                width={100}
+                height={100}
                 className="object-contain"
               />
-              <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
+              {/* <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
                 CHATSUITE
-              </h1>
+              </h1> */}
             </div>
             <p className="text-sm text-muted-foreground">
-              A powerful chatbot with multi-model support and smart browsing
-              capabilities
+              Your intelligent AI companion for visual analysis, web research,
+              and content creation
             </p>
           </div>
 

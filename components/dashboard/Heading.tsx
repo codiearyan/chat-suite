@@ -1,11 +1,12 @@
 import React from "react";
 
-import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 
-// Font files can be colocated inside of `app`
-const CalSans = localFont({
-  src: [{ path: "../../fonts/CalSans-SemiBold.woff2" }],
+// Replace the local font with Outfit from Google Fonts
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["600"], // SemiBold weight to match the previous font
   display: "swap",
 });
 
@@ -21,7 +22,7 @@ export const Heading = ({
   return (
     <Tag
       className={twMerge(
-        CalSans.className,
+        outfit.className,
         "text-base md:text-xl lg:text-4xl font-semibold text-[#505050]",
         className
       )}

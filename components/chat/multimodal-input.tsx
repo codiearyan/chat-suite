@@ -29,20 +29,27 @@ import { Button } from "../ui/button";
 import { ArrowUpIcon, StopIcon } from "./icons";
 import { Globe, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const suggestedActions = [
   {
-    title: "Build a Youtube Script Generator",
-    label: "How can I build a Youtube Script Generator with AnotherWrapper?",
+    title: "Research with Web Search",
+    label: "What are the latest developments in AI in 2024?",
     action:
-      "I want to build a Youtube Script Generator. Which demo app can I use? It should generate text scripts, the audio for each scene + thumbnails for the video.",
-    icon: "📹",
+      "Using web search, tell me about the most significant AI developments and breakthroughs in 2024. Include specific examples and their impact.",
+    icon: "🔍",
   },
   {
-    title: "Write an essay",
-    label: "Write an essay about Tupac Shakur",
-    action: "I want to write an essay about the life of Tupac Shakur.",
-    icon: "✨",
+    title: "Visual Problem Solving",
+    label: "Help debug my code with a screenshot",
+    action:
+      "I can help you debug code by analyzing screenshots. Upload an image of your code or error message, and I'll help identify and fix the issues.",
+    icon: "🐛",
   },
 ];
 
@@ -451,53 +458,102 @@ export function MultimodalInput({
       />
 
       {isLoading ? (
-        <Button
-          className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 border dark:border-zinc-600"
-          onClick={(event) => {
-            event.preventDefault();
-            stop();
-            setMessages((messages) => sanitizeUIMessages(messages));
-          }}
-        >
-          <StopIcon size={14} />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 border dark:border-zinc-600"
+                onClick={(event) => {
+                  event.preventDefault();
+                  stop();
+                  setMessages((messages) => sanitizeUIMessages(messages));
+                }}
+              >
+                <StopIcon size={14} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Stop generating response</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       ) : (
-        <Button
-          className={cn(
-            "rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5",
-            "border border-border/50",
-            // Light mode: black background, white arrow
-            "bg-black hover:bg-black/90",
-            // Dark mode: white background, black arrow
-            "dark:bg-white dark:hover:bg-white/90"
-          )}
-          onClick={(event) => {
-            event.preventDefault();
-            submitForm();
-          }}
-          disabled={input.length === 0 || uploadQueue.length > 0}
-        >
-          <ArrowUpIcon className="text-white dark:text-black" size={16} />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className={cn(
+                  "rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5",
+                  "border border-border/50",
+                  "bg-black hover:bg-black/90",
+                  "dark:bg-white dark:hover:bg-white/90"
+                )}
+                onClick={(event) => {
+                  event.preventDefault();
+                  submitForm();
+                }}
+                disabled={input.length === 0 || uploadQueue.length > 0}
+              >
+                <ArrowUpIcon className="text-white dark:text-black" size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Send message</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
 
       <div className="absolute bottom-2.5 left-2 flex gap-2 items-center">
-        <button
-          type="button"
-          onClick={handleBrowseClick}
-          className={cn(
-            "p-2 rounded-full transition-colors",
-            isBrowseEnabled
-              ? "bg-blue-500/10 text-blue-500"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted"
-          )}
-        >
-          <Globe className="h-4 w-4" />
-        </button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={handleBrowseClick}
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  isBrowseEnabled
+                    ? "bg-blue-500/10 text-blue-500"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                <Globe className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Enable web browsing</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {AI_MODEL_DISPLAY[selectedModel.id].vision && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <label className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                  <ImageIcon className="h-4 w-4 mr-1" />
+                  Upload Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e)}
+                  />
+                </label>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Upload images (max 5MB per image)</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+
         <div className="relative">
           <button
             type="button"
-            className="cursor-pointer text-xs inline-flex items-center justify-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-muted-foreground hover:text-primary/80 h-7 rounded-md px-2 py-1"
+            className="cursor-pointer text-xs inline-flex items-center justify-center  font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-muted-foreground hover:text-primary/80 h-7 rounded-md px-2 py-1"
             onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
           >
             <Image
@@ -562,20 +618,6 @@ export function MultimodalInput({
             </ul>
           )}
         </div>
-
-        {AI_MODEL_DISPLAY[selectedModel.id].vision && (
-          <label className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-            <ImageIcon className="h-4 w-4 mr-1" />
-            Upload Image
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              className="hidden"
-              onChange={(e) => handleFileChange(e)}
-            />
-          </label>
-        )}
       </div>
     </div>
   );

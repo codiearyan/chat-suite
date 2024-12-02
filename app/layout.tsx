@@ -1,4 +1,5 @@
 import { GeistSans } from "geist/font/sans";
+import { Outfit } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Providers from "./providers";
 import "./globals.css";
@@ -10,6 +11,12 @@ import {
   favicon,
   defaultKeywords,
 } from "@/config";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
 
 export const metadata = {
   title: `${defaultTitle}`,
@@ -47,7 +54,7 @@ export default function RootLayout({
         >
           <Providers>
             <main
-              className={`${GeistSans.className} overflow-hidden bg-background`}
+              className={`${outfit.className} overflow-hidden bg-background`}
             >
               {children}
             </main>
