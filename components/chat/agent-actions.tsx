@@ -20,8 +20,6 @@ const getActionText = (type: ToolType) => {
       return "Updating";
     case "browseInternet":
       return "Searching";
-    case "suggestApps":
-      return "Finding";
     default:
       return null;
   }
@@ -94,35 +92,12 @@ export function DocumentToolResult({
           <PencilIcon className="h-[15px] w-[15px]" />
         ) : type === "browseInternet" ? (
           <SearchIcon className="h-[15px] w-[15px]" />
-        ) : type === "suggestApps" ? (
-          <ComputerIcon className="h-[15px] w-[15px]" />
         ) : null}
       </div>
 
       <div className="text-[13px] leading-[15px] text-muted-foreground/90 group-hover:text-foreground transition-colors duration-300">
         <span className="opacity-60 font-normal">{getActionText(type)}</span>{" "}
         <span className="opacity-90 font-medium">{result.title}</span>
-      </div>
-    </div>
-  );
-}
-
-export function AppSuggestionToolCall({ args }: { args: any }) {
-  return (
-    <div className="w-fit bg-background/50 border-[0.5px] border-border/40 py-2.5 px-3.5 rounded-lg flex flex-row items-center justify-between gap-3 shadow-[0_1px_3px_0_rgb(0,0,0,0.02)] backdrop-blur-[2px]">
-      <div className="flex flex-row gap-3 items-center">
-        <div className="text-muted-foreground/70 flex items-center">
-          <ComputerIcon className="h-[15px] w-[15px]" />
-        </div>
-
-        <div className="text-[13px] leading-[15px] text-muted-foreground/90">
-          <span className="opacity-60 font-normal">Finding</span>{" "}
-          <span className="opacity-90 font-medium">relevant apps</span>
-        </div>
-      </div>
-
-      <div className="animate-spin flex items-center">
-        <LoaderIcon className="h-[15px] w-[15px] text-muted-foreground/70" />
       </div>
     </div>
   );

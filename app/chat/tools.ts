@@ -1,10 +1,9 @@
 import { z } from "zod";
-import { generateText, StreamData, streamText, generateObject } from "ai";
+import {  StreamData, streamText } from "ai";
 import { generateUUID } from "@/lib/ai/chat";
 import { saveDocument } from "@/lib/db/mutations";
 import { getDocumentById } from "@/lib/db/cached-queries";
 import { customModel } from "@/lib/ai/ai-utils";
-import { apps as demoApps } from "@/lib/ai/apps";
 
 /**
  * Available AI Tools
