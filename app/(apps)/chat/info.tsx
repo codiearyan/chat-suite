@@ -5,18 +5,18 @@ import {
   FileTextIcon,
   ImageIcon,
 } from "lucide-react";
-
+import Image from "next/image";
 export function AppInfo() {
   const features = [
     {
       icon: <BrainCircuitIcon className="w-4 h-4" />,
       title: "Multiple AI Models",
-      description: "OpenAI, Anthropic and Groq via Vercel AI SDK",
+      description: "OpenAI, Anthropic, Groq and more",
     },
     {
       icon: <ImageIcon className="w-4 h-4" />,
       title: "Multimodal",
-      description: "Interact with images and files via Cloudflare Storage",
+      description: "Interact with images and files",
     },
     {
       icon: <GlobeIcon className="w-4 h-4" />,
@@ -42,9 +42,18 @@ export function AppInfo() {
         <div className="p-4 space-y-3">
           {/* Title */}
           <div className="text-center space-y-1">
-            <h1 className="text-xl font-semibold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-              ChatSuite
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Image
+                src="/chatsuite.jpg"
+                alt="ChatSuite Logo"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+              <h1 className="text-2xl font-inter-medium xs:text-3xl">
+                CHATSUITE
+              </h1>
+            </div>
             <p className="text-sm text-muted-foreground">
               A powerful chatbot with multi-model support and smart browsing
               capabilities
