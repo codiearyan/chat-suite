@@ -4,13 +4,7 @@ import {
   GlobeIcon,
   FileTextIcon,
   ImageIcon,
-  WrenchIcon,
-  LinkIcon,
-  RocketIcon,
-  SparklesIcon,
-  SearchIcon,
 } from "lucide-react";
-import Link from "next/link";
 
 export function AppInfo() {
   const features = [
@@ -44,14 +38,14 @@ export function AppInfo() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="rounded-2xl bg-gradient-to-b from-white/80 to-white/40 backdrop-blur-sm border shadow-sm">
+      <div className="rounded-2xl bg-gradient-to-b from-background/50 to-background/80 backdrop-blur-sm border border-border/50 shadow-sm dark:shadow-lg dark:shadow-background/5">
         <div className="p-4 space-y-3">
           {/* Title */}
           <div className="text-center space-y-1">
             <h1 className="text-xl font-semibold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Chat Suite
+              ChatSuite
             </h1>
-            <p className="text-sm text-muted-foreground/80">
+            <p className="text-sm text-muted-foreground">
               A powerful chatbot with multi-model support and smart browsing
               capabilities
             </p>
@@ -65,23 +59,26 @@ export function AppInfo() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex gap-3 p-3 rounded-xl bg-white/60 hover:bg-white/90 border border-border/40 hover:border-border/80 transition-all duration-300 hover:shadow-sm"
+                className="group flex gap-3 p-3 rounded-xl 
+                  bg-background/50 hover:bg-background/80 
+                  border border-border/50 hover:border-border 
+                  transition-all duration-300 
+                  hover:shadow-sm dark:hover:shadow-md dark:hover:shadow-background/5"
               >
                 <div className="shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
                   {feature.icon}
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-foreground/90 group-hover:text-foreground leading-none mb-1 transition-colors">
+                  <h3 className="text-sm font-medium text-foreground group-hover:text-foreground leading-none mb-1 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground/70 group-hover:text-muted-foreground leading-tight transition-colors">
+                  <p className="text-xs text-muted-foreground leading-tight transition-colors">
                     {feature.description}
                   </p>
                 </div>
               </motion.div>
             ))}
           </div>
-
         </div>
       </div>
     </motion.div>

@@ -1,4 +1,5 @@
 import { GeistSans } from "geist/font/sans";
+import { ThemeProvider } from "next-themes";
 import Providers from "./providers";
 import "./globals.css";
 import {
@@ -9,9 +10,7 @@ import {
   favicon,
   defaultKeywords,
 } from "@/config";
-import Navbar from "@/components/navbars/Navbar-1";
 
-// SEO Optimization
 export const metadata = {
   title: `${defaultTitle}`,
   description: defaultDescription,
@@ -38,14 +37,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Providers>
-   
-      <main
-        className={`${GeistSans.className} overflow-hidden`}
-        data-theme={companyConfig.company.theme}
-      >
-        {children}
-      </main>
-    </Providers>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <main
+              className={`${GeistSans.className} overflow-hidden bg-background`}
+            >
+              {children}
+            </main>
+          </Providers>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

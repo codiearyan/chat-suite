@@ -41,7 +41,7 @@ const GroupHeader = memo(function GroupHeader({
   showAllButton?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between py-1 px-2">
+    <div className="flex items-start justify-between py-1 px-2">
       <span className="text-xs font-semibold text-neutral-500">{title}</span>
       {showAllButton}
     </div>
@@ -168,13 +168,6 @@ export function GroupedChatList({
   // Apply limit here
   const displayedChats = showAllHistory ? chats : chats.slice(0, limit);
   const groupedChats = groupChatsByDate(displayedChats);
-
-  console.log({
-    totalChats: chats.length,
-    displayedChats: displayedChats.length,
-    limit,
-    shouldShowButton: Boolean(chats.length > (limit || 0) && setShowAllHistory),
-  });
 
   // Create the show all button if we have more chats than the limit
   const showAllButton = chats.length > (limit || 0) && setShowAllHistory && (

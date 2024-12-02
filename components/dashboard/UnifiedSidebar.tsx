@@ -29,17 +29,17 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
       try {
         const baseUrl = window.location.origin;
         const response = await fetch(`${baseUrl}/api/user/credits`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include'
+          credentials: "include",
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         setCredits(data.credits || 0);
       } catch (error) {
@@ -56,13 +56,13 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
       setCredits(0);
     }
   }, [user]);
- 
+
   return (
     <>
       <div className={`lg:block ${open ? "block" : "hidden"}`}>
-        <div className="px-3 z-40 pb-4 bg-neutral-100 w-[220px] fixed lg:relative h-screen left-0 flex flex-col justify-between">
+        <div className="px-3 z-40 pb-4 bg-background/80 w-[220px] fixed lg:relative h-screen left-0 flex flex-col justify-between border-r border-border/50">
           <div className="flex-1 overflow-auto no-scrollbar">
-          <header className="flex sticky top-0 py-3 items-center justify-between px-3 border-b border-neutral-200 ">
+            <header className="flex sticky top-0 py-3 items-center justify-between px-3 border-b border-border/50 bg-background/80 backdrop-blur-sm">
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
@@ -75,8 +75,8 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <h1 className="text-lg font-semibold bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">
-                  ChatSuite
+                <h1 className="text-lg font-semibold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Back to Home
                 </h1>
               </div>
             </header>
@@ -123,8 +123,8 @@ export function UnifiedSidebar({ user }: UnifiedSidebarProps) {
 
               {credits > 0 && (
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500/40 animate-pulse" />
-                  <span className="text-sm text-grey-600">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm text-grey-600 dark:text-black">
                     {credits.toLocaleString()} credits
                   </span>
                 </div>

@@ -209,15 +209,12 @@ export function Chat({
     [messages]
   );
 
-  console.log(messages);
-
   return (
     <>
-      <div className="flex flex-col min-w-0 h-dvh bg-background">
-       
+      <div className="flex flex-col min-w-0 h-dvh">
         <div
           ref={messagesContainerRef}
-          className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+          className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4 px-4"
         >
           {messages.length === 0 && <AppInfo />}
 
@@ -242,28 +239,30 @@ export function Chat({
             className="shrink-0 min-w-[24px] min-h-[24px]"
           />
         </div>
-        <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
-          <MultimodalInput
-            chatId={id}
-            input={input}
-            setInput={setInput}
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-            stop={stop}
-            messages={messages}
-            attachments={attachments}
-            setAttachments={setAttachments}
-            containsImages={containsImages}
-            setMessages={setMessages}
-            append={append}
-            selectedModelId={currentModelId}
-            onModelChange={handleModelChange}
-            isBrowseEnabled={isBrowseEnabled}
-            onBrowseToggle={handleBrowseToggle}
-            className="bg-base-100/70"
-            isAuthenticated={isAuthenticated}
-          />
-        </form>
+        <div className=" bg-background/50 backdrop-blur-sm">
+          <form className="flex mx-auto px-4 pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
+            <MultimodalInput
+              chatId={id}
+              input={input}
+              setInput={setInput}
+              handleSubmit={handleSubmit}
+              isLoading={isLoading}
+              stop={stop}
+              messages={messages}
+              attachments={attachments}
+              setAttachments={setAttachments}
+              containsImages={containsImages}
+              setMessages={setMessages}
+              append={append}
+              selectedModelId={currentModelId}
+              onModelChange={handleModelChange}
+              isBrowseEnabled={isBrowseEnabled}
+              onBrowseToggle={handleBrowseToggle}
+              className="bg-background/50 dark:bg-background/30"
+              isAuthenticated={isAuthenticated}
+            />
+          </form>
+        </div>
       </div>
 
       <AnimatePresence>

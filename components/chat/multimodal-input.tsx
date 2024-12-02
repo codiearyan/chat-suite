@@ -426,10 +426,12 @@ export function MultimodalInput({
         placeholder="Send a message..."
         value={input}
         onChange={handleInput}
-        className={cx(
+        className={cn(
           "min-h-[72px] w-full max-h-[calc(100dvh)]",
           "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
-          "outline-none focus:outline-none focus:ring-0 border-0",
+          "outline-none focus:outline-none focus:ring-0",
+          "bg-background/50 dark:bg-background/30 border border-border/50",
+          "backdrop-blur-sm transition-colors duration-200",
           className
         )}
         rows={3}
@@ -461,14 +463,21 @@ export function MultimodalInput({
         </Button>
       ) : (
         <Button
-          className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 border dark:border-zinc-600"
+          className={cn(
+            "rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5",
+            "border border-border/50",
+            // Light mode: black background, white arrow
+            "bg-black hover:bg-black/90",
+            // Dark mode: white background, black arrow
+            "dark:bg-white dark:hover:bg-white/90"
+          )}
           onClick={(event) => {
             event.preventDefault();
             submitForm();
           }}
           disabled={input.length === 0 || uploadQueue.length > 0}
         >
-          <ArrowUpIcon size={14} />
+          <ArrowUpIcon className="text-white dark:text-black" size={16} />
         </Button>
       )}
 
