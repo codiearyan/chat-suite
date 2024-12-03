@@ -10,6 +10,7 @@ import { tosUrl, privacyPolicyUrl } from "@/config";
 
 export default function AuthComponent() {
   const [isLoading, setIsLoading] = useState(false);
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
