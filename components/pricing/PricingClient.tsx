@@ -3,10 +3,11 @@
 import { useRouter } from "next/navigation";
 import { PricingPlan } from "@/config/pricing";
 import { CheckCircle2 } from "lucide-react";
+import { User } from "@supabase/supabase-js";
 
 interface PricingClientProps {
   plans: PricingPlan[];
-  user?: { email: string | undefined } | null;
+  user?: User | null;
 }
 
 export function PricingClient({ plans, user }: PricingClientProps) {

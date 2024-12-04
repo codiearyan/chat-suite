@@ -1,13 +1,11 @@
 import { getLandingPagePlans } from "@/config/pricing";
-import { createClient } from "@/lib/utils/supabase/server";
+import { getSession } from "@/lib/db/cached-queries";
 import { PricingClient } from "./PricingClient";
+
 
 export default async function Pricing() {
   const pricingInfo = getLandingPagePlans();
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getSession();
 
   return (
     <div
