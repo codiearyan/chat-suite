@@ -11,7 +11,7 @@ export const companyConfig = {
     navbarLinks: [
       { label: "Home", href: "/" },
       { label: "Chat Suite", href: "/chat" },
-      { label: "Training", href: "/training" },
+      { label: "Training", href: "https://training.pivotwithai.com/" },
     ],
   },
 
