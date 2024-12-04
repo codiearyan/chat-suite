@@ -59,7 +59,7 @@ const navlinks = [
     icon: IconPhoto,
   },
   {
-    href: "/apps/chat",
+    href: "/chat",
     label: "Chat AI",
     icon: IconMessage2,
     isExternal: true,

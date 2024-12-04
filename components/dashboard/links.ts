@@ -45,7 +45,7 @@ export const navlinks: NavLink[] = [
     icon: IconPhoto,
   },
   {
-    href: "/apps/chat",
+    href: "/chat",
     label: "Chat AI",
     icon: IconMessage2,
     isExternal: false,

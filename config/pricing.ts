@@ -26,37 +26,39 @@ export const pricingPlans = {
     buttonText: "Start Free",
   },
   basic: {
-    title: "Basic",
-    description: "Perfect for casual users and small projects.",
+    title: "Starter",
+    description: "Perfect for casual users",
     price: "₹499",
     period: "/100 credits",
     features: [
       "Access to GPT-4o and Claude Sonnet",
+      "Access to Websearch",
       "100 message exchanges",
       "Standard response time",
       "File attachments support",
       "Email support",
     ],
-    special: false,
+    special: true,
     buttonText: "Get 100 Credits",
-    link: "https://buy.stripe.com/test_dR6bKTbzRau63EAbII",
+    link: "https://buy.stripe.com/eVa15danKdvB6Jy7su",
   },
   pro: {
-    title: "Pro",
-    description: "Ideal for professionals and teams.",
+    title: "Premium",
+    description: "Ideal for working professionals.",
     price: "₹1499",
     period: "/500 credits",
     features: [
-      "Access to GPT-4o and Claude Sonnet",
+      "Access to multi ai models",
+      "Access to Websearch",
       "500 message exchanges",
       "Priority response time",
       "Enhanced file handling",
       "Priority email support",
       "Bulk credit discounts",
     ],
-    special: true,
+    special: false,
     buttonText: "Get 500 Credits",
-    link: "https://buy.stripe.com/test_dR6bKTbzRau63EAbII",
+    link: "https://buy.stripe.com/00g5lt3Zmajpgk86or",
   },
 } as const;
 
@@ -70,12 +72,12 @@ export const getPaymentPlans = (userEmail?: string): PricingPlan[] => [
   {
     ...pricingPlans.basic,
     features: [...pricingPlans.basic.features],
-    link: `${pricingPlans.basic.link}?prefilled_email=${userEmail || ''}`,
+    link: `${pricingPlans.basic.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
   {
     ...pricingPlans.pro,
     features: [...pricingPlans.pro.features],
-    link: `${pricingPlans.pro.link}?prefilled_email=${userEmail || ''}`,
+    link: `${pricingPlans.pro.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
 ];
 

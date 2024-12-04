@@ -28,6 +28,11 @@ export const companyConfig = {
   },
 };
 
+export const paymentLinks = {
+  starter: "https://buy.stripe.com/test_dR68x895qfZ8880000",
+  premium: "https://buy.stripe.com/test_dR68x895qfZ8880000",
+};
+
 /// Core Website config
 export const companyName = "Holding Company Name";
 export const defaultTitle =

@@ -7,12 +7,12 @@ import Pricing from "@/components/pricing/Pricing-3";
 export default function Home() {
   return (
     <div className="bg-base-100">
-         <Navbar
+      <Navbar
         companyConfig={companyConfig.company!}
         navbarConfig={companyConfig.navbarLanding!}
       />
       <HeroDemos />
-     <Pricing />
+      <Pricing />
       <Footer
         companyConfig={companyConfig.company!}
         footerConfig={companyConfig.footerLanding!}

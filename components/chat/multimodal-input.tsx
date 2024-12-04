@@ -143,7 +143,7 @@ export function MultimodalInput({
   );
 
   const submitForm = useCallback(() => {
-    window.history.replaceState({}, "", `/apps/chat/${chatId}`);
+    window.history.replaceState({}, "", `/chat/${chatId}`);
 
     handleSubmit(undefined, {
       experimental_attachments: attachments,

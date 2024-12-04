@@ -7,7 +7,15 @@ export async function POST(request: NextRequest) {
   console.log("Supabase client created.");
 
   const { email } = await request.json();
-  console.log(`Received email: ${email}`);
+  console.log(`Received email: ${email}`)
+  
+    // Validate email
+    if (!email || !email.includes('@')) {
+      return NextResponse.json(
+        { status: 'Error', message: 'Invalid email address' },
+        { status: 400 }
+      );
+    }
 
   try {
     console.log(`Attempting to send magic link to: ${email}`);
