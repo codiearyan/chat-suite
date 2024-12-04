@@ -1,7 +1,18 @@
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Check if this is an auth callback
+  if (pathname === "/" && request.nextUrl.searchParams.has("code")) {
+    // Redirect to the confirm route with the code
+    const code = request.nextUrl.searchParams.get("code");
+    const redirectUrl = new URL("/auth/confirm", request.url);
+    redirectUrl.searchParams.set("code", code!);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   return await updateSession(request);
 }
 

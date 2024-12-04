@@ -13,6 +13,7 @@ export default function GoogleSignInButton() {
       if (!response.ok) throw new Error(data.message);
 
       if (data.url) {
+        console.log("data.url", data.url);
         // Redirect the user to the Supabase-provided URL
         window.location.href = data.url;
       } else {
@@ -24,7 +25,7 @@ export default function GoogleSignInButton() {
   };
 
   return (
-    <div className="w-full w-full">
+    <div className="w-full">
       <button
         onClick={signInWithGoogle}
         className="rounded-xl w-full h-30 flex flex-shrink-0 content-center items-center justify-center border border-base-200 bg-white px-6 py-3 text-center font-medium text-black shadow-sm hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-offset-2"

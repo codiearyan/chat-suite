@@ -7,39 +7,60 @@ export async function GET(request: Request) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 
-  console.log("Received Google Callback");
-  console.log("Request URL:", request.url);
+  console.log("Received auth callback");
   console.log("Code:", code);
-  console.log("Next:", next);
+  console.log("SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
 
-  const origin = process.env.PRODUCTION_URL || "http://localhost:3000";
-  console.log("Origin:", origin);
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    console.error("Missing Supabase environment variables");
+    return NextResponse.redirect(new URL("/auth/error", request.url));
+  }
 
   if (code) {
-    const cookieStore = cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
+    try {
+      const cookieStore = cookies();
+      const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        {
+          cookies: {
+            get(name: string) {
+              return cookieStore.get(name)?.value;
+            },
+            set(name: string, value: string, options: CookieOptions) {
+              cookieStore.set({ name, value, ...options });
+            },
+            remove(name: string, options: CookieOptions) {
+              cookieStore.delete({ name, ...options });
+            },
           },
-          set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options });
-          },
-          remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options });
-          },
-        },
+          auth: {
+            flowType: 'pkce',
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            persistSession: true
+          }
+        }
+      );
+
+      console.log("Attempting to exchange code for session...");
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      
+      if (error) {
+        console.error("Error exchanging code for session:", error);
+        return NextResponse.redirect(new URL("/auth/error", request.url));
       }
-    );
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+
+      console.log("Successfully exchanged code for session");
+      const redirectUrl = new URL(next, request.url);
+      console.log("Redirecting to:", redirectUrl.toString());
+      return NextResponse.redirect(redirectUrl);
+    } catch (error) {
+      console.error("Error in auth callback:", error);
+      return NextResponse.redirect(new URL("/auth/error", request.url));
     }
   }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  console.error("No code provided in auth callback");
+  return NextResponse.redirect(new URL("/auth/error", request.url));
 }
