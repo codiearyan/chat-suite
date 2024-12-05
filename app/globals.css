@@ -173,3 +173,17 @@ code {
 .ProseMirror h6 {
   color: hsl(var(--foreground));
 }
+
+.bg-grid-pattern {
+  background-image: linear-gradient(
+      to right,
+      rgb(var(--foreground) / 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgb(var(--foreground) / 0.1) 1px,
+      transparent 1px
+    );
+  background-size: 24px 24px;
+}

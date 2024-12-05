@@ -2,14 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { getThanksPagePlans } from "@/config/pricing";
+import { getLandingPagePlans } from "@/config/pricing";
+import { getSession } from "@/lib/db/cached-queries";
+import { PricingClient } from "@/components/pricing/PricingClient";
 
-export default function ThanksPage() {
-  const additionalCredits = getThanksPagePlans();
+export default async function ThanksPage() {
+  const pricingInfo = getLandingPagePlans();
+  const user = await getSession();
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="max-w-4xl w-full p-6 md:p-8 space-y-8">
+      <Card className="w-full p-6 md:p-8 space-y-8 px-8">
         <div className="text-center space-y-4">
           <div className="flex justify-center">
             <CheckCircle2 className="h-16 w-16 text-green-500 dark:text-green-400" />
@@ -55,66 +58,11 @@ export default function ThanksPage() {
             <h2 className="text-xl font-semibold text-center mb-6">
               Need More Credits?
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {additionalCredits.map((plan, index) => (
-                <div
-                  key={index}
-                  className={`rounded-xl shadow-lg bg-card relative flex flex-col ${
-                    plan.special
-                      ? "border-2 border-primary md:scale-[1.02] md:z-10"
-                      : "border border-border"
-                  }`}
-                >
-                  {plan.special && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full">
-                        Best Value
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex-1 p-6 space-y-4">
-                    <div>
-                      <h3 className="text-xl font-bold">{plan.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {plan.description}
-                      </p>
-                    </div>
-                    <div className="flex items-baseline gap-x-1">
-                      <span className="text-3xl font-bold">{plan.price}</span>
-                      <span className="text-muted-foreground text-sm">
-                        {plan.period}
-                      </span>
-                    </div>
-                    <ul className="space-y-2.5 text-sm">
-                      {plan.features.map((feature, i) => (
-                        <li key={i} className="flex items-center gap-x-2">
-                          <CheckCircle2
-                            className={`h-4 w-4 ${
-                              plan.special
-                                ? "text-primary"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                          <span className="text-muted-foreground">
-                            {feature}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    <a
-                      href={plan.link}
-                      className={`mt-4 block px-4 py-2 text-sm font-semibold rounded-lg text-center transition-all duration-200 ${
-                        plan.special
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                          : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                      }`}
-                    >
-                      {plan.buttonText}
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <section className="py-4">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <PricingClient plans={pricingInfo} user={user} />
+              </div>
+            </section>
           </div>
 
           <div className="space-y-3">

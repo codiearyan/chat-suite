@@ -34,42 +34,35 @@ export default async function AuthButton({ classProps }: AuthButtonProps) {
 
   return user ? (
     <div className="flex items-center gap-4">
-      <span
-        className={`hidden sm:block text-${primaryTextColor} menu menu-horizontal px-1`}
-      >
+      <span className="hidden sm:block text-muted-foreground">
         👋🏼 Hey, {user.email}!
       </span>
-      <form action={signOut} className={buttonClassName}>
-        <button
-          className={`py-2 px-4 text-${bgColor}-content rounded-md no-underline bg-${bgColor} hover:bg-${bgColor}/80`}
-        >
+      <form action={signOut}>
+        <button className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-muted hover:text-muted-foreground h-9 px-4 py-2 border border-border">
           Logout
         </button>
       </form>
     </div>
   ) : (
-    <div className="hidden sm:flex relative group scale-[.7]">
-      <Link
-        href="/auth"
-        className={`btn bg-${bgColor} hover:bg-${bgColor}/80 rounded-xl text-${bgColor}-content`}
+    <Link
+      href="/auth"
+      className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-6"
+    >
+      <span>Login</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="2"
+        stroke="currentColor"
+        className="w-4 h-4"
       >
-        Login
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          aria-hidden="true"
-          className={`h-3 w-3 ${primaryTextColor} ${svgClassName}`}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-          ></path>
-        </svg>
-      </Link>
-    </div>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+        />
+      </svg>
+    </Link>
   );
 }
