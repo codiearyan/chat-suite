@@ -110,7 +110,7 @@ export function UnifiedSidebar({
                 <Credits user={user} />
                 <Button
                   variant="ghost"
-                  className="w-full mt-2 flex items-center gap-2 text-muted-foreground hover:text-primary"
+                  className="w-full mt-2 flex items-center gap-2 text-muted-foreground/70 hover:text-muted-foreground hover:bg-muted/50 transition-colors"
                   onClick={() => {
                     router.push("/");
                     router.refresh();
