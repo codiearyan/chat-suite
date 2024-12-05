@@ -437,7 +437,7 @@ export function MultimodalInput({
             "min-h-[72px] w-full max-h-[calc(100dvh)]",
             "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
             "outline-none focus:outline-none focus:ring-0",
-            "bg-background/50 dark:bg-background/30 border border-border/50",
+            "bg-background/50 dark:bg-background/30 border border-black",
             "backdrop-blur-sm transition-colors duration-200",
             className
           )}

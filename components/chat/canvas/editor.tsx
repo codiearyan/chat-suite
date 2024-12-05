@@ -48,6 +48,7 @@ function PureEditor({ content, saveContent, status }: EditorProps) {
 
       editorRef.current = new EditorView(containerRef.current, {
         state,
+        attributes: { class: "prosemirror-editor" },
       });
     }
 
@@ -107,7 +108,10 @@ function PureEditor({ content, saveContent, status }: EditorProps) {
   }, [content, status]);
 
   return (
-    <div className="relative prose dark:prose-invert" ref={containerRef} />
+    <div
+      className="relative prose dark:prose-invert px-6 py-4 rounded-lg w-full max-w-[900px] mx-auto"
+      ref={containerRef}
+    />
   );
 }
 

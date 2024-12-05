@@ -425,7 +425,7 @@ export function Block({
             )}
           </AnimatePresence>
 
-          <div className="bg-base-100 flex flex-col h-full justify-between items-center gap-4">
+          <div className="bg-background dark:bg-background/50 flex flex-col h-full justify-between items-center gap-4">
             <div
               ref={messagesContainerRef}
               className="flex flex-col gap-4 h-full items-center overflow-y-scroll px-4 pt-20"
@@ -438,7 +438,7 @@ export function Block({
                   setBlock={setBlock}
                   isLoading={isLoading && index === messages.length - 1}
                   className={cx({
-                    "bg-white": message.role === "user",
+                    "bg-primary dark:bg-primary": message.role === "user",
                   })}
                 />
               ))}
@@ -462,7 +462,7 @@ export function Block({
                 setAttachments={setAttachments}
                 messages={messages}
                 append={append}
-                className="bg-white"
+                className="bg-background dark:bg-background/50"
                 setMessages={setMessages}
                 selectedModelId={selectedModelId}
                 isBrowseEnabled={isBrowseEnabled}
@@ -476,7 +476,7 @@ export function Block({
       )}
 
       <motion.div
-        className="fixed bg-background h-dvh flex flex-col shadow-sm overflow-y-scroll"
+        className="fixed bg-white dark:bg-background h-dvh flex flex-col shadow-sm overflow-y-scroll"
         initial={
           isMobile
             ? {
@@ -585,7 +585,7 @@ export function Block({
             <Button
               variant="ghost"
               size="icon"
-              className={cn("h-8 w-8 hover:bg-muted", {
+              className={cx("h-8 w-8 hover:bg-muted", {
                 "bg-blue-500/10 text-blue-500": mode === "diff",
               })}
               onClick={() => handleVersionChange("toggle")}
@@ -614,8 +614,8 @@ export function Block({
           </div>
         </div>
 
-        <div className="prose dark:prose-invert bg-background h-full overflow-y-scroll px-4 py-6 md:p-16 !max-w-full pb-32">
-          <div className="max-w-[650px] mx-auto">
+        <div className="prose dark:prose-invert bg-white dark:bg-background h-full overflow-y-scroll px-4 py-6 md:p-16 !max-w-full pb-32">
+          <div className="w-full max-w-[900px] mx-auto">
             {isDocumentsFetching && !block.content ? (
               <DocumentSkeleton />
             ) : mode === "edit" ? (

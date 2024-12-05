@@ -107,9 +107,9 @@ export function PreviewMessage({
         className={cx(
           "flex gap-4 rounded-2xl",
           {
-            "bg-base-100 px-4 py-3 w-fit ml-auto max-w-2xl text-white":
+            "bg-primary px-4 py-3 w-fit ml-auto max-w-2xl text-white":
               message.role === "user",
-            "w-full text-foreground": message.role === "assistant",
+            "w-full": message.role === "assistant",
           },
           className
         )}
@@ -142,8 +142,12 @@ export function PreviewMessage({
             </div>
           )}
 
-          <div className="prose text-foreground dark:prose-invert group-data-[role=user]/message:text-white">
-            {" "}
+          <div
+            className={cx("prose dark:prose-invert", {
+              "text-white [&_*]:text-white": message.role === "user",
+              "text-foreground": message.role === "assistant",
+            })}
+          >
             <Markdown>{message.content}</Markdown>
           </div>
 
