@@ -25,11 +25,11 @@ export default async function Layout({
   return (
     <SidebarProvider className="flex h-screen bg-background">
       <UnifiedSidebar user={user} showChatHistory={true} />
-      <div className="flex-1 flex flex-col lg:pl-2 lg:pt-2 bg-muted/50">
+      <div className="flex-1 flex flex-col   bg-muted/50">
         <div className="absolute top-4 right-4 z-50">
           <ThemeToggle />
         </div>
-        <SidebarInset className="flex-1 lg:rounded-tl-xl border border-border bg-background relative">
+        <SidebarInset className="flex-1  border border-border bg-background relative">
           {children}
         </SidebarInset>
       </div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { memo, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { TrashIcon, Check, X } from "lucide-react";
+import { TrashIcon, Check, X, Search } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -23,6 +23,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
 
 type GroupedChats = {
   today: Chat[];
@@ -41,8 +42,10 @@ const GroupHeader = memo(function GroupHeader({
   showAllButton?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between py-1 px-2">
-      <span className="text-xs font-semibold text-neutral-500">{title}</span>
+    <div className="flex items-start justify-between py-1.5">
+      <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+        {title}
+      </span>
       {showAllButton}
     </div>
   );
@@ -64,25 +67,25 @@ const ChatItem = memo(function ChatItem({
 
   return (
     <>
-      <div className="group flex items-center justify-between py-1 hover:text-primary/50 transition-colors">
+      <div className="group flex items-center justify-between py-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors rounded-md">
         <Link
           href={`/chat/${chat.id}`}
           onClick={() => setOpenMobile(false)}
           className={twMerge(
-            "flex-1 truncate text-xs",
-            isActive && "text-sky-500"
+            "flex-1 text-sm text-gray-700 dark:text-gray-300 truncate",
+            isActive && "text-blue-600 dark:text-blue-400 font-medium"
           )}
         >
-          {chat.title || "New Chat"}
+          {chat.title?.slice(0, 28) || "New Chat"}
         </Link>
         <button
           onClick={(e) => {
             e.preventDefault();
             setShowDeleteDialog(true);
           }}
-          className="opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+          className="opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity p-1"
         >
-          <TrashIcon className="h-3 w-3" />
+          <TrashIcon className="h-4 w-4" />
         </button>
       </div>
 
@@ -164,9 +167,17 @@ export function GroupedChatList({
 }) {
   const router = useRouter();
   const { toast } = useToast();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter chats based on search query
+  const filteredChats = chats.filter((chat) =>
+    chat.title?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Apply limit here
-  const displayedChats = showAllHistory ? chats : chats.slice(0, limit);
+  const displayedChats = showAllHistory
+    ? filteredChats
+    : filteredChats.slice(0, limit);
   const groupedChats = groupChatsByDate(displayedChats);
 
   // Create the show all button if we have more chats than the limit
@@ -209,12 +220,14 @@ export function GroupedChatList({
         description: (
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-teal-500/20 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-teal-500/20 dark:bg-teal-500/10 flex items-center justify-center">
                 <Check className="h-5 w-5 text-teal-500" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="font-semibold">Chat deleted successfully</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-foreground">
+                  Chat deleted successfully
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   The chat and its messages have been removed
                 </p>
               </div>
@@ -222,7 +235,8 @@ export function GroupedChatList({
           </div>
         ),
         duration: 4000,
-        className: "bg-white border-teal-200 rounded-xl",
+        className:
+          "bg-background border-teal-200 dark:border-teal-900 rounded-xl",
       });
 
       if (chatId === currentChatId) {
@@ -235,12 +249,14 @@ export function GroupedChatList({
         description: (
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-red-500/20 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-full bg-red-500/20 dark:bg-red-500/10 flex items-center justify-center">
                 <X className="h-5 w-5 text-red-500" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="font-semibold">Failed to delete chat</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-foreground">
+                  Failed to delete chat
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Please try again or contact support if the issue persists
                 </p>
               </div>
@@ -248,7 +264,8 @@ export function GroupedChatList({
           </div>
         ),
         duration: 4000,
-        className: "bg-white border-red-200 rounded-xl",
+        className:
+          "bg-background border-red-200 dark:border-red-900 rounded-xl",
       });
     }
   };
@@ -256,9 +273,20 @@ export function GroupedChatList({
   return (
     <SidebarGroup>
       <SidebarGroupContent>
-        <SidebarMenu>
+        <div className="pb-2">
+          <div className="relative">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search chats..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 h-9 text-sm bg-background"
+            />
+          </div>
+        </div>
+        <SidebarMenu className="space-y-2">
           {groupedChats.today.length > 0 && (
-            <>
+            <div className="space-y-0.5">
               <GroupHeader
                 title="Today"
                 showAllButton={
@@ -274,11 +302,11 @@ export function GroupedChatList({
                   setOpenMobile={setOpenMobile}
                 />
               ))}
-            </>
+            </div>
           )}
 
           {groupedChats.yesterday.length > 0 && (
-            <>
+            <div className="space-y-0.5">
               <GroupHeader
                 title="Yesterday"
                 showAllButton={
@@ -294,11 +322,11 @@ export function GroupedChatList({
                   setOpenMobile={setOpenMobile}
                 />
               ))}
-            </>
+            </div>
           )}
 
           {groupedChats.lastWeek.length > 0 && (
-            <>
+            <div className="space-y-0.5">
               <GroupHeader title="Last 7 days" />
               {groupedChats.lastWeek.map((chat) => (
                 <ChatItem
@@ -309,11 +337,11 @@ export function GroupedChatList({
                   setOpenMobile={setOpenMobile}
                 />
               ))}
-            </>
+            </div>
           )}
 
           {groupedChats.lastMonth.length > 0 && (
-            <>
+            <div className="space-y-0.5">
               <GroupHeader title="Last 30 days" />
               {groupedChats.lastMonth.map((chat) => (
                 <ChatItem
@@ -324,11 +352,11 @@ export function GroupedChatList({
                   setOpenMobile={setOpenMobile}
                 />
               ))}
-            </>
+            </div>
           )}
 
           {groupedChats.older.length > 0 && (
-            <>
+            <div className="space-y-0.5">
               <GroupHeader title="Older" />
               {groupedChats.older.map((chat) => (
                 <ChatItem
@@ -339,7 +367,7 @@ export function GroupedChatList({
                   setOpenMobile={setOpenMobile}
                 />
               ))}
-            </>
+            </div>
           )}
         </SidebarMenu>
       </SidebarGroupContent>

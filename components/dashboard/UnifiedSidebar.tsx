@@ -56,32 +56,31 @@ export function UnifiedSidebar({
                 <div className="flex flex-col">
                   {showChatHistory && (
                     <>
+                      <button
+                        onClick={() => {
+                          router.push("/chat");
+                          router.refresh();
+                        }}
+                        className={twMerge(
+                          "w-full group relative flex items-center justify-start gap-2 rounded-lg border border-border/50 bg-background/50 px-4 py-2.5 text-[0.90rem] font-medium text-foreground shadow-sm transition-all hover:bg-primary/5 hover:shadow-md",
+                          pathname.includes("/chat") &&
+                            "bg-primary/10 border-primary/20 shadow-md shadow-primary/10 text-primary hover:bg-primary/15"
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <PlusIcon className="h-4 w-4" />
+                          <span>New Chat</span>
+                        </div>
+                      </button>
                       <Heading
                         as="p"
-                        className="text-sm md:text-sm lg:text-sm px-2 pt-2 mb-2 text-foreground"
+                        className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground"
                       >
                         Previous Chats
                       </Heading>
-                      <div className="mb-1">
-                        <button
-                          onClick={() => {
-                            router.push("/chat");
-                            router.refresh();
-                          }}
-                          className={twMerge(
-                            "w-full text-primary hover:text-primary/50 transition duration-200 flex items-center justify-between py-2 px-4 rounded-md text-sm",
-                            pathname.includes("/chat") &&
-                              "bg-white shadow-lg text-primary"
-                          )}
-                        >
-                          <div className="flex items-center space-x-2">
-                            <PlusIcon className="h-4 w-4" />
-                            <span>New Chat</span>
-                          </div>
-                        </button>
-
+                      <div>
                         {isChatExpanded && (
-                          <div className="ml-4">
+                          <div className="">
                             <SidebarHistory
                               user={user ?? undefined}
                               limit={6}
