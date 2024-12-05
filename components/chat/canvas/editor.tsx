@@ -109,7 +109,7 @@ function PureEditor({ content, saveContent, status }: EditorProps) {
 
   return (
     <div
-      className="relative prose dark:prose-invert px-6 py-4 rounded-lg w-full max-w-[900px] mx-auto"
+      className="relative prose prose-black dark:prose-invert px-6 py-4 rounded-lg w-full max-w-[900px] mx-auto"
       ref={containerRef}
     />
   );
