@@ -623,7 +623,7 @@ export function MultimodalInput({
           </div>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground/60">
+      <p className="text-xs text-center text-muted-foreground/60">
         ChatSuite provides AI-generated responses. Please verify information
         independently.
       </p>

@@ -10,7 +10,7 @@ import { ArrowLeft, PlusIcon } from "lucide-react";
 import { isMobile } from "@/lib/utils";
 import { SidebarHistory } from "@/components/chat/sidebar/sidebar-history";
 import { Heading } from "./Heading";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { IconChevronLeft, IconLayoutSidebar } from "@tabler/icons-react";
 import { Credits } from "@/components/ui/credits";
 
 interface UnifiedSidebarProps {
@@ -22,6 +22,7 @@ export function UnifiedSidebar({
   user,
   showChatHistory = false,
 }: UnifiedSidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [open, setOpen] = useState(!isMobile());
   const [isChatExpanded, setIsChatExpanded] = useState(true);
   const [showAllHistory, setShowAllHistory] = useState(false);
@@ -30,82 +31,110 @@ export function UnifiedSidebar({
 
   return (
     <>
-      <div className={`lg:block ${open ? "block" : "hidden"}`}>
-        <div className="px-3 z-40 pb-4 bg-background/80 w-[220px] fixed lg:relative h-screen left-0 flex flex-col justify-between border-r border-border/50 lg:rounded-tl-xl">
-          <div className="flex-1 overflow-auto no-scrollbar">
-            <header className="flex sticky top-0 py-3 items-center justify-between px-3 border-b border-border/50 bg-background/80 backdrop-blur-sm lg:rounded-tl-xl">
-              <div className="flex items-center gap-2">
+      <div
+        className={twMerge(
+          "transition-all duration-300 ease-in-out fixed lg:relative",
+          open ? "block" : "hidden",
+          isCollapsed ? "w-[60px]" : "w-[260px]",
+          "h-screen bg-background z-40"
+        )}
+      >
+        <div
+          className={twMerge(
+            "h-full flex flex-col lg:rounded-tl-xl",
+            isCollapsed ? "w-[60px]" : "w-[260px] border-r border-border/50"
+          )}
+        >
+          <div className="hidden lg:block">
+            <button
+              className="absolute top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+            >
+              <IconLayoutSidebar
+                className={twMerge(
+                  "h-4 w-4 text-foreground transition-transform",
+                  isCollapsed ? "rotate-180" : ""
+                )}
+              />
+            </button>
+          </div>
+
+          {!isCollapsed && (
+            <>
+              <div className="flex-1 overflow-auto no-scrollbar mt-14 px-3">
+                <div className="flex flex-col space-y-1 relative z-40">
+                  <div className="flex flex-col">
+                    {showChatHistory && (
+                      <>
+                        <button
+                          onClick={() => {
+                            router.push("/chat");
+                            router.refresh();
+                          }}
+                          className={twMerge(
+                            "w-full group relative flex items-center justify-start gap-2 rounded-lg border border-border/50 bg-background/50 px-4 py-2.5 text-[0.90rem] font-medium text-foreground shadow-sm transition-all hover:bg-primary/5 hover:shadow-md",
+                            pathname.includes("/chat") &&
+                              "bg-primary/10 border-primary/20 shadow-md shadow-primary/10 text-primary hover:bg-primary/15"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <PlusIcon className="h-4 w-4" />
+                            <span>New Chat</span>
+                          </div>
+                        </button>
+                        <Heading
+                          as="p"
+                          className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground"
+                        >
+                          Previous Chats
+                        </Heading>
+                        <div>
+                          {isChatExpanded && (
+                            <div className="">
+                              <SidebarHistory
+                                user={user ?? undefined}
+                                limit={6}
+                                showAllHistory={showAllHistory}
+                                setShowAllHistory={setShowAllHistory}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="px-3 pb-4 mt-auto border-t border-border/50">
+                <Credits user={user} />
                 <Button
                   variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 hover:bg-primary/10 hover:text-primary"
+                  className="w-full mt-2 flex items-center gap-2 text-muted-foreground hover:text-primary"
                   onClick={() => {
                     router.push("/");
                     router.refresh();
                   }}
                 >
                   <ArrowLeft className="h-4 w-4" />
+                  <span>Back to Home</span>
                 </Button>
-                <h1 className="text-lg font-semibold bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-                  Back to Home
-                </h1>
               </div>
-            </header>
-            <div className="flex justify-between flex-col h-[90%]">
-              <div className="flex flex-col space-y-1 relative z-40">
-                <div className="flex flex-col">
-                  {showChatHistory && (
-                    <>
-                      <button
-                        onClick={() => {
-                          router.push("/chat");
-                          router.refresh();
-                        }}
-                        className={twMerge(
-                          "w-full group relative flex items-center justify-start gap-2 rounded-lg border border-border/50 bg-background/50 px-4 py-2.5 text-[0.90rem] font-medium text-foreground shadow-sm transition-all hover:bg-primary/5 hover:shadow-md",
-                          pathname.includes("/chat") &&
-                            "bg-primary/10 border-primary/20 shadow-md shadow-primary/10 text-primary hover:bg-primary/15"
-                        )}
-                      >
-                        <div className="flex items-center gap-2">
-                          <PlusIcon className="h-4 w-4" />
-                          <span>New Chat</span>
-                        </div>
-                      </button>
-                      <Heading
-                        as="p"
-                        className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground"
-                      >
-                        Previous Chats
-                      </Heading>
-                      <div>
-                        {isChatExpanded && (
-                          <div className="">
-                            <SidebarHistory
-                              user={user ?? undefined}
-                              limit={6}
-                              showAllHistory={showAllHistory}
-                              setShowAllHistory={setShowAllHistory}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <Credits user={user} />
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
 
       <button
-        className="fixed lg:hidden bottom-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-40 bg-background/80"
+        className="fixed lg:hidden top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80"
         onClick={() => setOpen(!open)}
       >
-        <IconChevronLeft className="h-4 w-4 text-foreground" />
+        <IconChevronLeft
+          className={twMerge(
+            "h-4 w-4 text-foreground transition-transform",
+            open ? "rotate-180" : ""
+          )}
+        />
       </button>
     </>
   );
