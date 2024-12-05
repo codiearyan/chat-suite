@@ -66,22 +66,22 @@ export function Credits({ user, className }: CreditsProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800",
+        "flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/75 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm",
         className
       )}
     >
       <span
         className={cn("w-1.5 h-1.5 rounded-full animate-pulse", {
-          "bg-red-500 dark:bg-red-400": creditStatus === "danger",
-          "bg-yellow-500 dark:bg-yellow-400": creditStatus === "warning",
-          "bg-green-500 dark:bg-green-400": creditStatus === "success",
+          "bg-red-600 dark:bg-red-400": creditStatus === "danger",
+          "bg-yellow-600 dark:bg-yellow-400": creditStatus === "warning",
+          "bg-green-600 dark:bg-green-400": creditStatus === "success",
         })}
       />
       <span
-        className={cn("text-sm", {
-          "text-red-600 dark:text-red-400": creditStatus === "danger",
-          "text-yellow-600 dark:text-yellow-400": creditStatus === "warning",
-          "text-gray-600 dark:text-gray-300": creditStatus === "success",
+        className={cn("text-sm font-medium", {
+          "text-red-700 dark:text-red-400": creditStatus === "danger",
+          "text-yellow-700 dark:text-yellow-400": creditStatus === "warning",
+          "text-gray-700 dark:text-gray-300": creditStatus === "success",
         })}
       >
         {credits.toLocaleString()} credits

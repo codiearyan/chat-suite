@@ -437,7 +437,7 @@ export function MultimodalInput({
             "min-h-[72px] w-full max-h-[calc(100dvh)]",
             "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
             "outline-none focus:outline-none focus:ring-0",
-            "bg-background/50 dark:bg-background/30 border border-black",
+            "bg-background/50 dark:bg-background/30 border dark:border-border/50 border-black/50",
             "backdrop-blur-sm transition-colors duration-200",
             className
           )}
@@ -534,8 +534,8 @@ export function MultimodalInput({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <label className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                    <ImageIcon className="h-4 w-4 mr-1" />
+                  <label className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                    <ImageIcon className="h-4 w-4" />
                     Upload Image
                     <input
                       type="file"
