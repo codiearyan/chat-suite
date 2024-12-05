@@ -1,9 +1,9 @@
 export const AI_MODEL_DISPLAY = {
-  // "gpt-4o-mini": {
-  //   name: "GPT-4o mini",
-  //   logo: "/providers/openai.webp",
-  //   vision: true,
-  // },
+  "gpt-4o-mini": {
+    name: "GPT-4o mini",
+    logo: "/providers/openai.webp",
+    vision: true,
+  },
   "gpt-4o": {
     name: "GPT-4o",
     logo: "/providers/openai.webp",

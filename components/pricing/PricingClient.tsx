@@ -77,11 +77,7 @@ export function PricingClient({ plans, user }: PricingClientProps) {
             </ul>
             <button
               onClick={() => handlePlanSelection(plan)}
-              className={`mt-4 block w-full px-4 py-2.5 text-sm font-semibold rounded-lg text-center transition-all duration-200 ${
-                plan.special
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-              }`}
+              className="mt-4 block w-full px-4 py-2.5 text-sm font-semibold rounded-lg text-center transition-all duration-200 bg-primary text-primary-foreground hover:bg-primary/90"
             >
               {plan.buttonText}
             </button>
