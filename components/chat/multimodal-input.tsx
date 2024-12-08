@@ -43,12 +43,14 @@ const suggestedActions = [
     action:
       "Using web search, tell me about the most significant AI developments and breakthroughs in 2024. Include specific examples and their impact.",
     icon: "🔍",
+    enableWebSearch: true,
   },
   {
     title: "Canvas",
     label: "Create, edit, and collaborate on AI-powered documents seamlessly",
     action: "Create a project document for a Task Management app",
     icon: "🖌️",
+    enableWebSearch: false,
   },
 ];
 
@@ -331,6 +333,23 @@ export function MultimodalInput({
     );
   };
 
+  const handleSuggestedAction = async (
+    suggestedAction: (typeof suggestedActions)[0]
+  ) => {
+    window.history.replaceState({}, "", `/chat/${chatId}`);
+
+    // Enable web search if the action requires it
+    if (suggestedAction.enableWebSearch && onBrowseToggle) {
+      onBrowseToggle(true);
+      setCookie("browse-enabled", "true");
+    }
+
+    await append({
+      role: "user",
+      content: suggestedAction.action,
+    });
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="w-full" onClick={handleUnauthenticatedInteraction}>
@@ -360,13 +379,7 @@ export function MultimodalInput({
                     exit={{ opacity: 0, y: 5 }}
                     transition={{ delay: 0.1 * index }}
                     key={index}
-                    onClick={async () => {
-                      window.history.replaceState({}, "", `/chat/${chatId}`);
-                      append({
-                        role: "user",
-                        content: suggestedAction.action,
-                      });
-                    }}
+                    onClick={() => handleSuggestedAction(suggestedAction)}
                     className="group flex items-center gap-3 p-3.5 
                     bg-background/50 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 rounded-lg
                     border border-border/30 hover:border-blue-500/30
@@ -430,14 +443,14 @@ export function MultimodalInput({
 
         <textarea
           ref={textareaRef}
-          placeholder="Send a message..."
+          placeholder="Ask Chatsuite Anything..."
           value={input}
           onChange={handleInput}
           className={cn(
             "min-h-[72px] w-full max-h-[calc(100dvh)]",
             "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
             "outline-none focus:outline-none focus:ring-0",
-            "bg-background/50 dark:bg-background/30 border dark:border-border/50 border-black/50",
+            "bg-background/50 dark:bg-background/30 border dark:border-border/40 border-white",
             "backdrop-blur-sm transition-colors duration-200",
             className
           )}

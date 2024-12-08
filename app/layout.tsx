@@ -1,4 +1,3 @@
-import { GeistSans } from "geist/font/sans";
 import { Outfit } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Providers from "./providers";
@@ -48,7 +47,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

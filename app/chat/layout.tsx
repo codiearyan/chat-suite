@@ -27,7 +27,7 @@ export default async function Layout({
       <UnifiedSidebar user={user} showChatHistory={true} />
       <div className="flex-1 flex flex-col bg-muted/50 transition-all duration-300">
         <div className="absolute top-4 right-4 z-50">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
         </div>
         <SidebarInset className="flex-1 bg-background relative">
           {children}

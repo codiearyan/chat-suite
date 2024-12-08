@@ -36,13 +36,13 @@ export function UnifiedSidebar({
           "transition-all duration-300 ease-in-out fixed lg:relative",
           open ? "block" : "hidden",
           isCollapsed ? "w-[60px]" : "w-[260px]",
-          "h-screen bg-background z-40"
+          "h-screen bg-[#191b1f] z-40"
         )}
       >
         <div
           className={twMerge(
             "h-full flex flex-col lg:rounded-tl-xl",
-            isCollapsed ? "w-[60px]" : "w-[260px] border-r border-border/50"
+            isCollapsed ? "w-[60px]" : "w-[260px] border-r-2 border-border/80"
           )}
         >
           <div className="hidden lg:block">

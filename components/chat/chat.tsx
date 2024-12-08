@@ -6,8 +6,6 @@ import { AnimatePresence } from "framer-motion";
 import { useState, useCallback, useMemo } from "react";
 import { useSWRConfig } from "swr";
 import { useWindowSize } from "usehooks-ts";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { PreviewMessage, ThinkingMessage } from "@/components/chat/message";
 import { useScrollToBottom } from "@/components/chat/use-scroll-to-bottom";
@@ -43,12 +41,14 @@ export function Chat({
   selectedModelId,
   initialBrowseEnabled = false,
   isAuthenticated = false,
+  userEmail,
 }: {
   id: string;
   initialMessages: Array<ExtendedMessage>;
   selectedModelId: string;
   initialBrowseEnabled?: boolean;
   isAuthenticated?: boolean;
+  userEmail: string;
 }) {
   const router = useRouter();
   const { mutate } = useSWRConfig();
@@ -225,6 +225,7 @@ export function Chat({
                 block={block}
                 setBlock={setBlock}
                 isLoading={isLoading && messages.length - 1 === index}
+                userEmail={userEmail}
               />
             ))}
 

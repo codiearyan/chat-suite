@@ -4,10 +4,11 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { groq } from "@ai-sdk/groq";
 import { xai } from "@ai-sdk/xai";
 import { Experimental_LanguageModelV1Middleware } from "ai";
+import { google } from "@ai-sdk/google";
 
 export const customMiddleware: Experimental_LanguageModelV1Middleware = {};
 
-type ModelProvider = "openai" | "anthropic" | "groq" | "xai";
+type ModelProvider = "openai" | "anthropic" | "groq" | "xai" | "google";
 
 // Helper to determine provider from model ID
 function getProviderFromModelId(modelId: string): ModelProvider {
@@ -15,6 +16,7 @@ function getProviderFromModelId(modelId: string): ModelProvider {
   if (modelId.startsWith("claude")) return "anthropic";
   if (modelId.startsWith("llama")) return "groq";
   if (modelId.startsWith("grok")) return "xai";
+  if (modelId.startsWith("gemini")) return "google";
   return "openai"; // fallback
 }
 
@@ -31,6 +33,8 @@ function getModelInstance(provider: ModelProvider, modelName: string) {
       return groq(modelName);
     case "xai":
       return xai(modelName);
+    case "google":
+      return google(modelName);
     default:
       throw new Error(`Unsupported provider: ${provider}`);
   }

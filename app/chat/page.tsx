@@ -29,7 +29,9 @@ export default async function Page() {
       return <PaymentModal userEmail={user?.email || ""} />;
     }
   }
-
+  if (!user?.email) {
+    return <PaymentModal userEmail="" />;
+  }
   return (
     <Chat
       key={id}
@@ -37,6 +39,7 @@ export default async function Page() {
       initialMessages={[]}
       selectedModelId={selectedModelId}
       isAuthenticated={!!user}
+      userEmail={user?.email ?? ""}
     />
   );
 }

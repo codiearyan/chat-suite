@@ -3,7 +3,7 @@ export const companyConfig = {
   ////// Base config used mainly for layout (@/components/navbar/Navbar-1.tsx and @/components/footer/Footer-1.tsx)
   company: {
     name: "Pivot With AI",
-    theme: "anotherwrapper",
+    theme: "pivotwithai",
     homeUrl: "/",
     appUrl: "/",
     description: "Experience AI-powered conversations with ChatSuite",
@@ -29,7 +29,7 @@ export const companyConfig = {
 };
 
 /// Core Website config
-export const companyName = "Holding Company Name";
+export const companyName = "Pivot With AI";
 export const defaultTitle =
   "Pivot with AI - AI tools to make your life easier";
 export const defaultDescription =

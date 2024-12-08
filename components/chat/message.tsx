@@ -12,6 +12,7 @@ import { MessageActions } from "./message-actions";
 import { PreviewAttachment } from "./preview-attachment";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type ToolState = "running" | "result" | "partial-call";
 
@@ -57,6 +58,12 @@ interface PreviewMessageProps {
   setBlock: Dispatch<SetStateAction<UIBlock>>;
   isLoading?: boolean;
   className?: string;
+  userEmail?: string;
+}
+
+function getUserInitial(email?: string): string {
+  if (!email) return "U";
+  return email.charAt(0).toUpperCase();
 }
 
 export function PreviewMessage({
@@ -65,6 +72,7 @@ export function PreviewMessage({
   setBlock,
   isLoading,
   className,
+  userEmail,
 }: PreviewMessageProps) {
   // Parse tool results from message content if it's a tool message
   const toolResults = useMemo(() => {
@@ -103,118 +111,204 @@ export function PreviewMessage({
       animate={{ y: 0, opacity: 1 }}
       data-role={message.role}
     >
-      <div
-        className={cx(
-          "flex gap-4 rounded-2xl",
-          {
-            "bg-primary px-4 py-3 w-fit ml-auto max-w-2xl text-white":
-              message.role === "user",
-            "w-full": message.role === "assistant",
-          },
-          className
-        )}
-      >
-        {message.role === "assistant" && (
-          <div className="flex items-start pt-1">
-            <div className="size-8 flex bg-black dark:bg-none items-center rounded-full justify-center shrink-0">
-              <Image
-                src="/chatsuite_nobg.png"
-                alt="Pivot with AI"
-                width={24}
-                height={24}
-              />
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-3 w-full">
-          {(message.experimental_attachments ?? []).length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {message.experimental_attachments?.map((attachment) => (
-                <div key={attachment.url} className="flex-shrink-0">
-                  <PreviewAttachment
-                    attachment={attachment}
-                    showFileName={false}
-                    size="normal"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
+      {message.role === "user" && (
+        <div className="flex justify-end items-center gap-2">
+          <div className="flex-1" /> {/* Spacer */}
           <div
-            className={cx("prose dark:prose-invert", {
-              "text-white [&_*]:text-white": message.role === "user",
-              "text-foreground": message.role === "assistant",
-            })}
+            className={cx(
+              "bg-primary py-2 px-3 rounded-2xl w-fit max-w-2xl text-white",
+              className
+            )}
           >
-            <Markdown>{message.content}</Markdown>
-          </div>
-
-          {allToolInvocations.length > 0 && (
-            <div className="flex flex-col gap-4">
-              {allToolInvocations.map(
-                (toolInvocation: ToolInvocationWithResult) => {
-                  const { toolName, toolCallId, state, args, result, status } =
-                    toolInvocation;
-
-                  if (state === "result") {
-                    return (
-                      <div key={toolCallId}>
-                        {toolName === "createDocument" ? (
-                          <DocumentToolResult
-                            type="create"
-                            result={result}
-                            block={block}
-                            setBlock={setBlock}
-                          />
-                        ) : toolName === "updateDocument" ? (
-                          <DocumentToolResult
-                            type="update"
-                            result={result}
-                            block={block}
-                            setBlock={setBlock}
-                          />
-                        ) : toolName === "browseInternet" ? (
-                          <InternetSearchResult
-                            isLoading={state !== "result"}
-                            result={result}
-                            status={status?.content}
-                          />
-                        ) : (
-                          <pre>{JSON.stringify(result, null, 2)}</pre>
-                        )}
-                      </div>
-                    );
-                  } else {
-                    return (
-                      <div
-                        key={toolCallId}
-                        className={cx({
-                          skeleton: false,
-                        })}
-                      >
-                        {toolName === "createDocument" ? (
-                          <DocumentToolCall type="create" args={args} />
-                        ) : toolName === "updateDocument" ? (
-                          <DocumentToolCall type="update" args={args} />
-                        ) : toolName === "browseInternet" ? (
-                          <InternetSearchResult
-                            isLoading={true}
-                            status={status?.content}
-                          />
-                        ) : null}
-                      </div>
-                    );
-                  }
-                }
-              )}
+            {(message.experimental_attachments ?? []).length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {message.experimental_attachments?.map((attachment) => (
+                  <div key={attachment.url} className="flex-shrink-0">
+                    <PreviewAttachment
+                      attachment={attachment}
+                      showFileName={false}
+                      size="normal"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="prose dark:prose-invert [&_*]:text-white">
+              <Markdown>{message.content}</Markdown>
             </div>
-          )}
+            {allToolInvocations.length > 0 && (
+              <div className="flex flex-col gap-4">
+                {allToolInvocations.map(
+                  (toolInvocation: ToolInvocationWithResult) => {
+                    const {
+                      toolName,
+                      toolCallId,
+                      state,
+                      args,
+                      result,
+                      status,
+                    } = toolInvocation;
 
-          <MessageActions message={message} isLoading={isLoading || false} />
+                    if (state === "result") {
+                      return (
+                        <div key={toolCallId}>
+                          {toolName === "createDocument" ? (
+                            <DocumentToolResult
+                              type="create"
+                              result={result}
+                              block={block}
+                              setBlock={setBlock}
+                            />
+                          ) : toolName === "updateDocument" ? (
+                            <DocumentToolResult
+                              type="update"
+                              result={result}
+                              block={block}
+                              setBlock={setBlock}
+                            />
+                          ) : toolName === "browseInternet" ? (
+                            <InternetSearchResult
+                              isLoading={state !== "result"}
+                              result={result}
+                              status={status?.content}
+                            />
+                          ) : (
+                            <pre>{JSON.stringify(result, null, 2)}</pre>
+                          )}
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          key={toolCallId}
+                          className={cx({
+                            skeleton: false,
+                          })}
+                        >
+                          {toolName === "createDocument" ? (
+                            <DocumentToolCall type="create" args={args} />
+                          ) : toolName === "updateDocument" ? (
+                            <DocumentToolCall type="update" args={args} />
+                          ) : toolName === "browseInternet" ? (
+                            <InternetSearchResult
+                              isLoading={true}
+                              status={status?.content}
+                            />
+                          ) : null}
+                        </div>
+                      );
+                    }
+                  }
+                )}
+              </div>
+            )}
+            <MessageActions message={message} isLoading={isLoading || false} />
+          </div>
+          <Avatar className="size-8 bg-white/20 shrink-0">
+            <AvatarFallback className="text-white text-sm">
+              {getUserInitial(userEmail)}
+            </AvatarFallback>
+          </Avatar>
         </div>
-      </div>
+      )}
+
+      {message.role === "assistant" && (
+        <div className="flex gap-3">
+          <div className="size-8 flex bg-black dark:bg-none items-center rounded-full justify-center shrink-0">
+            <Image
+              src="/chatsuite_nobg.png"
+              alt="Pivot with AI"
+              width={24}
+              height={24}
+            />
+          </div>
+          <div className="w-full">
+            {(message.experimental_attachments ?? []).length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {message.experimental_attachments?.map((attachment) => (
+                  <div key={attachment.url} className="flex-shrink-0">
+                    <PreviewAttachment
+                      attachment={attachment}
+                      showFileName={false}
+                      size="normal"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="prose dark:prose-invert">
+              <Markdown>{message.content}</Markdown>
+            </div>
+            {allToolInvocations.length > 0 && (
+              <div className="flex flex-col gap-4">
+                {allToolInvocations.map(
+                  (toolInvocation: ToolInvocationWithResult) => {
+                    const {
+                      toolName,
+                      toolCallId,
+                      state,
+                      args,
+                      result,
+                      status,
+                    } = toolInvocation;
+
+                    if (state === "result") {
+                      return (
+                        <div key={toolCallId}>
+                          {toolName === "createDocument" ? (
+                            <DocumentToolResult
+                              type="create"
+                              result={result}
+                              block={block}
+                              setBlock={setBlock}
+                            />
+                          ) : toolName === "updateDocument" ? (
+                            <DocumentToolResult
+                              type="update"
+                              result={result}
+                              block={block}
+                              setBlock={setBlock}
+                            />
+                          ) : toolName === "browseInternet" ? (
+                            <InternetSearchResult
+                              isLoading={state !== "result"}
+                              result={result}
+                              status={status?.content}
+                            />
+                          ) : (
+                            <pre>{JSON.stringify(result, null, 2)}</pre>
+                          )}
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div
+                          key={toolCallId}
+                          className={cx({
+                            skeleton: false,
+                          })}
+                        >
+                          {toolName === "createDocument" ? (
+                            <DocumentToolCall type="create" args={args} />
+                          ) : toolName === "updateDocument" ? (
+                            <DocumentToolCall type="update" args={args} />
+                          ) : toolName === "browseInternet" ? (
+                            <InternetSearchResult
+                              isLoading={true}
+                              status={status?.content}
+                            />
+                          ) : null}
+                        </div>
+                      );
+                    }
+                  }
+                )}
+              </div>
+            )}
+            <MessageActions message={message} isLoading={isLoading || false} />
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

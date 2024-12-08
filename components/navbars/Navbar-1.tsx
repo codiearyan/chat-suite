@@ -91,7 +91,7 @@ export default async function Navbar({
           user={user}
           className="hidden md:flex" // Hide on mobile to prevent cluttering
         />
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
         {supabase && (
           <AuthButton
             classProps={{
