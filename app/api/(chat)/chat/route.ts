@@ -165,6 +165,33 @@ function formatMessageContent(message: CoreMessage): string {
   return "";
 }
 
+// Add this helper function to debug message format
+function debugMessageFormat(messages: Array<Message>) {
+  console.log("Debug: Message format check");
+  messages.forEach((msg, index) => {
+    console.log(`Message ${index}:`, {
+      role: msg.role,
+      contentType: typeof msg.content,
+      content: msg.content,
+      hasToolCalls: !!msg.tool_calls,
+      hasName: !!msg.name,
+      hasFunctionCall: !!msg.function_call
+    });
+  });
+}
+
+// Add this helper function to normalize message content
+function normalizeMessage(message: Message) {
+  return {
+    role: message.role,
+    content: typeof message.content === 'object' ? JSON.stringify(message.content) : message.content,
+    name: message.name,
+    function_call: message.function_call,
+    tool_calls: message.tool_calls,
+    tool_call_id: message.tool_call_id,
+  };
+}
+
 /**
  * Main POST Handler
  * Processes incoming chat messages and generates AI responses
@@ -198,6 +225,19 @@ export async function POST(request: Request) {
     selectedModelId?: string;
     isBrowseEnabled: boolean;
   } = await request.json();
+
+  let modelToUse: string;
+
+  // Add debug logging
+  console.log("Received request:", {
+    chatId: id,
+    modelId: selectedModelId,
+    isBrowseEnabled,
+    messageCount: messages.length
+  });
+
+  // Debug message format
+  debugMessageFormat(messages);
 
   const user = await getUser();
 
@@ -255,8 +295,7 @@ export async function POST(request: Request) {
     });
 
     const streamingData = new StreamData();
-
-    const modelToUse = selectedModelId || "gpt-4o";
+    modelToUse = selectedModelId || "gpt-4o";
 
     // Credit check and usage - simplified since all messages cost 1 credit
     const usageCheck = canUseConfiguration(credits, {
@@ -273,15 +312,47 @@ export async function POST(request: Request) {
       );
     }
 
+    // Normalize messages before converting to core messages
+    const normalizedMessages = messages.map(normalizeMessage);
+    const coreMessages = convertToCoreMessages(normalizedMessages);
+    
+    // Debug core messages
+    console.log("Core messages format:", 
+      coreMessages.map(msg => ({
+        role: msg.role,
+        contentType: typeof msg.content,
+        hasToolCalls: Array.isArray(msg.content) && msg.content.some(c => c.type === 'tool-call')
+      }))
+    );
+
     // Handle response
+    const fileContext = await getRecentFileContext(user.id);
+    console.log("File context retrieved:", fileContext);
+
+    const systemMessage = createSystemPrompt(isBrowseEnabled, fileContext || undefined);
+
+    console.log("System message preview:", {
+      length: systemMessage.length,
+      hasFileContext: !!fileContext,
+      preview: systemMessage.substring(0, 200) + "..."
+    });
+
     const result = await streamText({
       model: customModel(modelToUse),
-      system: createSystemPrompt(isBrowseEnabled),
-      messages: coreMessages,
+      system: systemMessage,
+      messages: normalizedMessages,
       maxSteps: 5,
       experimental_activeTools: allTools,
       tools: createTools(streamingData, user.id, modelToUse, isBrowseEnabled),
       onFinish: async ({ responseMessages }) => {
+        // Add debug logging
+        console.log("Response messages format:", 
+          responseMessages.map(msg => ({
+            role: msg.role,
+            contentType: typeof msg.content
+          }))
+        );
+        
         if (user && user.id) {
           try {
             const responseMessagesWithoutIncompleteToolCalls =
@@ -343,24 +414,31 @@ export async function POST(request: Request) {
       headers,
     });
   } catch (error) {
-    console.error("Error in chat route:", error);
-    if (error instanceof Error && error.message === "Chat ID already exists") {
-      // If chat already exists, just continue with the message saving
-      await saveMessages({
-        chatId: id,
-        messages: [
-          {
-            id: generateUUID(),
-            chat_id: id,
-            role: userMessage.role as MessageRole,
-            content: formatMessageContent(userMessage),
-            created_at: new Date().toISOString(),
-          },
-        ],
-      });
-    } else {
-      throw error; // Re-throw other errors
-    }
+    console.error("Detailed error in chat route:", {
+      error,
+      messages: messages.map(m => ({
+        role: m.role,
+        contentType: typeof m.content
+      }))
+    });
+    
+    // Ensure proper error response
+    return new Response(
+      JSON.stringify({
+        error: error instanceof Error ? error.message : 'Unknown error',
+        details: process.env.NODE_ENV === 'development' ? {
+          stack: error instanceof Error ? error.stack : undefined,
+          messages: messages.map(m => ({
+            role: m.role,
+            contentType: typeof m.content
+          }))
+        } : undefined
+      }),
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }
 
@@ -404,4 +482,35 @@ export async function DELETE(request: Request) {
       status: 500,
     });
   }
+}
+
+async function getRecentFileContext(userId: string): Promise<string | null> {
+  const supabase = createClient();
+  
+  const { data: recentFile, error } = await supabase
+    .from('file_uploads')
+    .select('id, original_name, content_type, created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error || !recentFile) {
+    console.error("Error fetching recent file:", error);
+    return null;
+  }
+
+  console.log("Found recent file:", {
+    id: recentFile.id,
+    name: recentFile.original_name,
+    type: recentFile.content_type,
+    uploadedAt: recentFile.created_at
+  });
+
+  // Format the context to make the fileId very explicit
+  return `Recently uploaded file:
+- fileId: "${recentFile.id}"
+- fileName: "${recentFile.original_name}"
+- type: "${recentFile.content_type}"
+- uploadTime: "${recentFile.created_at}"`;
 }

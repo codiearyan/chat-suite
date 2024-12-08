@@ -82,12 +82,33 @@ Use the \`browseInternet\` tool to search for accurate, up-to-date information w
 - Do not include source mentions in your summary (sources are displayed separately).
 `;
 
-export function createSystemPrompt(isBrowseEnabled: boolean = false) {
-  const basePrompt = `${regularPrompt}\n\n${canvasPrompt}`;
+export function createSystemPrompt(isBrowseEnabled: boolean, fileContext?: string): string {
+  const fileInstructions = fileContext ? `
+Current file context:
+${fileContext}
 
-  const fullPrompt = isBrowseEnabled
-    ? `${basePrompt}\n\n${internetPrompt}`
-    : basePrompt;
+To access this file's content, use the fetch_document_content tool with the fileId from the context above.
+` : '';
 
-  return `${fullPrompt}\n\n`;
+  return `You are a helpful AI assistant with access to uploaded documents and files.
+
+${fileInstructions}
+
+When discussing documents:
+1. Use the fetch_document_content tool IMMEDIATELY when asked about file contents
+2. ALWAYS extract and use the fileId from the file context provided
+3. Analyze and explain document contents clearly
+4. Reference specific parts of the document in your responses
+
+For document queries:
+- IMPORTANT: Use the fileId provided in the context, don't ask for it
+- Don't just acknowledge the request, fetch the content right away
+- Provide detailed analysis of document contents
+
+${isBrowseEnabled ? `For web searches:
+- Use the browseInternet tool for current information
+- Combine document knowledge with web results when relevant
+` : ''}
+
+Remember: Don't ask for the fileId - it's in the context above. Use it directly with fetch_document_content.`;
 }

@@ -4,6 +4,7 @@ import { generateUUID } from "@/lib/ai/chat";
 import { saveDocument } from "@/lib/db/mutations";
 import { getDocumentById } from "@/lib/db/cached-queries";
 import { customModel } from "@/lib/ai/ai-utils";
+import { createClient } from "@/lib/utils/supabase/server";
 
 /**
  * Available AI Tools
@@ -11,6 +12,7 @@ import { customModel } from "@/lib/ai/ai-utils";
  * - createDocument: Creates new documents
  * - updateDocument: Updates existing documents
  * - browseInternet: Searches the internet for information
+ * - fetch_document_content: Fetches the content of a document that was previously uploaded
  *
  *
  * Generative UI Implementation Example:
@@ -43,14 +45,17 @@ import { customModel } from "@/lib/ai/ai-utils";
 type AllowedTools =
   | "createDocument"
   | "updateDocument"
-  | "browseInternet";
+  | "browseInternet"
+  | "fetch_document_content";
 
 // Group tools by functionality for better organization and potential feature flags
 export const canvasTools: AllowedTools[] = ["createDocument", "updateDocument"];
 export const internetTools: AllowedTools[] = ["browseInternet"];
+export const documentTools: AllowedTools[] = ["fetch_document_content"];
 export const allTools: AllowedTools[] = [
   ...canvasTools,
-  ...internetTools
+  ...internetTools,
+  ...documentTools
 ];
 
 // Add schema for Serper response
@@ -80,8 +85,16 @@ type BrowseTools = {
   };
 };
 
+type DocumentTools = {
+  fetch_document_content: {
+    description: string;
+    parameters: z.ZodObject<any>;
+    execute: (params: { fileId: string }) => Promise<any>;
+  };
+};
+
 // Define return type for createTools
-type ToolsReturn = BaseTools & Partial<BrowseTools>;
+type ToolsReturn = BaseTools & Partial<BrowseTools & DocumentTools>;
 
 // Define the analysis schema with clearer intent
 const AppAnalysisSchema = z.object({
@@ -97,6 +110,11 @@ const AppAnalysisSchema = z.object({
   needsCombination: z.boolean(),
   summary: z.string(),
   recommendedWorkflow: z.string().optional(),
+});
+
+// Add parameter schema for document tool
+const DocumentParamsSchema = z.object({
+  fileId: z.string().describe("The ID of the file to fetch content for"),
 });
 
 /**
@@ -116,7 +134,7 @@ export function createTools(
     isBrowseEnabled,
   });
 
-  const baseTools: BaseTools = {
+  const baseTools: BaseTools & DocumentTools = {
     /**
      * Document Creation Tool
      * Creates a new document with AI-generated content
@@ -282,8 +300,46 @@ export function createTools(
         };
       },
     },
+
+    fetch_document_content: {
+      description: "Fetches the content of a document that was previously uploaded",
+      parameters: DocumentParamsSchema,
+      execute: async ({ fileId }) => {
+        console.log("Document content tool called with params:", { fileId });
+        
+        const supabase = createClient();
+        
+        // First get the file metadata
+        const { data: fileData, error: fileError } = await supabase
+          .from('file_uploads')
+          .select('*')
+          .eq('id', fileId)
+          .eq('user_id', userId)
+          .single();
+
+        if (fileError || !fileData) {
+          console.error("Error fetching file metadata:", fileError);
+          return null;
+        }
+
+        // Then get the document content
+        const { data: contentData, error: contentError } = await supabase
+          .from('document_content')
+          .select('content')
+          .eq('file_id', fileId);
+
+        if (contentError || !contentData?.length) {
+          console.error("Error fetching document content:", contentError);
+          return null;
+        }
+
+        // Just return the raw content
+        return contentData.map(item => item.content).join('\n\n');
+      }
+    }
   };
 
+  // Return tools based on enabled features
   if (!isBrowseEnabled) {
     return baseTools;
   }
