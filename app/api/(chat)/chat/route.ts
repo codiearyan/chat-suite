@@ -192,6 +192,70 @@ function normalizeMessage(message: Message) {
   };
 }
 
+// Add this type for better type safety
+interface WebSearchResult {
+  toolCallId: string;
+  sources: Array<{
+    title: string;
+    url: string;
+  }>;
+  content: Array<{
+    title: string;
+    content: string;
+  }>;
+  status: 'success' | 'error';
+  error?: string;
+}
+
+// Update the formatWebSearchResponse function
+function formatWebSearchResponse(
+  sources: any[], 
+  scrapedContent: any[]
+): Omit<WebSearchResult, 'toolCallId' | 'status'> {
+  // Format sources into a clean list
+  const formattedSources = sources.slice(0, 5).map(source => ({
+    title: source.title,
+    url: source.url
+  }));
+
+  // Format scraped content, limiting length to prevent streaming issues
+  const formattedContent = scrapedContent.map(item => ({
+    title: item.title,
+    content: typeof item.content === 'string' 
+      ? item.content.substring(0, 2000) // Limit content length
+      : JSON.stringify(item.content).substring(0, 2000)
+  }));
+
+  return {
+    sources: formattedSources,
+    content: formattedContent
+  };
+}
+
+// Add this helper function at the top with other helpers
+function validateAndCleanMessages(messages: Message[]): Message[] {
+  return messages.filter(message => {
+    // Ensure message has content
+    if (!message.content) return false;
+    
+    // If content is string, check it's not empty after trimming
+    if (typeof message.content === 'string') {
+      return message.content.trim().length > 0;
+    }
+    
+    // If content is an array, ensure it has non-empty items
+    if (Array.isArray(message.content)) {
+      return message.content.some(item => {
+        if (item.type === 'text') return item.text.trim().length > 0;
+        if (item.type === 'tool-call') return true; // Tool calls are valid
+        return false;
+      });
+    }
+    
+    return false;
+  });
+}
+
 /**
  * Main POST Handler
  * Processes incoming chat messages and generates AI responses
@@ -226,6 +290,22 @@ export async function POST(request: Request) {
     isBrowseEnabled: boolean;
   } = await request.json();
 
+  // Add validation early in the function
+  const cleanedMessages = validateAndCleanMessages(messages);
+  
+  if (cleanedMessages.length === 0) {
+    return new Response(
+      JSON.stringify({
+        error: "Invalid messages",
+        message: "No valid messages found in the request"
+      }),
+      { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
+  }
+
   let modelToUse: string;
 
   // Add debug logging
@@ -233,11 +313,11 @@ export async function POST(request: Request) {
     chatId: id,
     modelId: selectedModelId,
     isBrowseEnabled,
-    messageCount: messages.length
+    messageCount: cleanedMessages.length
   });
 
   // Debug message format
-  debugMessageFormat(messages);
+  debugMessageFormat(cleanedMessages);
 
   const user = await getUser();
 
@@ -246,11 +326,20 @@ export async function POST(request: Request) {
   }
 
   // Get the most recent user message for title generation
-  const coreMessages = convertToCoreMessages(messages);
+  const coreMessages = convertToCoreMessages(cleanedMessages);
   const userMessage = getMostRecentUserMessage(coreMessages);
 
   if (!userMessage || userMessage.role !== "user") {
-    return new Response("No user message found", { status: 400 });
+    return new Response(
+      JSON.stringify({
+        error: "Invalid request",
+        message: "No valid user message found"
+      }),
+      { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 
   const supabase = createClient();
@@ -313,7 +402,7 @@ export async function POST(request: Request) {
     }
 
     // Normalize messages before converting to core messages
-    const normalizedMessages = messages.map(normalizeMessage);
+    const normalizedMessages = cleanedMessages.map(normalizeMessage);
     const coreMessages = convertToCoreMessages(normalizedMessages);
     
     // Debug core messages
@@ -355,12 +444,19 @@ export async function POST(request: Request) {
         
         if (user && user.id) {
           try {
-            const responseMessagesWithoutIncompleteToolCalls =
-              sanitizeResponseMessages(responseMessages);
+            const sanitizedMessages = responseMessages.map(msg => {
+              if (msg.role === 'tool' && typeof msg.content === 'string') {
+                return {
+                  ...msg,
+                  content: parseToolResponse(msg.content, msg.name || 'unknown')
+                };
+              }
+              return msg;
+            });
 
             await saveMessages({
               chatId: id,
-              messages: responseMessagesWithoutIncompleteToolCalls.map(
+              messages: sanitizedMessages.map(
                 (message) => {
                   const messageId = generateUUID();
 
@@ -414,24 +510,27 @@ export async function POST(request: Request) {
       headers,
     });
   } catch (error) {
-    console.error("Detailed error in chat route:", {
-      error,
-      messages: messages.map(m => ({
+    // Improve error logging
+    console.error("Chat route error:", {
+      error: error instanceof Error ? {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      } : error,
+      messageCount: cleanedMessages.length,
+      messagesPreview: cleanedMessages.map(m => ({
         role: m.role,
-        contentType: typeof m.content
+        contentType: typeof m.content,
+        contentLength: typeof m.content === 'string' ? m.content.length : 'n/a'
       }))
     });
-    
-    // Ensure proper error response
+
     return new Response(
       JSON.stringify({
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: "An error occurred while processing your request",
         details: process.env.NODE_ENV === 'development' ? {
-          stack: error instanceof Error ? error.stack : undefined,
-          messages: messages.map(m => ({
-            role: m.role,
-            contentType: typeof m.content
-          }))
+          message: error instanceof Error ? error.message : 'Unknown error',
+          type: error instanceof Error ? error.name : 'Unknown type'
         } : undefined
       }),
       { 

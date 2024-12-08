@@ -58,29 +58,24 @@ Canvas is a user interface mode that assists with writing, editing, and content 
 `;
 
 export const internetPrompt = `
-Use the \`browseInternet\` tool to search for accurate, up-to-date information when users ask about:
+When users request current information, follow these EXACT steps:
 
-- Facts and statistics
-- Current events
-- Time-sensitive information
-- Topics requiring multiple sources
+1. FIRST use the browseInternet tool to gather information
+2. WAIT for the search results before providing any response
+3. ONLY AFTER receiving results, provide your analysis
 
-**When You Receive Search Results:**
+DO NOT:
+- Make preliminary statements before searching
+- Apologize about dates or timing
+- Provide partial responses before getting search results
 
-1. **Review:** Go through the scraped content from all sources.
-2. **Summarize:** Create a clear, factual summary of the key points.
-3. **Respond:** Format your response as:
+Format your response ONLY AFTER receiving search results as:
 
-   "I've searched for information about [topic]. Here's what I found:
+"Based on my search, here's what I found about [topic]:
 
-   [Your concise, factual summary]"
+[Your concise, factual summary based on the search results]"
 
-**Important:**
-
-- Be objective and factual.
-- Focus on relevant and recent information.
-- Do not include source mentions in your summary (sources are displayed separately).
-`;
+Remember: Always search first, respond second.`;
 
 export function createSystemPrompt(isBrowseEnabled: boolean, fileContext?: string): string {
   const fileInstructions = fileContext ? `
@@ -106,8 +101,10 @@ For document queries:
 - Provide detailed analysis of document contents
 
 ${isBrowseEnabled ? `For web searches:
-- Use the browseInternet tool for current information
-- Combine document knowledge with web results when relevant
+- ALWAYS use browseInternet tool as your FIRST action for any query about current information
+- DO NOT make any statements or acknowledgments before searching
+- WAIT for search results before providing ANY response
+- Format responses exactly as: "Based on my search, here's what I found about [topic]: [summary]"
 ` : ''}
 
 Remember: Don't ask for the fileId - it's in the context above. Use it directly with fetch_document_content.`;
