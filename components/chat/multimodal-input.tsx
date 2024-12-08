@@ -23,7 +23,7 @@ import {
   AIModelDisplayInfo,
 } from "@/lib/ai/models";
 import { getCookie, setCookie } from "@/lib/utils/cookies";
-import { ImageIcon } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { PreviewAttachment } from "./preview-attachment";
 import { Button } from "../ui/button";
 import { ArrowUpIcon, StopIcon } from "./icons";
@@ -35,6 +35,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsMounted } from "usehooks-ts";
+import { formatFileSize } from "@/lib/utils";
+import { AnyAaaaRecord } from "dns";
 
 const suggestedActions = [
   {
@@ -54,14 +57,19 @@ const suggestedActions = [
   },
 ];
 
+interface ExtendedAttachment extends Attachment {
+  size?: number;
+  id?: string;
+}
+
 interface MultimodalInputProps {
   chatId: string;
   input: string;
   setInput: (value: string) => void;
   isLoading: boolean;
   stop: () => void;
-  attachments: Array<Attachment>;
-  setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
+  attachments: Array<ExtendedAttachment>;
+  setAttachments: Dispatch<SetStateAction<Array<ExtendedAttachment>>>;
   containsImages: boolean;
   messages: Array<Message>;
   setMessages: Dispatch<SetStateAction<Array<Message>>>;
@@ -93,12 +101,12 @@ interface UploadQueueItem {
   file: File;
 }
 
-const MAX_FILE_SIZE = 4 * 1024 * 1024; // 5MB in bytes
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
 // Extend the Message type to include attachments
 interface ExtendedMessage extends Message {
-  attachments?: Attachment[];
-  experimental_attachments?: Attachment[];
+  attachments?: ExtendedAttachment[];
+  experimental_attachments?: ExtendedAttachment[];
 }
 
 export function MultimodalInput({
@@ -137,11 +145,9 @@ export function MultimodalInput({
     "input",
     ""
   );
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadQueue, setUploadQueue] = useState<UploadQueueItem[]>([]);
-  const [previewAttachments, setPreviewAttachments] = useState<Attachment[]>(
-    []
-  );
+  const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
+  const [previewAttachments, setPreviewAttachments] = useState<ExtendedAttachment[]>([]);
 
   const submitForm = useCallback(() => {
     window.history.replaceState({}, "", `/chat/${chatId}`);
@@ -200,94 +206,92 @@ export function MultimodalInput({
     setLocalStorageInput(input);
   }, [input, setLocalStorageInput]);
 
+  useEffect(() => {
+    const processUploadQueue = async () => {
+      if (uploadQueue.length > 0) {
+        const [currentUpload, ...remainingQueue] = uploadQueue;
+        
+        // Add file to uploading set
+        setUploadingFiles(prev => new Set(prev).add(currentUpload.id));
+        
+        try {
+          const formData = new FormData();
+          formData.append("file", currentUpload.file);
+          formData.append("chatId", chatId);
+
+          const response = await fetch(`/api/files/upload`, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setAttachments(prev => [...prev, {
+              url: data.url,
+              name: currentUpload.name,
+              contentType: currentUpload.file.type,
+              size: currentUpload.file.size,
+              id: currentUpload.id
+            }]);
+          } else {
+            const { error } = await response.json();
+            toast({
+              title: "Upload error",
+              description: error,
+            });
+          }
+        } catch (error) {
+          console.error("Upload failed:", error);
+          toast({
+            title: "Upload failed",
+            description: "Failed to upload file, please try again!",
+          });
+        } finally {
+          // Remove file from uploading set
+          setUploadingFiles(prev => {
+            const next = new Set(prev);
+            next.delete(currentUpload.id);
+            return next;
+          });
+          setUploadQueue(remainingQueue);
+        }
+      }
+    };
+  
+    processUploadQueue();
+  }, [uploadQueue, chatId]);
+
   const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(event.target.value);
     adjustHeight();
   };
 
-  const uploadFile = async (file: File, chatId: string) => {
-    setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("chatId", chatId);
-
-    try {
-      const response = await fetch(`/api/files/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        return {
-          url: data.url,
-          name: data.path,
-          contentType: file.type,
-        };
-      } else {
-        const { error, details } = await response.json();
-        console.error("Upload error:", { error, details });
+  const handleFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter((file) => {
+      if (file.size > MAX_FILE_SIZE) {
         toast({
-          title: "Upload error",
-          description: error,
+          title: "File too large",
+          description: `${file.name} is larger than ${formatFileSize(MAX_FILE_SIZE)}`,
         });
+        return false;
       }
-    } catch (error) {
-      console.error("Upload failed:", error);
-      toast({
-        title: "Upload failed",
-        description: "Failed to upload file, please try again!",
-      });
-    } finally {
-      setIsUploading(false);
-    }
-  };
+      return true;
+    });
 
-  const handleFileChange = useCallback(
-    async (event: ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(event.target.files || []);
-      if (files.length === 0) return;
+    // Add files to upload queue with unique IDs
+    setUploadQueue((prev) => [
+      ...prev,
+      ...validFiles.map((file) => ({
+        id: crypto.randomUUID(),
+        name: file.name,
+        file,
+      })),
+    ]);
 
-      // Process each file one by one
-      for (const file of files) {
-        // Check file size
-        if (file.size > MAX_FILE_SIZE) {
-          toast({
-            title: `${file.name} exceeds 5MB limit`,
-          });
-          continue;
-        }
-
-        // Add single file to upload queue
-        const queueItem = {
-          id: crypto.randomUUID(),
-          name: file.name,
-          file,
-        };
-        setUploadQueue((prev) => [...prev, queueItem]);
-        setIsUploading(true);
-
-        try {
-          const uploadedAttachment = await uploadFile(file, chatId);
-          if (uploadedAttachment) {
-            setAttachments((current) => [...current, uploadedAttachment]);
-          }
-        } catch (error) {
-          console.error("Error uploading file:", error);
-          toast({
-            title: `Failed to upload ${file.name}`,
-          });
-        } finally {
-          // Remove this file from the queue
-          setUploadQueue((prev) =>
-            prev.filter((item) => item.id !== queueItem.id)
-          );
-        }
-      }
-      setIsUploading(false);
-    },
-    [setAttachments, chatId]
-  );
+    // Reset input
+    e.target.value = "";
+  }, []);
 
   useEffect(() => {
     // Load both cookies on mount
@@ -408,11 +412,11 @@ export function MultimodalInput({
           <div className="flex flex-row gap-2 overflow-x-scroll items-end">
             {attachments.length > 0 && (
               <div className="flex flex-wrap gap-2 pb-2">
-                {attachments.map((attachment) => (
+                {attachments.map((attachment: any) => (
                   <div key={attachment.url} className="relative group">
                     <PreviewAttachment
                       attachment={attachment}
-                      isUploading={isUploading}
+                      isUploading={uploadingFiles.has(attachment.id)}
                       showFileName={false}
                       size="small"
                     />
@@ -435,7 +439,7 @@ export function MultimodalInput({
                   name: queueItem.name,
                   contentType: "",
                 }}
-                isUploading={true}
+                isUploading={uploadingFiles.has(queueItem.id)}
               />
             ))}
           </div>
@@ -548,11 +552,12 @@ export function MultimodalInput({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <label className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                    <ImageIcon className="h-4 w-4" />
-                    Upload Image
+                
+                    <Paperclip className="h-4 w-4" />
+                    Attach Files
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/*, application/pdf"
                       multiple
                       className="hidden"
                       onChange={(e) => handleFileChange(e)}
@@ -560,7 +565,7 @@ export function MultimodalInput({
                   </label>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Upload images (max 5MB per image)</p>
+                  <p>Upload images and PDF files (max 10MB per file)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
