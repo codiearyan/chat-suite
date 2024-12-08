@@ -8,7 +8,7 @@ create table
     avatar_url text null,
     email text null,
     purchase text null,
-    credits smallint null default '10'::smallint,
+    credits smallint null default '20'::smallint,
     constraint profiles_pkey primary key (id),
     constraint profiles_username_key unique (username),
     constraint profiles_id_fkey foreign key (id) references auth.users (id) on delete cascade,
