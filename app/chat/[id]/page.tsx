@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { Chat as PreviewChat } from "@/components/chat/chat";
 import {
@@ -45,6 +45,10 @@ export default async function Page(props: { params: Promise<any> }) {
     availableModels.find((model) => model.id === modelIdFromCookie)?.id ||
     toolConfig.aiModel;
 
+    if(!user){
+     redirect("/auth");
+     return;
+    }
   return (
     <PreviewChat
       id={chat.id}
@@ -52,6 +56,7 @@ export default async function Page(props: { params: Promise<any> }) {
       selectedModelId={selectedModelId}
       initialBrowseEnabled={browseEnabledFromCookie}
       isAuthenticated={!!user}
+      userEmail={user?.email || ""}
     />
   );
 }
