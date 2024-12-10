@@ -3,23 +3,35 @@ export const AI_MODEL_DISPLAY = {
     name: "GPT-4o",
     logo: "/providers/openai.webp",
     vision: true,
+    isComingSoon: false,
   },
   "claude-3-5-sonnet-latest": {
     name: "Claude 3.5 Sonnet",
     logo: "/providers/anthropic.jpeg",
     vision: true,
+    isComingSoon: false,
   },
-  // "llama-3.3-70b-versatile": {
-  //   name: "Llama 3.3 70b",
-  //   logo: "/providers/meta.png",
-  //   vision: false,
-  // },
-  // "gemini-1.5-pro-latest": {
-  //   name: "Gemini 1.5 Pro",
-  //   logo: "/providers/gemini.png",
-  //   vision: true,
-  // },
+  "llama-3.3-70b-versatile": {
+    name: "Llama 3.3 70b",
+    logo: "/providers/meta.png",
+    vision: false,
+    isComingSoon: true,
+  },
+  "gemini-1.5-pro-latest": {
+    name: "Gemini 1.5 Pro",
+    logo: "/providers/gemini.png",
+    vision: true,
+    isComingSoon: true,
+  },
+  "qwen-2.5-72b-instruct": {
+    name: "Qwen 2.5 72b",
+    logo: "/providers/qwen.png",
+    vision: true,
+    isComingSoon: true,
+  },
 } as const;
+
+// ... rest of the file remains same ...
 
 // Get model IDs from the display object
 export const AI_MODELS = Object.keys(AI_MODEL_DISPLAY) as Array<
