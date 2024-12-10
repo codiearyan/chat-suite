@@ -1,6 +1,5 @@
-import { companyConfig } from "@/config";
-import Navbar from "@/components/navbars/Navbar-1";
-import Footer from "@/components/footers/Footer-1";
+import Navbar from "@/components/landing/Navbar";
+import Footer from "@/components/landing/Footer";
 
 export default async function CommonLayout({
   children,
@@ -9,15 +8,9 @@ export default async function CommonLayout({
 }) {
   return (
     <div className="bg-base-100">
-      <Navbar
-        companyConfig={companyConfig.company!}
-        navbarConfig={companyConfig.navbarLanding!}
-      />
+      <Navbar />
       {children}
-      <Footer
-        companyConfig={companyConfig.company!}
-        footerConfig={companyConfig.footerLanding!}
-      />
+      <Footer />
     </div>
   );
 }

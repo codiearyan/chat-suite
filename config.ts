@@ -15,6 +15,12 @@ export const companyConfig = {
     ],
   },
 
+  legal: {
+    privacyPolicyUrl: "/privacy",
+    tosUrl: "/terms",
+    refundPolicyUrl: "/refund",
+  },
+
   ////// UI config
   navbarLanding: {
     bgColor: "base-100",
