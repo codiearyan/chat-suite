@@ -50,3 +50,6 @@ next-env.d.ts
 # Supabase
 supabase/.temp/
 supabase/config.toml
+
+# Private files
+PivotWithAI final code

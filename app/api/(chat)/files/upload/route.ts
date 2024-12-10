@@ -87,12 +87,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate unique filename and path
-    const uuid = uuidv4();
+    const fileId = uuidv4();
     const sanitizedOriginalName = file.name
       .replace(/[^a-zA-Z0-9.-]/g, "_")
       .toLowerCase();
-    const fileName = `${uuid}-${sanitizedOriginalName}`;
-    const uploadPath = `chat/files/${uuid}`;
+    const fileName = `${fileId}-${sanitizedOriginalName}`;
+    const uploadPath = `chat/files/${fileId}`;
 
     // Upload file to storage
     const { url: publicUrl, path: filePath } = await uploadFile({
@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
     const { error: dbError } = await supabase
       .from("file_uploads")
       .insert({
+        id: fileId,
         user_id: user.id,
         chat_id: chatId,
         context: "chat",
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
         .from("document_content")
         .insert(
           processedDocs.map(doc => ({
-            file_id: fileName,
+            file_id: fileId,
             content: doc.content,
             metadata: doc.metadata,
           }))

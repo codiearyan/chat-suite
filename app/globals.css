@@ -40,7 +40,7 @@
 }
 
 code {
-  @apply bg-muted text-foreground px-[0.4em] py-[0.2em] rounded-[3px] font-mono text-[0.95em];
+  @apply bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] px-[0.4em] py-[0.2em] rounded-[3px] font-mono text-[0.95em];
 }
 
 @layer base {
@@ -124,7 +124,7 @@ code {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
-
+/* 
 @layer base {
   * {
     @apply border-border;
@@ -132,7 +132,7 @@ code {
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
 
 .prosemirror-editor {
   width: 100%;
