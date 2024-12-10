@@ -18,7 +18,7 @@ export function AppInfo() {
       icon: <ImageIcon className="w-4 h-4" />,
       title: "Visual Intelligence",
       description:
-        "Analyze images, compare visuals, and process screenshots instantly",
+        "Process images, PDFs, documents (DOCX), text files, and CSV data with instant analysis",
     },
     {
       icon: <GlobeIcon className="w-4 h-4" />,
@@ -43,29 +43,29 @@ export function AppInfo() {
       transition={{ duration: 0.3 }}
     >
       <div className="rounded-2xl bg-gradient-to-b from-background/50 to-background/80 backdrop-blur-sm border border-border/50 shadow-sm dark:shadow-lg dark:shadow-background/5">
-        <div className="p-4 space-y-2">
+        <div className=" space-y-2 my-1">
           {/* Title */}
           <div className="text-center">
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center  flex-col justify-center ">
               <Image
                 src="/chatsuite_nobg.png"
                 alt="ChatSuite Logo"
-                width={100}
-                height={100}
+                width={70}
+                height={70}
                 className="object-contain"
               />
-              {/* <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
+              <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
                 CHATSUITE
-              </h1> */}
+              </h1>
             </div>
             <p className="text-sm text-muted-foreground">
-              Your intelligent AI companion for visual analysis, web research,
-              and content creation
+              Your Intelligent AI Companion for Visual Analysis, Web Research,
+              and Content Creation
             </p>
           </div>
 
           {/* Features Grid */}
-          <div className="grid gap-2 grid-cols-1 md:grid-cols-2">
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 mx-2">
             {features.map((feature, i) => (
               <motion.div
                 key={i}

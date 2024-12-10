@@ -222,6 +222,7 @@ export function PreviewMessage({
             <Image
               src="/chatsuite_nobg.png"
               alt="Pivot with AI"
+              className="rounded-full object-cover"
               width={24}
               height={24}
             />

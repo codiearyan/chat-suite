@@ -101,7 +101,7 @@ interface UploadQueueItem {
   file: File;
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
 // Extend the Message type to include attachments
 interface ExtendedMessage extends Message {
@@ -402,7 +402,7 @@ export function MultimodalInput({
           uploadQueue.length === 0 &&
           messages.length === 0 && (
             <div className="w-full px-1">
-              <div className="text-sm text-muted-foreground/60 mb-4 font-medium">
+              <div className="text-sm text-muted-foreground/60 mb-1 font-medium">
                 Get started with
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -437,7 +437,6 @@ export function MultimodalInput({
               </div>
             </div>
           )}
-
         {(attachments.length > 0 || uploadQueue.length > 0) && (
           <div className="flex flex-row gap-2 overflow-x-scroll items-end">
             {attachments.length > 0 && (
@@ -477,15 +476,31 @@ export function MultimodalInput({
 
         <textarea
           ref={textareaRef}
-          placeholder="Ask Chatsuite Anything..."
+          placeholder="Ask ChatSuite Anything..."
           value={input}
           onChange={handleInput}
           className={cn(
             "min-h-[72px] w-full max-h-[calc(100dvh)]",
             "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
             "outline-none focus:outline-none focus:ring-0",
-            "bg-black dark:bg-background/30 border dark:border-border/40 border-white",
-            "backdrop-blur-sm transition-colors duration-200",
+            // Base glassmorphism
+            "bg-white/5 dark:bg-zinc-900/30",
+            "backdrop-blur-[12px] backdrop-saturate-150",
+            "border border-white/10 dark:border-zinc-800/50",
+            "shadow-[0_8px_16px_rgba(0,0,0,0.08)]",
+            "dark:shadow-[0_8px_16px_rgba(0,0,0,0.2)]",
+            // Shining effect
+            "relative isolate",
+            "before:absolute before:inset-0 before:-z-10",
+            "before:bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.1),transparent)]",
+            "before:bg-[length:200%_100%]",
+            "before:animate-[shine_8s_linear_infinite]",
+            // Hover and focus states
+            "hover:bg-white/10 dark:hover:bg-zinc-900/40",
+            "hover:border-white/20 dark:hover:border-zinc-700/50",
+            "focus:bg-white/15 dark:focus:bg-zinc-900/50",
+            "focus:border-white/30 dark:focus:border-zinc-700/80",
+            "transition-all duration-200 ease-in-out",
             className
           )}
           rows={3}
@@ -503,9 +518,8 @@ export function MultimodalInput({
             }
           }}
         />
-
         {isLoading ? (
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -525,7 +539,7 @@ export function MultimodalInput({
             </Tooltip>
           </TooltipProvider>
         ) : (
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -553,32 +567,34 @@ export function MultimodalInput({
             </Tooltip>
           </TooltipProvider>
         )}
-
         <div className="absolute bottom-2.5 left-2 flex gap-2 items-center">
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
                   onClick={handleBrowseClick}
                   className={cn(
-                    "p-2 rounded-full transition-colors",
+                    "p-2 rounded-full transition-colors inline-flex items-center gap-2",
                     isBrowseEnabled
-                      ? "bg-blue-500/10 text-blue-500"
+                      ? "bg-blue-500/10 text-blue-500 px-3" // Added more padding for text
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   <Globe className="h-4 w-4" />
+                  {isBrowseEnabled && (
+                    <span className="text-xs font-medium">Search</span>
+                  )}
                 </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Enable web browsing</p>
+                <p>{isBrowseEnabled ? "Disable" : "Enable"} web browsing</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
           {AI_MODEL_DISPLAY[selectedModel.id].vision && (
-            <TooltipProvider>
+            <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <label className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
@@ -594,7 +610,7 @@ export function MultimodalInput({
                   </label>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Upload images and PDF files (max 10MB per file)</p>
+                  <p>Upload files (max 5MB per file)</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

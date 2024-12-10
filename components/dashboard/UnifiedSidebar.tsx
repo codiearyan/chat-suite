@@ -2,25 +2,27 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useCallback, useEffect } from "react";
-import { Badge } from "@/components/dashboard/Badge";
 import { User } from "@supabase/supabase-js";
 import { twMerge } from "tailwind-merge";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Plus } from "lucide-react";
 import { isMobile } from "@/lib/utils";
 import { SidebarHistory } from "@/components/chat/sidebar/sidebar-history";
 import { Heading } from "./Heading";
 import { IconChevronLeft, IconLayoutSidebar } from "@tabler/icons-react";
 import { Credits } from "@/components/ui/credits";
 import AuthButton from "@/components/auth/AuthButton";
+import Image from "next/image";
 
 interface UnifiedSidebarProps {
   user: User | null;
   showChatHistory?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 export function UnifiedSidebar({
   user,
   showChatHistory = false,
+  onCollapsedChange,
 }: UnifiedSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [open, setOpen] = useState(!isMobile());
@@ -29,39 +31,61 @@ export function UnifiedSidebar({
   const pathname = usePathname();
   const router = useRouter();
 
+  useEffect(() => {
+    onCollapsedChange?.(isCollapsed);
+  }, [isCollapsed, onCollapsedChange]);
+
   return (
     <>
-      <div
+      <aside
         className={twMerge(
           "transition-all duration-300 ease-in-out fixed lg:relative",
-          open ? "block" : "hidden",
-          isCollapsed ? "w-[60px]" : "w-[260px]",
-          "h-screen bg-[#191b1f] z-40"
+          open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          isCollapsed ? "w-[60px] bg-background" : "w-[260px]  bg-muted/50",
+          "h-screen"
         )}
       >
         <div
           className={twMerge(
-            "h-full flex flex-col lg:rounded-tl-xl",
-            isCollapsed ? "w-[60px]" : "w-[260px] border-r-2 border-border/80"
+            "absolute inset-0 flex flex-col lg:rounded-tl-xl",
+            isCollapsed ? "" : "border-r border-border/80"
           )}
         >
-          <div className="hidden lg:block">
-            <button
-              className="absolute top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-            >
-              <IconLayoutSidebar
+          <div className="flex items-center justify-between px-4 py-2 my-2">
+            {!isCollapsed && (
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/chatsuite_nobg.png"
+                  alt="ChatSuite Logo"
+                  width={30}
+                  height={30}
+                />
+                <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
+                  CHATSUITE
+                </h1>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <button
                 className={twMerge(
-                  "h-4 w-4 text-foreground transition-transform",
-                  isCollapsed ? "rotate-180" : ""
+                  "h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80",
+                  isCollapsed && "mx-auto"
                 )}
-              />
-            </button>
+                onClick={() => setIsCollapsed(!isCollapsed)}
+              >
+                <IconLayoutSidebar
+                  className={twMerge(
+                    "h-4 w-4 text-foreground transition-transform duration-300",
+                    isCollapsed ? "rotate-180" : ""
+                  )}
+                />
+              </button>
+            </div>
           </div>
 
           {!isCollapsed && (
             <>
-              <div className="flex-1 overflow-auto no-scrollbar mt-14 px-3">
+              <div className="flex-1 overflow-auto no-scrollbar px-3">
                 <div className="flex flex-col space-y-1 relative z-40">
                   <div className="flex flex-col">
                     {showChatHistory && (
@@ -131,7 +155,7 @@ export function UnifiedSidebar({
             </>
           )}
         </div>
-      </div>
+      </aside>
 
       <button
         className="fixed lg:hidden top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80"

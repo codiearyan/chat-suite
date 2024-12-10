@@ -10,7 +10,7 @@ export const AI_MODEL_DISPLAY = {
     vision: true,
   },
   "llama-3.3-70b-versatile": {
-    name: "Llama 3.3 (Pro)",
+    name: "Llama 3.3 70b",
     logo: "/providers/meta.png",
     vision: false,
   },

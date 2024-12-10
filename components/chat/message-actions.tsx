@@ -3,6 +3,12 @@ import { useCopyToClipboard } from "usehooks-ts";
 import { useState } from "react";
 import { CopyIcon, CheckIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export function MessageActions({
   message,
@@ -27,17 +33,26 @@ export function MessageActions({
 
   return (
     <div className="flex flex-row gap-2">
-      <Button
-        className="py-1 px-2 text-xs h-fit hover:bg-primary/10 text-primary hover:text-primary"
-        variant="ghost"
-        onClick={handleCopy}
-      >
-        {hasCopied ? (
-          <CheckIcon className="text-xs text-green-500 w-4 h-4" />
-        ) : (
-          <CopyIcon className="text-xs w-4 h-4" />
-        )}
-      </Button>
+      <TooltipProvider delayDuration={0}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className="py-1 px-2 text-xs h-fit hover:bg-primary/10 text-primary hover:text-primary"
+              variant="ghost"
+              onClick={handleCopy}
+            >
+              {hasCopied ? (
+                <CheckIcon className="text-xs text-green-500 w-4 h-4" />
+              ) : (
+                <CopyIcon className="text-xs w-4 h-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{hasCopied ? "Copied!" : "Copy to clipboard"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 }

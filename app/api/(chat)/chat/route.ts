@@ -257,6 +257,16 @@ function validateAndCleanMessages(messages: Message[]): Message[] {
   });
 }
 
+// Add this helper function at the top
+function isImageType(contentType: string): boolean {
+  return [
+    "image/jpeg",
+    "image/png", 
+    "image/gif",
+    "image/webp"
+  ].includes(contentType);
+}
+
 /**
  * Main POST Handler
  * Processes incoming chat messages and generates AI responses
@@ -419,20 +429,20 @@ export async function POST(request: Request) {
     const fileContext = await getRecentFileContext(user.id);
     console.log("File context retrieved:", fileContext);
 
-    const systemMessage = createSystemPrompt(isBrowseEnabled, fileContext || undefined);
+    // Update how we create tools based on file type
+    let activeTools = isBrowseEnabled ? allTools : allTools.filter(t => t !== "browseInternet");
 
-    console.log("System message preview:", {
-      length: systemMessage.length,
-      hasFileContext: !!fileContext,
-      preview: systemMessage.substring(0, 200) + "..."
-    });
+    // If we have a file context and it's an image, remove the document fetching tool
+    if (fileContext?.includes("Recently uploaded image:")) {
+      activeTools = activeTools.filter(t => t !== "fetch_document_content");
+    }
 
     const result = await streamText({
       model: customModel(modelToUse),
-      system: systemMessage,
+      system: createSystemPrompt(isBrowseEnabled, fileContext || undefined),
       messages: normalizedMessages,
       maxSteps: 5,
-      experimental_activeTools: allTools,
+      experimental_activeTools: activeTools,
       tools: createTools(streamingData, user.id, modelToUse, isBrowseEnabled),
       onFinish: async ({ responseMessages }) => {
         // Add debug logging
@@ -589,7 +599,7 @@ async function getRecentFileContext(userId: string): Promise<string | null> {
   
   const { data: recentFile, error } = await supabase
     .from('file_uploads')
-    .select('id, original_name, content_type, created_at')
+    .select('id, original_name, content_type, created_at, url')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -607,7 +617,15 @@ async function getRecentFileContext(userId: string): Promise<string | null> {
     uploadedAt: recentFile.created_at
   });
 
-  // Format the context to make the fileId very explicit
+  // For images, include the URL in the context
+  if (isImageType(recentFile.content_type)) {
+    return `Recently uploaded image:
+- url: "${recentFile.url}"
+- fileName: "${recentFile.original_name}"
+- type: "${recentFile.content_type}"`;
+  }
+
+  // For documents, keep the existing format
   return `Recently uploaded file:
 - fileId: "${recentFile.id}"
 - fileName: "${recentFile.original_name}"

@@ -78,18 +78,29 @@ Format your response ONLY AFTER receiving search results as:
 Remember: Always search first, respond second.`;
 
 export function createSystemPrompt(isBrowseEnabled: boolean, fileContext?: string): string {
-  const fileInstructions = fileContext ? `
+  // Check if we're dealing with an image
+  const isImage = fileContext?.includes("Recently uploaded image:");
+  
+  const fileInstructions = fileContext 
+    ? isImage 
+      ? `
+Current context includes an image:
+${fileContext}
+
+You can see this image directly - analyze and describe what you see in the image.
+No need to use any tools for this - the image URL is provided above.`
+      : `
 Current file context:
 ${fileContext}
 
-To access this file's content, use the fetch_document_content tool with the fileId from the context above.
-` : '';
+To access this file's content, use the fetch_document_content tool with the fileId from the context above.`
+    : '';
 
   return `You are a helpful AI assistant with access to uploaded documents and files.
 
 ${fileInstructions}
 
-When discussing documents:
+${!isImage ? `When discussing documents:
 1. Use the fetch_document_content tool IMMEDIATELY when asked about file contents
 2. ALWAYS extract and use the fileId from the file context provided
 3. Analyze and explain document contents clearly
@@ -98,7 +109,7 @@ When discussing documents:
 For document queries:
 - IMPORTANT: Use the fileId provided in the context, don't ask for it
 - Don't just acknowledge the request, fetch the content right away
-- Provide detailed analysis of document contents
+- Provide detailed analysis of document contents` : ''}
 
 ${isBrowseEnabled ? `For web searches:
 - ALWAYS use browseInternet tool as your FIRST action for any query about current information
@@ -107,5 +118,8 @@ ${isBrowseEnabled ? `For web searches:
 - Format responses exactly as: "Based on my search, here's what I found about [topic]: [summary]"
 ` : ''}
 
-Remember: Don't ask for the fileId - it's in the context above. Use it directly with fetch_document_content.`;
+${isImage ? `For image analysis:
+- Describe what you see in the image in detail
+- Answer any questions about the image directly
+- No need to use any tools - you can see the image directly` : ''}`;
 }
