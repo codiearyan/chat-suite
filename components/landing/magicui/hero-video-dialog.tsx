@@ -39,10 +39,13 @@ const HeroVideoDialog = ({
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
       <DialogPrimitive.Trigger asChild>
         <motion.button
+          role="button"
           className={`relative block w-full overflow-hidden rounded-2xl border border-purple-500/20 
                      group hover:border-purple-500/40 transition-all duration-300 ${className}`}
           whileHover={{ scale: 1.02 }}
-          {...props}
+          {...Object.fromEntries(
+            Object.entries(props).filter(([key]) => !key.startsWith("onDrag"))
+          )}
         >
           {/* Thumbnail */}
           <div className="relative w-full">
