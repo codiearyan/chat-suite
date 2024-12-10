@@ -55,6 +55,12 @@ import { ArrowLeft, ArrowRight, RotateCcw, Copy } from "lucide-react";
 import type { Document } from "@/lib/types/supabase";
 import { getCookie, setCookie } from "@/lib/utils/cookies";
 import cx from "classnames";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
 
 export interface UIBlock {
   title: string; // The name of the document
@@ -540,19 +546,28 @@ export function Block({
       >
         <div className="flex items-center justify-between px-4 h-14 border-b border-border/50">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 hover:bg-muted"
-              onClick={() => {
-                setBlock((currentBlock) => ({
-                  ...currentBlock,
-                  isVisible: false,
-                }));
-              }}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-muted"
+                    onClick={() => {
+                      setBlock((currentBlock) => ({
+                        ...currentBlock,
+                        isVisible: false,
+                      }));
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Close editor</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             <span className="text-base font-medium">
               {document?.title ?? block.title}
@@ -560,57 +575,83 @@ export function Block({
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 hover:bg-muted"
-              onClick={() => handleVersionChange("prev")}
-              disabled={
-                currentVersionIndex === 0 || block.status === "streaming"
-              }
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-muted"
+                    onClick={() => handleVersionChange("prev")}
+                    disabled={currentVersionIndex === 0 || block.status === "streaming"}
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Previous version</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 hover:bg-muted"
-              onClick={() => handleVersionChange("next")}
-              disabled={isCurrentVersion || block.status === "streaming"}
-            >
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-muted"
+                    onClick={() => handleVersionChange("next")}
+                    disabled={isCurrentVersion || block.status === "streaming"}
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Next version</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cx("h-8 w-8 hover:bg-muted", {
-                "bg-blue-500/10 text-blue-500": mode === "diff",
-              })}
-              onClick={() => handleVersionChange("toggle")}
-              disabled={
-                block.status === "streaming" || currentVersionIndex === 0
-              }
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cx("h-8 w-8 hover:bg-muted", {
+                      "bg-blue-500/10 text-blue-500": mode === "diff",
+                    })}
+                    onClick={() => handleVersionChange("toggle")}
+                    disabled={block.status === "streaming" || currentVersionIndex === 0}
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Toggle diff view</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 hover:bg-muted"
-              onClick={() => {
-                copyToClipboard(block.content);
-                toast({
-                  title: "Success",
-                  description: "Copied to clipboard!",
-                });
-              }}
-              disabled={block.status === "streaming"}
-            >
-              <Copy className="h-4 w-4" />
-            </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 hover:bg-muted"
+                    onClick={() => {
+                      copyToClipboard(block.content);
+                      toast({
+                        title: "Success",
+                        description: "Copied to clipboard!",
+                      });
+                    }}
+                    disabled={block.status === "streaming"}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Copy to clipboard</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
 

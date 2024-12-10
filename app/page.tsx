@@ -9,9 +9,9 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const user = await getSession();
 
-  // if (user) {
-  //   redirect("/chat");
-  // }
+  if (user) {
+    redirect("/chat");
+  }
 
   return (
     <div className="bg-base-100">

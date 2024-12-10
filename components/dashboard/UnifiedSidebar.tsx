@@ -12,6 +12,12 @@ import { IconChevronLeft, IconLayoutSidebar } from "@tabler/icons-react";
 import { Credits } from "@/components/ui/credits";
 import AuthButton from "@/components/auth/AuthButton";
 import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface UnifiedSidebarProps {
   user: User | null;
@@ -68,17 +74,26 @@ export function UnifiedSidebar({
             <div className="flex items-center gap-2">
               <button
                 className={twMerge(
-                  "h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80",
+                  "h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50",
                   isCollapsed && "mx-auto"
                 )}
                 onClick={() => setIsCollapsed(!isCollapsed)}
               >
-                <IconLayoutSidebar
-                  className={twMerge(
-                    "h-4 w-4 text-foreground transition-transform duration-300",
-                    isCollapsed ? "rotate-180" : ""
-                  )}
-                />
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <IconLayoutSidebar
+                        className={twMerge(
+                          "h-4 w-4 text-foreground transition-transform duration-300",
+                          isCollapsed ? "rotate-180" : ""
+                        )}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isCollapsed ? "Expand" : "Collapse"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </button>
             </div>
           </div>
@@ -96,7 +111,7 @@ export function UnifiedSidebar({
                             router.refresh();
                           }}
                           className={twMerge(
-                            "w-full group relative flex items-center justify-start gap-2 rounded-lg border border-border/50 bg-background/50 px-4 py-2.5 text-[0.90rem] font-medium text-foreground shadow-sm transition-all hover:bg-primary/5 hover:shadow-md",
+                            "w-full group relative flex items-center justify-start gap-2 rounded-lg border border-border/50 bg-background/50 px-4 py-2.5 text-[0.90rem] font-bold text-foreground shadow-sm transition-all hover:bg-primary/5 hover:shadow-md",
                             pathname.includes("/chat") &&
                               "bg-primary/10 border-primary/20 shadow-md shadow-primary/10 text-primary hover:bg-primary/15"
                           )}
