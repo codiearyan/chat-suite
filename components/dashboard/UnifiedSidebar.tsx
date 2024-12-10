@@ -7,7 +7,6 @@ import { twMerge } from "tailwind-merge";
 import { PlusIcon, Plus } from "lucide-react";
 import { isMobile } from "@/lib/utils";
 import { SidebarHistory } from "@/components/chat/sidebar/sidebar-history";
-import { Heading } from "./Heading";
 import { IconChevronLeft, IconLayoutSidebar } from "@tabler/icons-react";
 import { Credits } from "@/components/ui/credits";
 import AuthButton from "@/components/auth/AuthButton";
@@ -121,12 +120,12 @@ export function UnifiedSidebar({
                             <span>New Chat</span>
                           </div>
                         </button>
-                        <Heading
+                        <div className="flex items-center gap-2">
                           as="p"
                           className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground"
                         >
                           Previous Chats
-                        </Heading>
+                        </div>
                         <div>
                           {isChatExpanded && (
                             <div className="">
