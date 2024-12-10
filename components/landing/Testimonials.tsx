@@ -36,16 +36,18 @@ const testimonials: Testimonial[] = [
 ];
 
 const Testimonials = () => {
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [windowSize, setWindowSize] = useState({ width: 1024, height: 768 }); // Default fallback values
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    };
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      };
 
-    handleResize(); // Set initial size
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+      handleResize(); // Set initial size
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   return (
@@ -55,24 +57,25 @@ const Testimonials = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-purple-900/20 to-slate-900" />
 
         {/* Animated Background Elements */}
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-purple-500 rounded-full"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [1, 1.5, 1],
-              x: Math.random() * windowSize.width,
-              y: Math.random() * windowSize.height,
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          />
-        ))}
+        {typeof window !== "undefined" &&
+          [...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-purple-500 rounded-full"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [1, 1.5, 1],
+                x: Math.random() * windowSize.width,
+                y: Math.random() * windowSize.height,
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            />
+          ))}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

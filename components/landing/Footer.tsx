@@ -77,8 +77,12 @@ const Footer = () => {
             animate={{
               opacity: [0, 1, 0],
               scale: [0, 1, 0],
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x:
+                Math.random() *
+                (typeof window !== "undefined" ? window.innerWidth : 1024),
+              y:
+                Math.random() *
+                (typeof window !== "undefined" ? window.innerHeight : 768),
             }}
             transition={{
               duration: Math.random() * 3 + 2,
