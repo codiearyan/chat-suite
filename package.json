@@ -19,7 +19,6 @@
     "@langchain/core": "^0.3.1",
     "@langchain/groq": "^0.0.12",
     "@langchain/openai": "^0.3.14",
-    "@lobehub/icons": "^1.56.0",
     "@mdx-js/react": "^3.0.1",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
