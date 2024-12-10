@@ -121,10 +121,9 @@ export function UnifiedSidebar({
                           </div>
                         </button>
                         <div className="flex items-center gap-2">
-                          as="p"
-                          className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground"
-                        >
-                          Previous Chats
+                          <p className="text-sm mt-2 md:text-md lg:text-md px-2 pt-2 text-foreground">
+                            Previous Chats
+                          </p>
                         </div>
                         <div>
                           {isChatExpanded && (
