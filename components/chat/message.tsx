@@ -78,7 +78,12 @@ export function PreviewMessage({
   const toolResults = useMemo(() => {
     if (message.role === "tool" && typeof message.content === "string") {
       try {
-        return JSON.parse(message.content);
+        const parsed = JSON.parse(message.content);
+        // Skip rendering if it's a fetch_document_content result
+        if (parsed.toolName === "fetch_document_content") {
+          return [];
+        }
+        return [parsed];
       } catch (e) {
         console.error("Failed to parse tool message content:", e);
         return [];
@@ -87,22 +92,19 @@ export function PreviewMessage({
     return [];
   }, [message]);
 
-  // Map the stored tool results to toolInvocations format
-  const toolInvocations = useMemo(() => {
-    return toolResults.map((result: any) => ({
-      toolName: result.toolName,
-      toolCallId: result.toolCallId,
-      state: "result",
-      result: result.result,
-      status: result.status,
-    }));
-  }, [toolResults]);
+  // Filter out fetch_document_content from toolInvocations
+  const allToolInvocations = useMemo(() => {
+    const combined = [...(message.toolInvocations || []), ...toolResults];
+    return combined.filter(
+      (invocation) => invocation.toolName !== "fetch_document_content"
+    );
+  }, [message.toolInvocations, toolResults]);
 
-  // Combine original toolInvocations with parsed ones
-  const allToolInvocations = [
-    ...(message.toolInvocations || []),
-    ...toolInvocations,
-  ];
+  // Only render content if it's not a tool message or if it's a meaningful message
+  const shouldRenderContent =
+    message.role !== "tool" ||
+    (message.role === "tool" &&
+      !message.content.includes("fetch_document_content"));
 
   return (
     <motion.div
@@ -133,9 +135,11 @@ export function PreviewMessage({
                 ))}
               </div>
             )}
-            <div className="prose dark:prose-invert [&_*]:text-white">
-              <Markdown>{message.content}</Markdown>
-            </div>
+            {shouldRenderContent && (
+              <div className="prose dark:prose-invert [&_*]:text-white">
+                <Markdown>{message.content}</Markdown>
+              </div>
+            )}
             {allToolInvocations.length > 0 && (
               <div className="flex flex-col gap-4">
                 {allToolInvocations.map(
@@ -236,9 +240,11 @@ export function PreviewMessage({
                 ))}
               </div>
             )}
-            <div className="prose dark:prose-invert">
-              <Markdown>{message.content}</Markdown>
-            </div>
+            {shouldRenderContent && (
+              <div className="prose dark:prose-invert">
+                <Markdown>{message.content}</Markdown>
+              </div>
+            )}
             {allToolInvocations.length > 0 && (
               <div className="flex flex-col gap-4">
                 {allToolInvocations.map(

@@ -94,9 +94,16 @@ export default async function Navbar({
         {/* <ThemeToggle /> */}
         {supabase && (
           <AuthButton
+            user={user}
             classProps={{
-              bgColor: "bg-primary",
-              primaryTextColor: "text-primary-foreground",
+              container: "flex items-center gap-4",
+              button:
+                "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-muted hover:text-muted-foreground h-9 px-4 py-2 border border-border",
+              loginButton:
+                "bg-primary text-primary-foreground hover:bg-primary/90",
+              showEmail: false,
+              variant: "ghost",
+              showLogoutIcon: false,
             }}
           />
         )}

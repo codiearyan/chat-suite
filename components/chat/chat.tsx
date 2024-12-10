@@ -208,6 +208,21 @@ export function Chat({
     [messages]
   );
 
+  const filteredMessages = useMemo(() => {
+    return messages.filter((message) => {
+      // Filter out fetch_document_content tool messages
+      if (message.role === "tool") {
+        try {
+          const content = JSON.parse(message.content as string);
+          return content.toolName !== "fetch_document_content";
+        } catch (e) {
+          return true;
+        }
+      }
+      return true;
+    });
+  }, [messages]);
+
   return (
     <>
       <div className="flex flex-col h-full overflow-hidden">
@@ -216,22 +231,22 @@ export function Chat({
             ref={messagesContainerRef}
             className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll custom-scrollbar pt-4 px-4"
           >
-            {messages.length === 0 && <AppInfo />}
+            {filteredMessages.length === 0 && <AppInfo />}
 
-            {messages.map((message, index) => (
+            {filteredMessages.map((message, index) => (
               <PreviewMessage
                 key={message.id}
                 message={message}
                 block={block}
                 setBlock={setBlock}
-                isLoading={isLoading && messages.length - 1 === index}
+                isLoading={isLoading && filteredMessages.length - 1 === index}
                 userEmail={userEmail}
               />
             ))}
 
             {isLoading &&
-              messages.length > 0 &&
-              messages[messages.length - 1].role === "user" && (
+              filteredMessages.length > 0 &&
+              filteredMessages[filteredMessages.length - 1].role === "user" && (
                 <ThinkingMessage />
               )}
 

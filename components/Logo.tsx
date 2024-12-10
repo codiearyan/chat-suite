@@ -1,11 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-export default function Logo() {
+export default function Logo({ className }: { className?: string }) {
   return (
-    <Link href="/" className="flex items-center">
+    <Link href="/" className={cn("flex items-center", className)}>
       <Image
-        src="/logo-text.png"
+        src="/chatsuite_nobg.png"
         alt="Logo"
         width={400}
         height={100}

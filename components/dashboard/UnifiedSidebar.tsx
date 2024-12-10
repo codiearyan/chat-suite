@@ -5,13 +5,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Badge } from "@/components/dashboard/Badge";
 import { User } from "@supabase/supabase-js";
 import { twMerge } from "tailwind-merge";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { isMobile } from "@/lib/utils";
 import { SidebarHistory } from "@/components/chat/sidebar/sidebar-history";
 import { Heading } from "./Heading";
 import { IconChevronLeft, IconLayoutSidebar } from "@tabler/icons-react";
 import { Credits } from "@/components/ui/credits";
+import AuthButton from "@/components/auth/AuthButton";
 
 interface UnifiedSidebarProps {
   user: User | null;
@@ -93,7 +93,7 @@ export function UnifiedSidebar({
                             <div className="">
                               <SidebarHistory
                                 user={user ?? undefined}
-                                limit={6}
+                                limit={12}
                                 showAllHistory={showAllHistory}
                                 setShowAllHistory={setShowAllHistory}
                               />
@@ -114,17 +114,19 @@ export function UnifiedSidebar({
                 >
                   Need more credits?
                 </button>
-                <Button
-                  variant="ghost"
-                  className="w-full mt-2 flex items-center gap-2 text-muted-foreground/70 hover:text-muted-foreground hover:bg-muted/50 transition-colors"
-                  onClick={() => {
-                    router.push("/");
-                    router.refresh();
-                  }}
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  <span>Back to Home</span>
-                </Button>
+                <div className="flex justify-center w-full mt-2">
+                  <AuthButton
+                    user={user}
+                    classProps={{
+                      container: "w-full",
+                      showEmail: false,
+                      button:
+                        "w-full flex items-center gap-2 text-muted-foreground hover:text-foreground border border-white/10 rounded-md px-3 py-2 hover:border-white/20 hover:bg-white/5 transition-all duration-200",
+                      emailText: "text-center px-2",
+                      variant: "ghost",
+                    }}
+                  />
+                </div>
               </div>
             </>
           )}

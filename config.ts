@@ -40,11 +40,15 @@ export const defaultOgImage = "/og.png";
 export const favicon = "/favicon.ico";
 
 // LEGAL STUFF
-export const privacyPolicyUrl = "https://anotherwrapper.com/privacy";
-export const tosUrl = "https://anotherwrapper.com/terms";
+export const privacyPolicyUrl = "/privacy";
+export const tosUrl = "/terms";
+export const refundPolicyUrl = "/refund";
 
 // Auth
 export const authImage = "/hero.webp";
+
+// Refund
+
 
 // Inside routing
 export const homePage = "/";

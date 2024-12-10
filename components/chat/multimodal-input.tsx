@@ -147,7 +147,9 @@ export function MultimodalInput({
   );
   const [uploadQueue, setUploadQueue] = useState<UploadQueueItem[]>([]);
   const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
-  const [previewAttachments, setPreviewAttachments] = useState<ExtendedAttachment[]>([]);
+  const [previewAttachments, setPreviewAttachments] = useState<
+    ExtendedAttachment[]
+  >([]);
 
   const submitForm = useCallback(() => {
     window.history.replaceState({}, "", `/chat/${chatId}`);
@@ -210,10 +212,10 @@ export function MultimodalInput({
     const processUploadQueue = async () => {
       if (uploadQueue.length > 0) {
         const [currentUpload, ...remainingQueue] = uploadQueue;
-        
+
         // Add file to uploading set
-        setUploadingFiles(prev => new Set(prev).add(currentUpload.id));
-        
+        setUploadingFiles((prev) => new Set(prev).add(currentUpload.id));
+
         try {
           const formData = new FormData();
           formData.append("file", currentUpload.file);
@@ -226,13 +228,16 @@ export function MultimodalInput({
 
           if (response.ok) {
             const data = await response.json();
-            setAttachments(prev => [...prev, {
-              url: data.url,
-              name: currentUpload.name,
-              contentType: currentUpload.file.type,
-              size: currentUpload.file.size,
-              id: currentUpload.id
-            }]);
+            setAttachments((prev) => [
+              ...prev,
+              {
+                url: data.url,
+                name: currentUpload.name,
+                contentType: currentUpload.file.type,
+                size: currentUpload.file.size,
+                id: currentUpload.id,
+              },
+            ]);
           } else {
             const { error } = await response.json();
             toast({
@@ -248,7 +253,7 @@ export function MultimodalInput({
           });
         } finally {
           // Remove file from uploading set
-          setUploadingFiles(prev => {
+          setUploadingFiles((prev) => {
             const next = new Set(prev);
             next.delete(currentUpload.id);
             return next;
@@ -257,7 +262,7 @@ export function MultimodalInput({
         }
       }
     };
-  
+
     processUploadQueue();
   }, [uploadQueue, chatId]);
 
@@ -272,12 +277,37 @@ export function MultimodalInput({
       if (file.size > MAX_FILE_SIZE) {
         toast({
           title: "File too large",
-          description: `${file.name} is larger than ${formatFileSize(MAX_FILE_SIZE)}`,
+          description: `${file.name} is larger than ${formatFileSize(
+            MAX_FILE_SIZE
+          )}`,
         });
         return false;
       }
+      // if (
+      //   file.type !== "image/*" &&
+      //   file.type !== "application/pdf" &&
+      //   file.type !== "text/plain" &&
+      //   file.type !== ".docx" &&
+      //   file.type !== ".xlsx" &&
+      //   file.type !== ".csv" &&
+      //   file.type !== ".txt"
+      // ) {
+      //   toast({
+      //     title: "Invalid file type",
+      //     description: `${file.name} is not a valid file type`,
+      //   });
+      //   return false;
+      // }
       return true;
     });
+
+    if (validFiles.length >= 3) {
+      toast({
+        title: "Too many files",
+        description: "You can only upload up to 3 files at a time",
+      });
+      return;
+    }
 
     // Add files to upload queue with unique IDs
     setUploadQueue((prev) => [
@@ -454,7 +484,7 @@ export function MultimodalInput({
             "min-h-[72px] w-full max-h-[calc(100dvh)]",
             "overflow-hidden resize-none px-4 pb-10 pt-4 rounded-2xl",
             "outline-none focus:outline-none focus:ring-0",
-            "bg-background/50 dark:bg-background/30 border dark:border-border/40 border-white",
+            "bg-black dark:bg-background/30 border dark:border-border/40 border-white",
             "backdrop-blur-sm transition-colors duration-200",
             className
           )}
@@ -552,12 +582,11 @@ export function MultimodalInput({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <label className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                
                     <Paperclip className="h-4 w-4" />
                     Attach Files
                     <input
                       type="file"
-                      accept="image/*, application/pdf"
+                      accept="image/*, application/pdf, text/plain, .docx, .xlsx, .csv, .txt"
                       multiple
                       className="hidden"
                       onChange={(e) => handleFileChange(e)}

@@ -232,22 +232,23 @@ function formatWebSearchResponse(
   };
 }
 
-// Add this helper function at the top with other helpers
+interface MessageContent {
+  type: 'text' | 'tool-call';
+  text?: string;
+}
+
 function validateAndCleanMessages(messages: Message[]): Message[] {
   return messages.filter(message => {
-    // Ensure message has content
     if (!message.content) return false;
     
-    // If content is string, check it's not empty after trimming
     if (typeof message.content === 'string') {
       return message.content.trim().length > 0;
     }
     
-    // If content is an array, ensure it has non-empty items
     if (Array.isArray(message.content)) {
-      return message.content.some(item => {
-        if (item.type === 'text') return item.text.trim().length > 0;
-        if (item.type === 'tool-call') return true; // Tool calls are valid
+      return (message.content as MessageContent[]).some(item => {
+        if (item.type === 'text') return Boolean(item.text && item.text.trim().length > 0);
+        if (item.type === 'tool-call') return true;
         return false;
       });
     }
@@ -448,7 +449,7 @@ export async function POST(request: Request) {
               if (msg.role === 'tool' && typeof msg.content === 'string') {
                 return {
                   ...msg,
-                  content: parseToolResponse(msg.content, msg.name || 'unknown')
+                  content: msg.content
                 };
               }
               return msg;

@@ -1,9 +1,4 @@
 export const AI_MODEL_DISPLAY = {
-  // "gpt-4o-mini": {
-  //   name: "GPT-4o mini",
-  //   logo: "/providers/openai.webp",
-  //   vision: true,
-  // },
   "gpt-4o": {
     name: "GPT-4o",
     logo: "/providers/openai.webp",
@@ -16,12 +11,12 @@ export const AI_MODEL_DISPLAY = {
   },
   "llama-3.3-70b-versatile": {
     name: "Llama 3.3 (Pro)",
-    logo: "/providers/meta.jpeg",
+    logo: "/providers/meta.png",
     vision: false,
   },
   "gemini-1.5-pro-latest": {
     name: "Gemini 1.5 Pro",
-    logo: "/providers/google.svg",
+    logo: "/providers/gemini.png",
     vision: true,
   },
 } as const;

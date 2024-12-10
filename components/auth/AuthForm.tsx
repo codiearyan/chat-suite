@@ -21,7 +21,7 @@ export default function AuthForm({ onEmailSubmit, isLoading }: AuthFormProps) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
-          placeholder="tupac@shakur.com"
+          placeholder="aryan@chatsuite.com"
           required
           className="input w-full p-3 rounded-xl shadow-sm focus:outline-none border-base-300 bg-base-200 text-base-content-content"
         />

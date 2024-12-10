@@ -64,28 +64,33 @@ export function Credits({ user, className }: CreditsProps) {
   const creditStatus = getCreditStatus(credits);
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/75 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm",
-        className
-      )}
-    >
-      <span
-        className={cn("w-1.5 h-1.5 rounded-full animate-pulse", {
-          "bg-red-600 dark:bg-red-400": creditStatus === "danger",
-          "bg-yellow-600 dark:bg-yellow-400": creditStatus === "warning",
-          "bg-green-600 dark:bg-green-400": creditStatus === "success",
-        })}
-      />
-      <span
-        className={cn("text-sm font-medium", {
-          "text-red-700 dark:text-red-400": creditStatus === "danger",
-          "text-yellow-700 dark:text-yellow-400": creditStatus === "warning",
-          "text-gray-700 dark:text-gray-300": creditStatus === "success",
-        })}
+    <div className="flex flex-col gap-1">
+      <div
+        className={cn(
+          "flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/75 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm",
+          className
+        )}
       >
-        {credits.toLocaleString()} credits
-      </span>
+        <span
+          className={cn("w-1.5 h-1.5 rounded-full animate-pulse", {
+            "bg-red-600 dark:bg-red-400": creditStatus === "danger",
+            "bg-yellow-600 dark:bg-yellow-400": creditStatus === "warning",
+            "bg-green-600 dark:bg-green-400": creditStatus === "success",
+          })}
+        />
+        <span
+          className={cn("text-sm font-medium", {
+            "text-red-700 dark:text-red-400": creditStatus === "danger",
+            "text-yellow-700 dark:text-yellow-400": creditStatus === "warning",
+            "text-gray-700 dark:text-gray-300": creditStatus === "success",
+          })}
+        >
+          {credits.toLocaleString()} credits
+        </span>
+      </div>
+      <p className="text-xs text-center text-muted-foreground/70">
+        1 Message = 1 Credit
+      </p>
     </div>
   );
 }
