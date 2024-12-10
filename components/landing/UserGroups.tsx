@@ -156,15 +156,17 @@ const UserGroups = () => {
                   <motion.div
                     className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-1 rounded-full 
                               bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
-                      "--tw-gradient-from": `var(--tw-gradient-${
-                        group.gradient.split(" ")[1]
-                      })`,
-                      "--tw-gradient-to": `var(--tw-gradient-${
-                        group.gradient.split(" ")[3]
-                      })`,
-                    }}
+                    style={
+                      {
+                        backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
+                        "--tw-gradient-from": `var(--tw-gradient-${
+                          group.gradient.split(" ")[1]
+                        })`,
+                        "--tw-gradient-to": `var(--tw-gradient-${
+                          group.gradient.split(" ")[3]
+                        })`,
+                      } as React.CSSProperties
+                    } // Type assertion added here
                   />
                 </div>
               </div>
