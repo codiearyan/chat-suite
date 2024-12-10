@@ -46,6 +46,9 @@ export default function AuthComponent() {
             alt="Auth Image"
             className="w-full h-full object-cover absolute"
           />
+          <h1 className="text-2xl font-bold font-inter-medium xs:text-3xl">
+            CHATSUITE
+          </h1>
         </div>
 
         {/* Auth Section */}

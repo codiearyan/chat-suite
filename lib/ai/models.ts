@@ -9,16 +9,16 @@ export const AI_MODEL_DISPLAY = {
     logo: "/providers/anthropic.jpeg",
     vision: true,
   },
-  "llama-3.3-70b-versatile": {
-    name: "Llama 3.3 70b",
-    logo: "/providers/meta.png",
-    vision: false,
-  },
-  "gemini-1.5-pro-latest": {
-    name: "Gemini 1.5 Pro",
-    logo: "/providers/gemini.png",
-    vision: true,
-  },
+  // "llama-3.3-70b-versatile": {
+  //   name: "Llama 3.3 70b",
+  //   logo: "/providers/meta.png",
+  //   vision: false,
+  // },
+  // "gemini-1.5-pro-latest": {
+  //   name: "Gemini 1.5 Pro",
+  //   logo: "/providers/gemini.png",
+  //   vision: true,
+  // },
 } as const;
 
 // Get model IDs from the display object

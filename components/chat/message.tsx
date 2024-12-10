@@ -218,7 +218,7 @@ export function PreviewMessage({
 
       {message.role === "assistant" && (
         <div className="flex gap-3">
-          <div className="size-8 flex bg-black dark:bg-none items-center rounded-full justify-center shrink-0">
+          <div className="size-8 flex bg-none  items-center rounded-full justify-center shrink-0">
             <Image
               src="/chatsuite_nobg.png"
               alt="Pivot with AI"
@@ -338,7 +338,7 @@ export const ThinkingMessage = () => {
           }
         )}
       >
-        <div className="size-8 flex items-center bg-black dark:bg-none rounded-full justify-center shrink-0">
+        <div className="size-8 bg-none flex items-center dark:bg-none rounded-full justify-center shrink-0">
           <Image
             src="/chatsuite_nobg.png"
             alt="Pivot with AI"
