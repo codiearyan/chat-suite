@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Video, Bot, Star, Check, X, ArrowRight } from "lucide-react";
 
@@ -23,6 +23,17 @@ type Plan = {
 
 const Pricing = () => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const plans: Plan[] = [
     {
@@ -186,8 +197,8 @@ const Pricing = () => {
             animate={{
               opacity: [0, 1, 0],
               scale: [1, 2, 1],
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height,
             }}
             transition={{
               duration: Math.random() * 3 + 2,

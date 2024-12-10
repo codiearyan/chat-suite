@@ -8,8 +8,21 @@ import {
   Users,
   Sparkles,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Features = () => {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const features = [
     {
       title: "Multiple AI Models",
@@ -72,13 +85,13 @@ const Features = () => {
             key={i}
             className="absolute w-2 h-2 bg-blue-500 rounded-full"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height,
               opacity: 0,
             }}
             animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height,
               opacity: [0, 1, 0],
             }}
             transition={{
