@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import useIntersectionObserver from "@/lib/hooks/useIntersectionObserver";
 
 type FAQItem = {
   question: string;
