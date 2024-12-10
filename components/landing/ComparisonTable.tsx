@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ComparisonRow {
   feature: string;
@@ -38,6 +39,18 @@ const comparisonData: ComparisonRow[] = [
 ];
 
 const ComparisonTable = () => {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="relative min-h-screen py-20 bg-gradient-to-b from-slate-900 to-slate-800">
       {/* Background Effects */}
@@ -49,11 +62,11 @@ const ComparisonTable = () => {
             key={i}
             className="absolute w-2 h-2 bg-purple-500 rounded-full"
             initial={{ opacity: 0 }}
-            // animate={{
-            //   opacity: [0, 1, 0],
-            //   x: Math.random() * window.innerWidth,
-            //   y: Math.random() * window.innerHeight,
-            // }}
+            animate={{
+              opacity: [0, 1, 0],
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height,
+            }}
             transition={{
               duration: Math.random() * 3 + 2,
               repeat: Infinity,

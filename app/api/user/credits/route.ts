@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/utils/supabase/server";
-import { cookies } from "next/headers";
+import { headers } from "next/headers";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

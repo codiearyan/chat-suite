@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Testimonial {
   content: string;
@@ -35,6 +36,18 @@ const testimonials: Testimonial[] = [
 ];
 
 const Testimonials = () => {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    handleResize(); // Set initial size
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="relative min-h-screen py-24 bg-slate-900 overflow-hidden">
       {/* Background Effects */}
@@ -50,8 +63,8 @@ const Testimonials = () => {
             animate={{
               opacity: [0, 1, 0],
               scale: [1, 1.5, 1],
-              // x: Math.random() * window.innerWidth,
-              // y: Math.random() * window.innerHeight,
+              x: Math.random() * windowSize.width,
+              y: Math.random() * windowSize.height,
             }}
             transition={{
               duration: Math.random() * 3 + 2,
