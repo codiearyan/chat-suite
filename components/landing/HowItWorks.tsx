@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { UserCircle2, Cog, Clock } from "lucide-react";
-import MockupDashboard from "./MockupDashboard";
+import Image from "next/image";
 
 const steps = [
   {
@@ -13,6 +13,7 @@ const steps = [
     gradient: "from-blue-500 to-purple-500",
     delay: 0.2,
     imagePosition: "right",
+    image: "/steps/step1.png",
   },
   {
     icon: <Cog className="w-12 h-12" />,
@@ -22,6 +23,7 @@ const steps = [
     gradient: "from-purple-500 to-pink-500",
     delay: 0.4,
     imagePosition: "left",
+    image: "/steps/step2.png",
   },
   {
     icon: <Clock className="w-12 h-12" />,
@@ -31,6 +33,7 @@ const steps = [
     gradient: "from-pink-500 to-blue-500",
     delay: 0.6,
     imagePosition: "right",
+    image: "/steps/step3.png",
   },
 ];
 
@@ -131,22 +134,29 @@ const HowItWorks = () => {
                   </p>
                 </div>
 
-                {/* Dashboard Preview */}
+                {/* Step Image */}
                 <div className="flex-1">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
                     className="relative rounded-2xl overflow-hidden border border-purple-500/20 
-                             hover:border-purple-500/40 transition-all duration-300 shadow-2xl"
+                              hover:border-purple-500/40 transition-all duration-300 shadow-2xl"
                   >
                     {/* Glow Effect */}
                     <div
                       className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20 
-                                  opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500"
+                                opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500"
                     />
 
-                    {/* Dashboard Mock */}
-                    <div className="relative bg-slate-800/50 backdrop-blur-sm p-1">
-                      <MockupDashboard />
+                    {/* Step Image */}
+                    <div className="relative aspect-video">
+                      <Image
+                        src={step.image}
+                        alt={step.title}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        priority={index === 0}
+                      />
                     </div>
                   </motion.div>
                 </div>

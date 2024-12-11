@@ -12,7 +12,7 @@ export const companyConfig = {
       { label: "Features", href: "#features" },
       { label: "Pricing", href: "#pricing" },
       { label: "NextGenAI School", href: "https://training.pivotwithai.com/" },
-      { label: "Blog", href: "https://www.linkedin.com/in/sushantvpai" },
+      { label: "Community", href: "http://chat.whatsapp.com/BmJq5FSuK7wJ389m494UL8" },
       { label: "Contact", href: "/contact" },
     ],
   },

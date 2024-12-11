@@ -90,12 +90,12 @@ const Testimonials = () => {
           <h2 className="text-4xl font-bold text-white mb-6">
             Loved by{" "}
             <span className="bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text">
-              Thousands
+              our Early
             </span>{" "}
             of Users
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            See what our community has to say about their experience with
+            See what our early users has to say about their experience with
             ChatSuite
           </p>
         </motion.div>
@@ -130,19 +130,6 @@ const Testimonials = () => {
 
                 {/* Content Container */}
                 <div className="relative">
-                  {/* Avatar */}
-                  <motion.div
-                    className="w-20 h-20 mx-auto mb-6 rounded-full overflow-hidden
-                              ring-2 ring-purple-500 ring-offset-2 ring-offset-slate-800"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.author}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-
                   {/* Stars */}
                   <div className="flex justify-center mb-4 space-x-1">
                     {[...Array(5)].map((_, i) => (

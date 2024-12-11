@@ -51,7 +51,6 @@ export const pricingPlans = {
       Support: {
         "Community Support": "✓",
         "Priority Support": "-",
-        "Dedicated Manager": "-",
         "Training Sessions": "-",
       },
     },
@@ -87,7 +86,6 @@ export const pricingPlans = {
       Support: {
         "Community Support": "✓",
         "Priority Support": "-",
-        "Dedicated Manager": "-",
         "Training Sessions": "-",
       },
     },
@@ -123,7 +121,6 @@ export const pricingPlans = {
       Support: {
         "Community Support": "✓",
         "Priority Support": "-",
-        "Dedicated Manager": "-",
         "Training Sessions": "-",
       },
     },

@@ -75,7 +75,7 @@ export default function AuthComponent() {
           </h1>
 
           <h2 className="font-medium mb-2 text-neutral-300 text-center">
-            AI powered Chatbot
+            All in One AI Workspace
           </h2>
           <hr className="border-0 h-[1px] bg-gradient-to-r from-white/0 via-white/10 to-white/0 mb-2" />
 

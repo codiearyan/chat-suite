@@ -59,7 +59,6 @@ const Pricing = () => {
       Support: {
         "Community Support": "✓",
         "Priority Support": "-",
-        "Dedicated Manager": "-",
         "Training Sessions": "-",
       },
     },
