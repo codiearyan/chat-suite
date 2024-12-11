@@ -13,7 +13,7 @@ export const companyConfig = {
       { label: "Pricing", href: "#pricing" },
       { label: "NextGenAI School", href: "https://training.pivotwithai.com/" },
       { label: "Community", href: "http://chat.whatsapp.com/BmJq5FSuK7wJ389m494UL8" },
-      { label: "Contact", href: "/contact" },
+      { label: "Contact", href: "mailto:support@pivotwithai.com" },
     ],
   },
 
