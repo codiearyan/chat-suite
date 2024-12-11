@@ -35,9 +35,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useIsMounted } from "usehooks-ts";
 import { formatFileSize } from "@/lib/utils";
-import { AnyAaaaRecord } from "dns";
 
 const suggestedActions = [
   {
@@ -274,6 +272,13 @@ export function MultimodalInput({
   const handleFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const validFiles = files.filter((file) => {
+      if (file.size === 0) {
+        toast({
+          title: "Empty file",
+          description: `${file.name} is empty and cannot be uploaded`,
+        });
+        return false;
+      }
       if (file.size > MAX_FILE_SIZE) {
         toast({
           title: "File too large",
@@ -602,7 +607,7 @@ export function MultimodalInput({
                     Attach Files
                     <input
                       type="file"
-                      accept="image/*, application/pdf, text/plain, .docx, .xlsx, .csv, .txt"
+                      accept="image/*, application/pdf, .pptx, .ppt, text/plain, .docx, .csv, .txt"
                       multiple
                       className="hidden"
                       onChange={(e) => handleFileChange(e)}

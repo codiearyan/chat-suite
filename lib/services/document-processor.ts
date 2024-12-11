@@ -3,6 +3,7 @@ import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { PPTXLoader } from "@langchain/community/document_loaders/fs/pptx";
 
 
 interface ProcessedDocument {
@@ -46,6 +47,11 @@ export async function processDocument(
       case "text/plain":
         console.log("Using Text loader");
         loader = new TextLoader(blob);
+        break;
+      case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+      case "application/vnd.ms-powerpoint":
+        console.log("Using PowerPoint loader");
+        loader = new PPTXLoader(blob);
         break;
       default:
         throw new Error(`Unsupported file type: ${contentType}`);

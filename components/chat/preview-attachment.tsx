@@ -1,7 +1,16 @@
 import { Attachment } from "ai";
 import { LoaderIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PDFPreview } from "./pdf-preview";
+import { DocumentPreview } from "./document-preview";
+
+const SUPPORTED_DOCUMENT_TYPES = [
+  "application/pdf",
+  "text/csv",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.ms-powerpoint",
+];
 
 // Extend the Attachment type to include size and id
 interface ExtendedAttachment extends Attachment {
@@ -28,7 +37,6 @@ export const PreviewAttachment = ({
     large: "w-[360px]",
   };
 
-  // Ensure URL is defined before passing to PDFPreview
   if (!url && !isUploading) {
     return (
       <div className={cn(sizeClasses[size], "shrink-0")}>
@@ -52,11 +60,14 @@ export const PreviewAttachment = ({
             <LoaderIcon className="w-6 h-6 animate-spin text-primary" />
             <span className="text-xs text-muted-foreground">Uploading...</span>
           </div>
-        ) : contentType?.startsWith("application/pdf") && url ? (
-          <PDFPreview
+        ) : contentType &&
+          SUPPORTED_DOCUMENT_TYPES.includes(contentType) &&
+          url ? (
+          <DocumentPreview
             url={url}
-            fileName={name ?? "Untitled PDF"}
+            fileName={name ?? "Untitled Document"}
             fileSize={attachment.size ?? 0}
+            contentType={contentType}
             className="w-full h-full"
           />
         ) : contentType?.startsWith("image") && url ? (

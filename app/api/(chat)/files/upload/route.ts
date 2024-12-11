@@ -12,6 +12,8 @@ const SUPPORTED_DOCUMENT_TYPES = [
   "text/csv",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/plain",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation", // PPTX
+  "application/vnd.ms-powerpoint" // PPT
 ];
 
 const SUPPORTED_IMAGE_TYPES = [

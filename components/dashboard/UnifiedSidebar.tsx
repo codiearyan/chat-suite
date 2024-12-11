@@ -44,9 +44,9 @@ export function UnifiedSidebar({
     <>
       <aside
         className={twMerge(
-          "transition-all duration-300 ease-in-out fixed lg:relative",
+          "transition-all duration-300 ease-in-out fixed lg:relative z-50",
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
-          isCollapsed ? "w-[60px] bg-background" : "w-[260px]  bg-muted/50",
+          isCollapsed ? "w-[60px] bg-background" : "w-[260px]  bg-muted",
           "h-screen"
         )}
       >
@@ -171,13 +171,13 @@ export function UnifiedSidebar({
       </aside>
 
       <button
-        className="fixed lg:hidden top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-50 bg-background/80"
+        className="fixed lg:hidden top-4 left-4 h-8 w-8 border border-border/50 rounded-full backdrop-blur-sm flex items-center justify-center z-[60] bg-background/80"
         onClick={() => setOpen(!open)}
       >
         <IconChevronLeft
           className={twMerge(
-            "h-4 w-4 text-foreground transition-transform",
-            open ? "rotate-180" : ""
+            "h-4 w-4 text-foreground transition-transform duration-300",
+            !open ? "rotate-180" : ""
           )}
         />
       </button>
