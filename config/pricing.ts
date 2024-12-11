@@ -8,6 +8,7 @@ export interface PricingPlan {
   name: string;
   badge?: string;
   price: string | number;
+  period?: string;
   credits: number;
   description: string;
   features: PlanFeatures;
@@ -15,6 +16,7 @@ export interface PricingPlan {
   ctaHoverText?: string;
   isPopular?: boolean;
   link?: string;
+  special?: boolean;
 }
 
 export const pricingPlans = {

@@ -3,9 +3,17 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getLandingPagePlans } from "@/config/pricing";
+import { getLandingPagePlans, PlanFeatures } from "@/config/pricing";
 import { getSession } from "@/lib/db/cached-queries";
 import { PricingClient } from "@/components/pricing/PricingClient";
+import { IconType } from "react-icons";
+import { Video, Bot, Star, Check, X, ArrowRight } from "lucide-react";
+
+const categoryIcons: Record<keyof PlanFeatures, React.ElementType> = {
+  "Basic Features": Video,
+  "AI Tools": Bot,
+  Support: Star,
+} as const;
 
 export default async function ThanksPage() {
   const pricingInfo = getLandingPagePlans();
@@ -64,7 +72,11 @@ export default async function ThanksPage() {
             </h2>
             <section className="py-4">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <PricingClient plans={pricingInfo} user={user} />
+                <PricingClient
+                  plans={pricingInfo}
+                  user={user}
+                  categoryIcons={categoryIcons}
+                />
               </div>
             </section>
           </div>

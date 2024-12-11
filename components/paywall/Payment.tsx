@@ -24,12 +24,12 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
             <div
               key={index}
               className={`rounded-xl shadow-lg bg-card relative flex flex-col ${
-                plan.special
+                plan.isPopular
                   ? "border-2 border-primary md:scale-[1.02] md:z-10"
                   : "border border-border"
               }`}
             >
-              {plan.special && (
+              {plan.isPopular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <span className="bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full">
                     Best Value
@@ -38,7 +38,7 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
               )}
               <div className="flex-1 p-6 space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold">{plan.title}</h3>
+                  <h3 className="text-xl font-bold">{plan.name}</h3>
                   <p className="text-sm text-muted-foreground mt-1">
                     {plan.description}
                   </p>
@@ -50,28 +50,28 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
                   </span>
                 </div>
                 <ul className="space-y-2.5 text-sm">
-                  {plan.features.map((feature, i) => (
+                  {Object.entries(plan.features).map(([key, value], i) => (
                     <li key={i} className="flex items-center gap-x-2">
                       <CheckCircle2
                         className={`h-4 w-4 ${
-                          plan.special
+                          plan.isPopular
                             ? "text-primary"
                             : "text-muted-foreground"
                         }`}
                       />
-                      <span className="text-muted-foreground">{feature}</span>
+                      <span className="text-muted-foreground">{key}</span>
                     </li>
                   ))}
                 </ul>
                 <a
                   href={plan.link}
                   className={`mt-4 block px-4 py-2.5 text-sm font-semibold rounded-lg text-center transition-all duration-200 ${
-                    plan.special
+                    plan.isPopular
                       ? "bg-primary text-primary-foreground hover:bg-primary/90"
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                   }`}
                 >
-                  {plan.buttonText}
+                  {plan.ctaText}
                 </a>
               </div>
             </div>
