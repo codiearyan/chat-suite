@@ -49,7 +49,7 @@ export default function MessageDisplay({
             />
           </svg>
         )}
-        <div className={`text-sm font-medium mt-2`}>{message}</div>
+        <div className={`text-sm font-medium`}>{message}</div>
       </div>
     </div>
   );

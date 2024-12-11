@@ -1,22 +1,39 @@
+"use client";
+
+import { useToast } from "@/components/ui/use-toast";
 import React, { useState } from "react";
 
 interface AuthFormProps {
   onEmailSubmit: (email: string) => void;
   isLoading: boolean;
+  isTermsAccepted: boolean;
 }
 
-export default function AuthForm({ onEmailSubmit, isLoading }: AuthFormProps) {
+export default function AuthForm({
+  onEmailSubmit,
+  isLoading,
+  isTermsAccepted,
+}: AuthFormProps) {
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!isTermsAccepted) {
+      toast({
+        title: "Terms & Conditions Required",
+        description: "Please accept the terms and conditions to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
     onEmailSubmit(email);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-5 w-full">
-        <label className="text-left block font-semibold mb-2"> ✉️ Email </label>
+        <label className="text-left block font-semibold mb-2">Email </label>
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -29,11 +46,8 @@ export default function AuthForm({ onEmailSubmit, isLoading }: AuthFormProps) {
 
       <button
         disabled={isLoading}
-        title="Send magic link"
         type="submit"
-        className={`btn bg-primary hover:bg-primary/70 rounded-xl text-white w-full p-3 font-medium ${
-          isLoading ? "bg-primary/80" : ""
-        }`}
+        className="btn bg-primary hover:bg-primary/70 rounded-xl text-white w-full p-3 font-medium"
         role="button"
       >
         {!isLoading && (

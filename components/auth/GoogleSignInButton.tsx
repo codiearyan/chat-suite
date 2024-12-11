@@ -1,5 +1,27 @@
-export default function GoogleSignInButton() {
+"use client";
+
+import { useToast } from "@/components/ui/use-toast";
+
+interface GoogleSignInButtonProps {
+  isTermsAccepted: boolean;
+}
+
+export default function GoogleSignInButton({
+  isTermsAccepted,
+}: GoogleSignInButtonProps) {
+  const { toast } = useToast();
+
   const signInWithGoogle = async () => {
+    if (!isTermsAccepted) {
+      console.log("Attempting to show toast"); // Add
+      toast({
+        title: "Terms & Conditions Required",
+        description: "Please accept the terms and conditions to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const response = await fetch("/api/auth/google", {
         method: "POST",

@@ -6,14 +6,26 @@ import MessageDisplay from "@/components/auth/MessageDisplay";
 import React, { useState } from "react";
 import Logo from "@/components/Logo";
 import { tosUrl, privacyPolicyUrl } from "@/config";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AuthComponent() {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
   const handleLogin = (email: string) => {
+    if (!isTermsAccepted) {
+      toast({
+        title: "Terms & Conditions Required",
+        description: "Please accept the terms and conditions to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     fetch("/api/auth", {
       method: "POST",
@@ -58,13 +70,16 @@ export default function AuthComponent() {
           {message && (
             <MessageDisplay message={message} messageType={messageType} />
           )}
+          <h1 className="text-2xl text-white text-center font-bold font-inter-medium xs:text-3xl">
+            CHATSUITE
+          </h1>
 
-          <h2 className="font-medium mb-2 text-neutral-100 text-center">
+          <h2 className="font-medium mb-2 text-neutral-300 text-center">
             AI powered Chatbot
           </h2>
           <hr className="border-0 h-[1px] bg-gradient-to-r from-white/0 via-white/10 to-white/0 mb-2" />
 
-          <GoogleSignInButton />
+          <GoogleSignInButton isTermsAccepted={isTermsAccepted} />
 
           <div className="flex items-center my-4">
             <div className="flex-grow h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
@@ -72,21 +87,34 @@ export default function AuthComponent() {
             <div className="flex-grow h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
           </div>
 
-          <AuthForm onEmailSubmit={handleLogin} isLoading={isLoading} />
+          <AuthForm
+            onEmailSubmit={handleLogin}
+            isLoading={isLoading}
+            isTermsAccepted={isTermsAccepted}
+          />
 
-          <p className="mt-4 text-xs text-white/50">
-            When creating a new account, you agree to the
-            <a href={tosUrl} className="underline">
-              {" "}
-              terms & conditions
-            </a>{" "}
-            and
-            <a href={privacyPolicyUrl} className="underline">
-              {" "}
-              privacy policy
-            </a>
-            .
-          </p>
+          <div className="mt-4 flex items-start gap-2">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={isTermsAccepted}
+              onChange={(e) => setIsTermsAccepted(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <label htmlFor="terms" className="text-xs text-white/50">
+              When creating a new account, you agree to the
+              <a href={tosUrl} className="underline">
+                {" "}
+                terms & conditions
+              </a>{" "}
+              and
+              <a href={privacyPolicyUrl} className="underline">
+                {" "}
+                privacy policy
+              </a>
+              .
+            </label>
+          </div>
         </div>
       </div>
     </div>
