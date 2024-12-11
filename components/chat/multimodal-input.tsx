@@ -649,46 +649,49 @@ export function MultimodalInput({
             </button>
             {isModelDropdownOpen && (
               <ul className="absolute bottom-full mb-2 z-10 w-40 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-lg">
-              {availableModels.map((model) => {
-  const modelInfo = AI_MODEL_DISPLAY[model.id];
-  const isDisabled = 
-    modelInfo.isComingSoon || 
-    ((attachments.length > 0 || containsImages) && !modelInfo.vision);
+                {availableModels.map((model) => {
+                  const modelInfo = AI_MODEL_DISPLAY[model.id];
+                  const isDisabled =
+                    modelInfo.isComingSoon ||
+                    ((attachments.length > 0 || containsImages) &&
+                      !modelInfo.vision);
 
-  return (
-    <li
-      key={model.id}
-      className={cn(
-        "flex items-center px-3 py-2 text-xs",
-        isDisabled
-          ? "cursor-not-allowed opacity-50 bg-zinc-100 dark:bg-zinc-700"
-          : "cursor-pointer text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
-      )}
-      onClick={() => !isDisabled && handleModelSelect(model)}
-      title={
-        modelInfo.isComingSoon
-          ? "Coming Soon"
-          : isDisabled
-          ? "This model doesn't support image analysis"
-          : undefined
-      }
-    >
-      <Image
-        src={model.logo}
-        alt={model.name}
-        width={16}
-        height={16}
-        className="mr-2 rounded-sm"
-      />
-      <span className="flex-1">{model.name}</span>
-      {modelInfo.isComingSoon && (
-        <span className="text-[10px] font-medium text-blue-500 ml-1">
-          Coming Soon
-        </span>
-      )}
-    </li>
-  );
-})}
+                  return (
+                    <li
+                      key={model.id}
+                      className={cn(
+                        "flex flex-col items-start px-3 py-2 text-xs",
+                        isDisabled
+                          ? "cursor-not-allowed opacity-50 bg-zinc-100 dark:bg-zinc-700"
+                          : "cursor-pointer text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                      )}
+                      onClick={() => !isDisabled && handleModelSelect(model)}
+                      title={
+                        modelInfo.isComingSoon
+                          ? "Coming Soon"
+                          : isDisabled
+                          ? "This model doesn't support image analysis"
+                          : undefined
+                      }
+                    >
+                      <div className="flex items-center">
+                        <Image
+                          src={model.logo}
+                          alt={model.name}
+                          width={16}
+                          height={16}
+                          className="mr-2 rounded-sm"
+                        />
+                        <span className="flex-1">{model.name}</span>
+                      </div>
+                      {modelInfo.isComingSoon && (
+                        <span className="text-[10px] font-medium text-blue-500 mt-1">
+                          Coming Soon.
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
