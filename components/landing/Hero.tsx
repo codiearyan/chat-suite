@@ -94,9 +94,9 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-10 flex flex-col  items-center justify-center gap-8 px-4"
+            className="mt-10 flex flex-col  items-center justify-center gap-2 px-4"
           >
-            <div className="w-full sm:w-auto flex  items-center">
+            <div className="w-full sm:w-auto flex gap-4  items-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
