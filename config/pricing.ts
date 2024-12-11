@@ -1,104 +1,150 @@
+export interface PlanFeatures {
+  [key: string]: {
+    [key: string]: string;
+  };
+}
+
 export interface PricingPlan {
-  title: string;
+  name: string;
+  badge?: string;
+  price: string | number;
+  credits: number;
   description: string;
-  price: string;
-  period: string;
-  features: string[];
-  special: boolean;
-  buttonText: string;
+  features: PlanFeatures;
+  ctaText: string;
+  ctaHoverText?: string;
+  isPopular?: boolean;
   link?: string;
 }
 
 export const pricingPlans = {
-  // free: {
-  //   title: "Free Trial",
-  //   description: "Experience ChatSuite for Free!",
-  //   price: "₹0",
-  //   period: "/10 credits",
-  //   features: [
-  //     "10 credits upon sign-up",
-  //     "Access to all AI models",
-  //     "Web Search capability",
-  //     "Canvas Editor access",
-  //     "Basic features included",
-  //   ],
-  //   special: false,
-  //   buttonText: "Sign Up for Free",
-  // },
   lite: {
-    title: "Lite",
+    name: "Lite Model",
+    price: 499,
+    credits: 100,
     description: "Affordable Flexibility for Casual Users",
-    price: "₹499",
-    period: "/100 credits",
-    features: [
-      "Access to all AI models",
-      "Web Search & Canvas Editor",
-      "Image Analysis tools",
-      "PDF chat functionality",
-      "AI Image Generation (coming soon)",
-      "Text-to-Speech (coming soon)",
-    ],
-    special: false,
-    buttonText: "Get Started for ₹499",
+    ctaText: "Get Started for ₹499",
+    ctaHoverText: "Use credits anytime!",
     link: "https://buy.stripe.com/00g5lt3Zmajpgk86or",
+    features: {
+      "Basic Features": {
+        "AI Models": "Access to all models",
+        "Real Time WebSearch": "✓",
+        "Canvas Editor": "✓",
+        "Microphone Input": "✓",
+        "Chat with Docs": "✓",
+        Credits: "100 credits",
+        "Access Duration": "Unlimited",
+      },
+      "AI Tools": {
+        "GPT-4o": "✓",
+        "Claude Sonnet 3.5": "✓",
+        "Google Gemini 1.5 Pro": "✓",
+        "Meta Llama 3.3 70b": "✓",
+        "Qwen 2.5 32b": "✓",
+        "Image Analysis": "✓",
+        "Text to Image": "Coming Soon",
+        "Text to Speech": "Coming Soon",
+      },
+      Support: {
+        "Community Support": "✓",
+        "Priority Support": "-",
+        "Dedicated Manager": "-",
+        "Training Sessions": "-",
+      },
+    },
   },
   pro: {
-    title: "Pro",
+    name: "Pro Model",
+    price: 1499,
+    credits: 500,
     description: "Perfect for Power Users",
-    price: "₹1499",
-    period: "/500 credits",
-    features: [
-      "Everything in Lite plan",
-      "500 message credits",
-      "Advanced AI tools access",
-      "Larger capacity",
-      "Best for frequent users",
-      "Priority support",
-    ],
-    special: true,
-    buttonText: "Upgrade to Pro",
+    ctaText: "Upgrade to Pro",
+    ctaHoverText: "Use credits anytime!",
     link: "https://buy.stripe.com/00g5lt3Zmajpgk86or",
+    features: {
+      "Basic Features": {
+        "AI Models": "Access to all models",
+        "Real Time WebSearch": "✓",
+        "Canvas Editor": "✓",
+        "Microphone Input": "✓",
+        "Chat with Docs": "✓",
+        Credits: "500 credits",
+        "Access Duration": "Unlimited",
+      },
+      "AI Tools": {
+        "GPT-4o": "✓",
+        "Claude Sonnet 3.5": "✓",
+        "Google Gemini 1.5 Pro": "✓",
+        "Meta Llama 3.3 70b": "✓",
+        "Qwen 2.5 32b": "✓",
+        "Image Analysis": "✓",
+        "Text to Image": "Coming Soon",
+        "Text to Speech": "Coming Soon",
+      },
+      Support: {
+        "Community Support": "✓",
+        "Priority Support": "-",
+        "Dedicated Manager": "-",
+        "Training Sessions": "-",
+      },
+    },
   },
   bulk: {
-    title: "Bulk Credits",
+    name: "Bulk Credits",
+    price: 2999,
+    credits: 2000,
     description: "Need More Credits? Save with Bulk Purchases!",
-    price: "₹2999",
-    period: "/2000 credits",
-    features: [
-      "Maximum savings on credits",
-      "2000 message credits",
-      "All premium features included",
-      "Use credits anytime",
-      "Highest value for money",
-      "Priority support",
-    ],
-    special: false,
-    buttonText: "Buy Bulk Credits",
+    ctaText: "Buy Bulk Credits",
+    ctaHoverText: "Use credits anytime!",
     link: "https://buy.stripe.com/9AQ29hanKbnt7NC28c?prefilled_promo_code=BULK25",
+    features: {
+      "Basic Features": {
+        "AI Models": "Access to all models",
+        "Real Time WebSearch": "✓",
+        "Canvas Editor": "✓",
+        "Microphone Input": "✓",
+        "Chat with Docs": "✓",
+        Credits: "2000 credits",
+        "Access Duration": "Unlimited",
+      },
+      "AI Tools": {
+        "GPT-4o": "✓",
+        "Claude Sonnet 3.5": "✓",
+        "Google Gemini 1.5 Pro": "✓",
+        "Meta Llama 3.3 70b": "✓",
+        "Qwen 2.5 32b": "✓",
+        "Image Analysis": "✓",
+        "Text to Image": "Coming Soon",
+        "Text to Speech": "Coming Soon",
+      },
+      Support: {
+        "Community Support": "✓",
+        "Priority Support": "-",
+        "Dedicated Manager": "-",
+        "Training Sessions": "-",
+      },
+    },
   },
 } as const;
 
 export const getLandingPagePlans = (): PricingPlan[] => [
-  // { ...pricingPlans.free, features: [...pricingPlans.free.features] },
-  { ...pricingPlans.lite, features: [...pricingPlans.lite.features] },
-  { ...pricingPlans.pro, features: [...pricingPlans.pro.features] },
-  { ...pricingPlans.bulk, features: [...pricingPlans.bulk.features]},
+  { ...pricingPlans.lite },
+  { ...pricingPlans.pro },
+  { ...pricingPlans.bulk },
 ];
 
 export const getPaymentPlans = (userEmail?: string): PricingPlan[] => [
   {
     ...pricingPlans.lite,
-    features: [...pricingPlans.lite.features],
     link: `${pricingPlans.lite.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
   {
     ...pricingPlans.pro,
-    features: [...pricingPlans.pro.features],
     link: `${pricingPlans.pro.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
   {
     ...pricingPlans.bulk,
-    features: [...pricingPlans.bulk.features],
     link: `${pricingPlans.bulk.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
 ];

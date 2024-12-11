@@ -3,6 +3,51 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Quote, Sparkles } from "lucide-react";
 
+interface Founder {
+  name: string;
+  role: string;
+  image: string;
+  greeting: string;
+  story: string[];
+  highlightBox: {
+    text: string;
+    variant: "purple" | "blue";
+  };
+}
+
+export const founders: Founder[] = [
+  {
+    name: "Sushant",
+    role: "Founder, PivotWithAI",
+    image: "/founder.jpg",
+    greeting: "Hi, it's Sushant from Pivot With AI,",
+    story: [
+      "I used to feel overwhelmed by technology. Juggling multiple AI tools, paying for countless subscriptions, and constantly switching between platforms—it was exhausting and inefficient.",
+      "I went from frustrated and overworked to calm and confident. I now have a single platform that does it all—content creation, image generation, document analysis, and more.",
+      "That's why I created ChatSuite, your all-in-one AI workspace designed to save time, reduce costs, and boost productivity.",
+    ],
+    highlightBox: {
+      text: "ChatSuite changed everything.",
+      variant: "purple",
+    },
+  },
+  {
+    name: "Aryan Bhati",
+    role: "Co-Founder & Tech Lead",
+    image: "/cofounder.jpg", // Add your co-founder's image
+    greeting: "Hey, I'm Aryan, a self-taught developer,",
+    story: [
+      "As a developer, I understand the challenges of staying up-to-date with rapidly evolving tech landscapes and making crucial architectural decisions.",
+      "ChatSuite has become an invaluable companion in my development journey, helping with project research, technology evaluation, and architectural planning.",
+      "Our platform streamlines the development process by providing AI-powered insights for choosing the best tech stack and making informed decisions for your next big product.",
+    ],
+    highlightBox: {
+      text: "Transform your development workflow with AI-powered insights and research.",
+      variant: "blue",
+    },
+  },
+];
+
 const FoundersNote = () => {
   return (
     <div className="relative min-h-screen py-24 overflow-hidden bg-gradient-to-b from-slate-900 via-purple-900/20 to-slate-900">
@@ -69,112 +114,89 @@ const FoundersNote = () => {
             </h2>
           </div>
 
-          {/* Note Content */}
-          <div className="relative">
-            {/* Main Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="relative p-8 md:p-12 bg-white/5 backdrop-blur-xl rounded-2xl border border-purple-500/20"
-            >
-              {/* Content Grid */}
-              <div className="grid md:grid-cols-5 gap-8 items-start">
-                {/* Profile Section */}
-                <div className="md:col-span-2 text-center md:text-left">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="relative inline-block"
-                  >
-                    <div className="relative w-48 h-48 mx-auto rounded-2xl overflow-hidden ring-2 ring-purple-500/30">
-                      <img
-                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sushant&backgroundColor=b6e3f4"
-                        alt="Sushant"
-                        className="w-full h-full object-cover"
-                      />
-                      {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent" />
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mt-6 space-y-2"
-                  >
-                    <h3 className="text-2xl font-bold text-white">Sushant</h3>
-                    <p className="text-purple-400 font-medium">
-                      Founder, PivotWithAI
-                    </p>
-                  </motion.div>
-                </div>
-
-                {/* Letter Content */}
-                <div className="md:col-span-3 space-y-6">
-                  {/* Decorative Quote */}
-                  <div className="relative">
-                    <Quote className="absolute -top-4 -left-4 w-8 h-8 text-purple-500/20" />
-
-                    {/* Letter Paragraphs */}
-                    <div className="space-y-6 text-gray-300 leading-relaxed relative z-10">
-                      <p className="text-lg font-medium text-purple-300">
-                        Hi, it's Sushant from Pivot With AI,
-                      </p>
-
-                      <p>
-                        I used to feel overwhelmed by technology. Juggling
-                        multiple AI tools, paying for countless subscriptions,
-                        and constantly switching between platforms—it was
-                        exhausting and inefficient.
-                      </p>
-
-                      <div className="py-4 px-6 bg-purple-500/10 rounded-xl border border-purple-500/20 my-8">
-                        <p className="text-lg font-medium text-purple-300">
-                          ChatSuite changed everything.
-                        </p>
+          {/* Updated Note Content - Changed to horizontal layout */}
+          <div className="relative grid md:grid-cols-2 gap-8">
+            {founders.map((founder, index) => (
+              <motion.div
+                key={founder.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="relative p-6 md:p-8 bg-white/5 backdrop-blur-xl rounded-2xl border border-purple-500/20"
+              >
+                <div className="flex flex-col h-full">
+                  {/* Profile Section - Adjusted for horizontal layout */}
+                  <div className="text-center mb-6">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="relative inline-block"
+                    >
+                      <div className="relative w-32 h-32 md:w-40 md:h-40 mx-auto rounded-2xl overflow-hidden ring-2 ring-purple-500/30">
+                        <img
+                          src={founder.image}
+                          alt={founder.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent" />
                       </div>
+                    </motion.div>
 
-                      <p>
-                        I went from frustrated and overworked to calm and
-                        confident. I now have a single platform that does it
-                        all—content creation, image generation, document
-                        analysis, and more.
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="mt-4 space-y-1"
+                    >
+                      <h3 className="text-xl font-bold text-white">
+                        {founder.name}
+                      </h3>
+                      <p className="text-purple-400 font-medium text-sm">
+                        {founder.role}
                       </p>
+                    </motion.div>
+                  </div>
 
-                      <p>
-                        That's why I created ChatSuite, your all-in-one AI
-                        workspace designed to save time, reduce costs, and boost
-                        productivity.
-                      </p>
-
-                      <div className="py-4 px-6 bg-blue-500/10 rounded-xl border border-blue-500/20">
-                        <p className="text-lg font-medium text-blue-300">
-                          With ChatSuite, you'll save 100+ hours of wasted
-                          effort and keep more money in your pocket.
+                  {/* Letter Content - Adjusted spacing */}
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <Quote className="absolute -top-4 -left-4 w-6 h-6 text-purple-500/20" />
+                      <div className="space-y-4 text-gray-300 leading-relaxed relative z-10">
+                        <p className="text-base font-medium text-purple-300">
+                          {founder.greeting}
                         </p>
+                        {founder.story.map((paragraph, i) => (
+                          <p key={i} className="text-sm">
+                            {paragraph}
+                          </p>
+                        ))}
+                        <div
+                          className={`py-3 px-4 bg-${founder.highlightBox.variant}-500/10 rounded-xl border border-${founder.highlightBox.variant}-500/20`}
+                        >
+                          <p
+                            className={`text-base font-medium text-${founder.highlightBox.variant}-300`}
+                          >
+                            {founder.highlightBox.text}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* CTA Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mt-8 w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-blue-600 
-                             text-white rounded-xl font-medium shadow-xl hover:shadow-purple-500/25 
-                             flex items-center justify-center space-x-2 group transition-all duration-300"
-                  >
-                    <span>Start Your Journey with ChatSuite</span>
-                    <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-                  </motion.button>
                 </div>
-              </div>
-            </motion.div>
-
-            {/* Decorative Elements */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-3xl blur-xl -z-10" />
+              </motion.div>
+            ))}
           </div>
+
+          {/* CTA Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-8 w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-blue-600 
+                     text-white rounded-xl font-medium shadow-xl hover:shadow-purple-500/25 
+                     flex items-center justify-center space-x-2 group transition-all duration-300"
+          >
+            <span>Start Your Journey with ChatSuite</span>
+            <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
+          </motion.button>
         </motion.div>
 
         {/* Bottom Decoration */}

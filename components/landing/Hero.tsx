@@ -94,9 +94,9 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 px-4"
+            className="mt-10 flex flex-col  items-center justify-center gap-8 px-4"
           >
-            <div className="w-full sm:w-auto flex flex-col items-center">
+            <div className="w-full sm:w-auto flex  items-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -106,12 +106,7 @@ const Hero = () => {
               >
                 Try ChatSuite for Free
               </motion.button>
-              <span className="mt-2 text-sm text-gray-400">
-                No credit card required
-              </span>
-            </div>
 
-            <div className="w-full sm:w-auto flex flex-col items-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -121,6 +116,9 @@ const Hero = () => {
                 Schedule a Demo
               </motion.button>
             </div>
+            <span className="mt-1 text-sm text-gray-400">
+              No credit card required
+            </span>
           </motion.div>
 
           {/* Video Dialog */}

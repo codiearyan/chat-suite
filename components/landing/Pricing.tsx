@@ -2,24 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Video, Bot, Star, Check, X, ArrowRight } from "lucide-react";
+import {
+  getLandingPagePlans,
+  PlanFeatures,
+  type PricingPlan,
+} from "@/config/pricing";
 
-type PlanFeatures = {
-  [key: string]: {
-    [key: string]: string;
-  };
-};
-
-type Plan = {
-  name: string;
-  badge?: string;
-  price: number | string;
-  description: string;
-  features: PlanFeatures;
-  ctaText: string;
-  ctaHoverText?: string;
-  isPopular?: boolean;
-  credits: number;
-};
+const categoryIcons: Record<keyof PlanFeatures, React.ElementType> = {
+  "Basic Features": Video,
+  "AI Tools": Bot,
+  Support: Star,
+} as const;
 
 const Pricing = () => {
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -30,161 +23,55 @@ const Pricing = () => {
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
-    handleResize(); // Set initial size
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const plans: Plan[] = [
-    {
-      name: "Free Trial",
-      badge: "Try it Now",
-      price: "Free",
-      credits: 10,
-      description: "Experience ChatSuite for Free!",
-      ctaText: "Sign Up for Free",
-      features: {
-        "Basic Features": {
-          "AI Models": "Access to all models",
-          "Real Time WebSearch": "✓",
-          "Canvas Editor": "✓",
-          "Microphone Input": "✓",
-          "Chat with Docs": "✓",
-          Credits: "10 credits",
-          "Access Duration": "Unlimited",
-        },
-        "AI Tools": {
-          "GPT-4o": "✓",
-          "Claude Sonnet 3.5": "✓",
-          "Google Gemini 1.5 Pro": "✓",
-          "Meta Llama 3.3 70b": "✓",
-          "Qwen 2.5 32b": "✓",
-          "Image Analysis": "-",
-          "Text to Image": "-",
-          "Text to Speech": "-",
-        },
-        Support: {
-          "Community Support": "✓",
-          "Priority Support": "-",
-          "Dedicated Manager": "-",
-          "Training Sessions": "-",
-        },
+  const freePlan: PricingPlan = {
+    name: "Free Trial",
+    badge: "Try it Now",
+    price: "Free",
+    credits: 10,
+    description: "Experience ChatSuite for Free!",
+    ctaText: "Sign Up for Free",
+    link: "/auth",
+    features: {
+      "Basic Features": {
+        "AI Models": "Access to all models",
+        "Real Time WebSearch": "✓",
+        "Canvas Editor": "✓",
+        "Microphone Input": "✓",
+        "Chat with Docs": "✓",
+        Credits: "10 credits",
+        "Access Duration": "Unlimited",
+      },
+      "AI Tools": {
+        "GPT-4o": "✓",
+        "Claude Sonnet 3.5": "✓",
+        "Google Gemini 1.5 Pro": "✓",
+        "Meta Llama 3.3 70b": "✓",
+        "Qwen 2.5 32b": "✓",
+        "Image Analysis": "-",
+        "Text to Image": "-",
+        "Text to Speech": "-",
+      },
+      Support: {
+        "Community Support": "✓",
+        "Priority Support": "-",
+        "Dedicated Manager": "-",
+        "Training Sessions": "-",
       },
     },
-    {
-      name: "Lite Model",
-      price: 499,
-      credits: 100,
-      description: "Affordable Flexibility for Casual Users",
-      ctaText: "Get Started for ₹499",
-      ctaHoverText: "Use credits anytime!",
-      features: {
-        "Basic Features": {
-          "AI Models": "Access to all models",
-          "Real Time WebSearch": "✓",
-          "Canvas Editor": "✓",
-          "Microphone Input": "✓",
-          "Chat with Docs": "✓",
-          Credits: "100 credits",
-          "Access Duration": "Unlimited",
-        },
-        "AI Tools": {
-          "GPT-4o": "✓",
-          "Claude Sonnet 3.5": "✓",
-          "Google Gemini 1.5 Pro": "✓",
-          "Meta Llama 3.3 70b": "✓",
-          "Qwen 2.5 32b": "✓",
-          "Image Analysis": "✓",
-          "Text to Image": "Coming Soon",
-          "Text to Speech": "Coming Soon",
-        },
-        Support: {
-          "Community Support": "✓",
-          "Priority Support": "-",
-          "Dedicated Manager": "-",
-          "Training Sessions": "-",
-        },
-      },
-    },
-    {
-      name: "Pro Model",
-      badge: "Most Popular",
-      price: 1499,
-      credits: 500,
-      description: "Perfect for Power Users",
-      ctaText: "Upgrade to Pro",
-      ctaHoverText: "Save more with bulk credits!",
-      isPopular: true,
-      features: {
-        "Basic Features": {
-          "AI Models": "Access to all models",
-          "Real Time WebSearch": "✓",
-          "Canvas Editor": "✓",
-          "Microphone Input": "✓",
-          "Chat with Docs": "✓",
-          Credits: "500 credits",
-          "Access Duration": "Unlimited",
-        },
-        "AI Tools": {
-          "GPT-4o": "✓",
-          "Claude Sonnet 3.5": "✓",
-          "Google Gemini 1.5 Pro": "✓",
-          "Meta Llama 3.3 70b": "✓",
-          "Qwen 2.5 32b": "✓",
-          "Image Analysis": "✓",
-          "Text to Image": "Priority Access",
-          "Text to Speech": "Priority Access",
-        },
-        Support: {
-          "Community Support": "✓",
-          "Priority Support": "✓",
-          "Dedicated Manager": "-",
-          "Training Sessions": "1 Session",
-        },
-      },
-    },
-    {
-      name: "Bulk Credits",
-      price: 2999,
-      credits: 2000,
-      description: "Need More Credits? Save with Bulk Purchases!",
-      ctaText: "Buy Bulk Credits",
-      ctaHoverText: "Get the best value for your credits!",
-      features: {
-        "Basic Features": {
-          "AI Models": "Access to all models",
-          "Real Time WebSearch": "✓",
-          "Canvas Editor": "✓",
-          "Microphone Input": "✓",
-          "Chat with Docs": "✓",
-          Credits: "2000 credits",
-          "Access Duration": "Unlimited",
-        },
-        "AI Tools": {
-          "GPT-4o": "✓",
-          "Claude Sonnet 3.5": "✓",
-          "Google Gemini 1.5 Pro": "✓",
-          "Meta Llama 3.3 70b": "✓",
-          "Qwen 2.5 32b": "✓",
-          "Image Analysis": "✓",
-          "Text to Image": "Priority Access",
-          "Text to Speech": "Priority Access",
-        },
-        Support: {
-          "Community Support": "✓",
-          "Priority Support": "✓",
-          "Dedicated Manager": "✓",
-          "Training Sessions": "3 Sessions",
-        },
-      },
-    },
-  ];
-
-  const categoryIcons: { [key: string]: React.ElementType } = {
-    "Basic Features": Video,
-    "AI Tools": Bot,
-    Support: Star,
   };
+
+  const paidPlans = getLandingPagePlans().map((plan) =>
+    plan.name === "Pro Model"
+      ? { ...plan, badge: "Most Popular", isPopular: true }
+      : plan
+  );
+
+  const plans = [freePlan, ...paidPlans];
 
   return (
     <div
