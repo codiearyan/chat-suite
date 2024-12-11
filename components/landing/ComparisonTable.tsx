@@ -144,15 +144,16 @@ const ComparisonTable = () => {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <motion.button
+          <motion.a
+            href="/auth"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 bg-purple-600 text-white rounded-full font-medium 
                      hover:bg-purple-700 transition-all duration-300 shadow-lg 
                      hover:shadow-purple-500/50 animate-glow"
           >
-            Start Your Free Trial
-          </motion.button>
+            Start for Free
+          </motion.a>
         </motion.div>
       </div>
     </div>

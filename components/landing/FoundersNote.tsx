@@ -187,7 +187,8 @@ const FoundersNote = () => {
           </div>
 
           {/* CTA Button */}
-          <motion.button
+          <motion.a
+            href="/auth"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="mt-8 w-full py-4 px-6 bg-gradient-to-r from-purple-600 to-blue-600 
@@ -196,7 +197,7 @@ const FoundersNote = () => {
           >
             <span>Start Your Journey with ChatSuite</span>
             <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-          </motion.button>
+          </motion.a>
         </motion.div>
 
         {/* Bottom Decoration */}

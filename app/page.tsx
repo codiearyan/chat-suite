@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { companyConfig } from "@/config";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import { getSession } from "@/lib/db/cached-queries";
@@ -13,7 +12,7 @@ const Benefits = dynamic(() => import("@/components/landing/Benefits"));
 const FoundersNote = dynamic(() => import("@/components/landing/FoundersNote"));
 const Features = dynamic(() => import("@/components/landing/Features"));
 const HowItWorks = dynamic(() => import("@/components/landing/HowItWorks"));
-const Pricing = dynamic(() => import("@/components/landing/Pricing"));
+const Pricing = dynamic(() => import("@/components/pricing/Pricing-3"));
 const ComparisonTable = dynamic(
   () => import("@/components/landing/ComparisonTable")
 );
