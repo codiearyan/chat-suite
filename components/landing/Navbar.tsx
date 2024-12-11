@@ -105,7 +105,7 @@ const Navbar = () => {
           href="/auth"
           className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition-colors animate-pulse"
         >
-          Get Started for Free
+          Get Started
         </Link>
       </div>
 
