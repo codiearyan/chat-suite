@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -47,17 +49,23 @@ const Navbar = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <a href={companyConfig.company.homeUrl} className="flex items-center">
-          <img
+      <div className="max-w-7xl mx-auto flex items-center justify-evenly">
+        <Link
+          href={companyConfig.company.homeUrl}
+          className="flex items-center justify-center"
+        >
+          <Image
             src={companyConfig.company.logo}
             alt={companyConfig.company.name}
+            width={32}
+            height={32}
             className="h-8 w-8"
+            priority
           />
           <span className="text-lg font-bold ml-2 text-white">
             {companyConfig.company.name}
           </span>
-        </a>
+        </Link>
 
         <button
           className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -71,44 +79,34 @@ const Navbar = () => {
           )}
         </button>
 
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center justify-center space-x-6">
           {navigationItems.map((item) => (
-            <motion.button
-              key={item.name}
-              onClick={() =>
-                item.href.startsWith("http")
-                  ? (window.location.href = item.href)
-                  : scrollToSection(item.sectionId)
-              }
-              className="relative group px-4 py-2 rounded-full text-white flex items-center space-x-2 hover:bg-white/10 transition-all duration-300 cursor-pointer"
-              whileHover={{ scale: 1.05 }}
-            >
-              <span>{item.name}</span>
-              <motion.div
-                className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.button>
+            <motion.div key={item.name}>
+              {item.href.startsWith("http") ? (
+                <a
+                  href={item.href}
+                  className="relative group px-4 py-2 rounded-full text-white flex items-center space-x-2 hover:bg-white/10 transition-all duration-300"
+                >
+                  <span>{item.name}</span>
+                </a>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="relative group px-4 py-2 rounded-full text-white flex items-center space-x-2 hover:bg-white/10 transition-all duration-300"
+                >
+                  <span>{item.name}</span>
+                </Link>
+              )}
+            </motion.div>
           ))}
-
-          <motion.a
-            href="#signin"
-            className="text-white hover:text-blue-300 transition-colors relative group"
-            whileHover={{ scale: 1.05 }}
-          >
-            Sign In
-            <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-          </motion.a>
-          <motion.button
-            className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition-colors animate-pulse"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Get Started
-          </motion.button>
         </div>
+
+        <Link
+          href="/auth"
+          className="px-6 py-2 bg-blue-500 text-white rounded-full font-medium hover:bg-blue-600 transition-colors animate-pulse"
+        >
+          Get Started for Free
+        </Link>
       </div>
 
       {isMobileMenuOpen && (
@@ -133,19 +131,20 @@ const Navbar = () => {
               </button>
             ))}
             <div className="pt-4 border-t border-white/10 flex flex-col space-y-4">
-              <motion.a
-                href="#signin"
+              {/* <motion.a
+                href="/auth"
                 className="w-full p-3 text-center text-white hover:bg-white/10 rounded-lg transition-colors"
                 whileTap={{ scale: 0.95 }}
               >
                 Sign In
-              </motion.a>
-              <motion.button
+              </motion.a> */}
+              <motion.a
+                href="/auth"
                 className="w-full p-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
                 whileTap={{ scale: 0.95 }}
               >
                 Get Started
-              </motion.button>
+              </motion.a>
             </div>
           </div>
         </motion.div>

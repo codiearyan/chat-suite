@@ -75,7 +75,7 @@ const Features = () => {
   };
 
   return (
-    <section className="relative min-h-screen bg-slate-900 py-24 overflow-hidden">
+    <section id="features" className="relative min-h-screen bg-slate-900 py-24 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 opacity-90" />

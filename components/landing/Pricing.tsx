@@ -54,10 +54,11 @@ const Pricing = () => {
           "Access Duration": "Unlimited",
         },
         "AI Tools": {
-          "GPT-4": "✓",
-          "Claude 3.5": "✓",
-          "Google Gemini": "✓",
-          "Meta Llama": "✓",
+          "GPT-4o": "✓",
+          "Claude Sonnet 3.5": "✓",
+          "Google Gemini 1.5 Pro": "✓",
+          "Meta Llama 3.3 70b": "✓",
+          "Qwen 2.5 32b": "✓",
           "Image Analysis": "-",
           "Text to Image": "-",
           "Text to Speech": "-",
@@ -88,10 +89,11 @@ const Pricing = () => {
           "Access Duration": "Unlimited",
         },
         "AI Tools": {
-          "GPT-4": "✓",
-          "Claude 3.5": "✓",
-          "Google Gemini": "✓",
-          "Meta Llama": "✓",
+          "GPT-4o": "✓",
+          "Claude Sonnet 3.5": "✓",
+          "Google Gemini 1.5 Pro": "✓",
+          "Meta Llama 3.3 70b": "✓",
+          "Qwen 2.5 32b": "✓",
           "Image Analysis": "✓",
           "Text to Image": "Coming Soon",
           "Text to Speech": "Coming Soon",
@@ -124,10 +126,11 @@ const Pricing = () => {
           "Access Duration": "Unlimited",
         },
         "AI Tools": {
-          "GPT-4": "✓",
-          "Claude 3.5": "✓",
-          "Google Gemini": "✓",
-          "Meta Llama": "✓",
+          "GPT-4o": "✓",
+          "Claude Sonnet 3.5": "✓",
+          "Google Gemini 1.5 Pro": "✓",
+          "Meta Llama 3.3 70b": "✓",
+          "Qwen 2.5 32b": "✓",
           "Image Analysis": "✓",
           "Text to Image": "Priority Access",
           "Text to Speech": "Priority Access",
@@ -158,10 +161,11 @@ const Pricing = () => {
           "Access Duration": "Unlimited",
         },
         "AI Tools": {
-          "GPT-4": "✓",
-          "Claude 3.5": "✓",
-          "Google Gemini": "✓",
-          "Meta Llama": "✓",
+          "GPT-4o": "✓",
+          "Claude Sonnet 3.5": "✓",
+          "Google Gemini 1.5 Pro": "✓",
+          "Meta Llama 3.3 70b": "✓",
+          "Qwen 2.5 32b": "✓",
           "Image Analysis": "✓",
           "Text to Image": "Priority Access",
           "Text to Speech": "Priority Access",
@@ -183,7 +187,10 @@ const Pricing = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-900 py-24 overflow-hidden">
+    <div
+      id="pricing"
+      className="relative min-h-screen bg-slate-900 py-24 overflow-hidden"
+    >
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 via-blue-900/30 to-slate-900" />

@@ -37,19 +37,17 @@ const Hero = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
           className="text-center"
         >
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
             className="inline-block"
           >
             <div className="px-4 py-2 rounded-full bg-purple-900/30 border border-purple-500/30 shadow-lg backdrop-blur-sm">
               <p className="text-purple-300 text-sm font-medium animate-pulse">
-                Introducing ChatSuite – Your AI Workspace
+                ✨ Introducing ChatSuite (Beta) – Your AI Workspace
               </p>
             </div>
           </motion.div>
@@ -58,7 +56,6 @@ const Hero = () => {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
             className="mt-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight px-4"
           >
             <span className="inline-block bg-gradient-to-r from-purple-400 to-blue-500 text-transparent bg-clip-text animate-gradient">
@@ -78,26 +75,25 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
             className="mt-6 space-y-4 px-4"
           >
             <p className="text-lg sm:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Access <span className="text-blue-400">OpenAI GPT-4</span>,
-              <span className="text-purple-400"> Claude</span>,
-              <span className="text-green-400"> Gemini</span>, and more – all
-              for less than{" "}
+              Access <span className="text-blue-400">OpenAI GPT-4o</span>,
+              <span className="text-purple-400"> Claude Sonnet 3.5</span>,
+              <span className="text-green-400"> Gemini 1.5 Pro</span>,{" "}
+              <span className="text-green-400"> Meta Llama 3.3 70b</span>,
+              <span className="text-green-400"> Qwen 2.5 32b</span> and more –
+              all for less than{" "}
               <span className="text-green-400 font-semibold">$10/month</span>.
+              Stop juggling subscriptions and simplify your AI Workflow
             </p>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
-              Stop juggling subscriptions.
-            </p>
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto"></p>
           </motion.div>
 
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 px-4"
           >
             <div className="w-full sm:w-auto flex flex-col items-center">
@@ -124,7 +120,6 @@ const Hero = () => {
               >
                 Schedule a Demo
               </motion.button>
-              <span className="mt-2 text-sm text-gray-400">Cancel Anytime</span>
             </div>
           </motion.div>
 
@@ -132,7 +127,6 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.8 }}
             className="mt-16 px-4"
           >
             <div className="relative max-w-3xl mx-auto">

@@ -7,11 +7,13 @@ export const companyConfig = {
     homeUrl: "/",
     appUrl: "/",
     description: "Experience AI-powered conversations with ChatSuite",
-    logo: "/logo.png",
+    logo: "/chatsuite_nobg.png",
     navbarLinks: [
-      { label: "Home", href: "/" },
-      { label: "Chat Suite", href: "/chat" },
-      { label: "Training", href: "https://training.pivotwithai.com/" },
+      { label: "Features", href: "#features" },
+      { label: "Pricing", href: "#pricing" },
+      { label: "NextGenAI School", href: "https://training.pivotwithai.com/" },
+      { label: "Blog", href: "/blog" },
+      { label: "Contact", href: "/contact" },
     ],
   },
 

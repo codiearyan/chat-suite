@@ -29,38 +29,68 @@ const Footer = () => {
     href: link.href,
   }));
 
-  const socialLinks = [
-    {
-      name: "LinkedIn",
-      icon: <Linkedin />,
-      href: "#",
-      color: "hover:text-blue-400",
+  const socialLinks = {
+    person1: {
+      title: "Founder",
+      name: "Sushant Pai",
+      links: [
+        {
+          name: "LinkedIn",
+          icon: <Linkedin />,
+          href: "https://www.linkedin.com/in/sushantvpai",
+          color: "hover:text-blue-400",
+        },
+        {
+          name: "Twitter",
+          icon: <Twitter />,
+          href: "https://x.com/sushantvpai",
+          color: "hover:text-blue-400",
+        },
+        {
+          name: "Instagram",
+          icon: <Instagram />,
+          href: "https://www.instagram.com/pivotwithai",
+          color: "hover:text-pink-400",
+        },
+        {
+          name: "YouTube",
+          icon: <Youtube />,
+          href: "https://www.youtube.com/@PivotWithAI",
+          color: "hover:text-red-500",
+        },
+        {
+          name: "Facebook",
+          icon: <Facebook />,
+          href: "https://www.facebook.com/aiwithpai",
+          color: "hover:text-blue-400",
+        },
+      ],
     },
-    {
-      name: "Twitter",
-      icon: <Twitter />,
-      href: "#",
-      color: "hover:text-blue-400",
+    person2: {
+      title: "Co-Founder",
+      name: "Aryan Bhati",
+      links: [
+        {
+          name: "Twitter",
+          icon: <Twitter />,
+          href: "https://x.com/",
+          color: "hover:text-blue-400",
+        },
+        {
+          name: "LinkedIn",
+          icon: <Linkedin />,
+          href: "https://www.linkedin.com/in/aryan-bhati",
+          color: "hover:text-blue-400",
+        },
+        {
+          name: "Instagram",
+          icon: <Instagram />,
+          href: "https://www.instagram.com/ary4n_704",
+          color: "hover:text-pink-400",
+        },
+      ],
     },
-    {
-      name: "Instagram",
-      icon: <Instagram />,
-      href: "#",
-      color: "hover:text-pink-400",
-    },
-    {
-      name: "Facebook",
-      icon: <Facebook />,
-      href: "#",
-      color: "hover:text-blue-500",
-    },
-    {
-      name: "YouTube",
-      icon: <Youtube />,
-      href: "#",
-      color: "hover:text-red-500",
-    },
-  ];
+  };
 
   return (
     <footer className="relative bg-slate-900 pt-24 pb-12 overflow-hidden">
@@ -104,7 +134,8 @@ const Footer = () => {
           <h2 className="text-3xl font-bold text-white mb-8">
             Ready to Experience the Future of AI?
           </h2>
-          <motion.button
+          <motion.a
+            href="/auth"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center px-8 py-3 bg-purple-600 text-white rounded-full 
@@ -113,7 +144,7 @@ const Footer = () => {
           >
             <span>Get Started—Your All-in-One AI Workspace Awaits</span>
             <ArrowRight className="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" />
-          </motion.button>
+          </motion.a>
         </motion.div>
 
         {/* Main Footer Content */}
@@ -158,23 +189,31 @@ const Footer = () => {
           </div>
 
           {/* Social Links */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h3 className="text-white font-semibold text-lg">
               Connect With Us
             </h3>
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.name}
-                  href={social.href}
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  className={`w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center 
-                             text-gray-400 transition-colors duration-200 ${social.color}`}
-                >
-                  {social.icon}
-                </motion.a>
-              ))}
-            </div>
+            {Object.values(socialLinks).map((person) => (
+              <div key={person.name} className="space-y-2">
+                <div className="text-gray-400">
+                  <span className="font-medium text-white">{person.title}</span>{" "}
+                  - {person.name}
+                </div>
+                <div className="flex space-x-4">
+                  {person.links.map((social) => (
+                    <motion.a
+                      key={social.name}
+                      href={social.href}
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      className={`w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center 
+                                 text-gray-400 transition-colors duration-200 ${social.color}`}
+                    >
+                      {social.icon}
+                    </motion.a>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
