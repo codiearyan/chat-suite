@@ -4,6 +4,14 @@ import { getSession } from "@/lib/db/cached-queries";
 import { PricingClient } from "@/components/pricing/PricingClient";
 import Navbar from "@/components/navbars/Navbar-1";
 import { companyConfig } from "@/config";
+import { Video, Bot, Star } from "lucide-react";
+
+// Define category icons
+const categoryIcons = {
+  "Basic Features": Video,
+  "AI Tools": Bot,
+  Support: Star,
+};
 
 export const metadata: Metadata = {
   title: "Pricing - ChatSuite",
@@ -41,7 +49,11 @@ export default async function PricingPage() {
         {/* Pricing Section */}
         <section className="py-4">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <PricingClient plans={pricingInfo} user={user} />
+            <PricingClient
+              plans={pricingInfo}
+              user={user}
+              categoryIcons={categoryIcons}
+            />
           </div>
         </section>
 
