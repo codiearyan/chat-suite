@@ -27,7 +27,7 @@ export const pricingPlans = {
     description: "Affordable Flexibility for Casual Users",
     ctaText: "Get Started for ₹499",
     ctaHoverText: "Use credits anytime!",
-    link: "https://buy.stripe.com/00g5lt3Zmajpgk86or",
+    link: "https://buy.stripe.com/eVa15danKdvB6Jy7su",
     features: {
       "Basic Features": {
         "AI Models": "Access to all models",
@@ -85,7 +85,7 @@ export const pricingPlans = {
       },
       Support: {
         "Community Support": "✓",
-        "Priority Support": "-",
+        "Priority Support": "✓",
         "Training Sessions": "-",
       },
     },
@@ -120,8 +120,8 @@ export const pricingPlans = {
       },
       Support: {
         "Community Support": "✓",
-        "Priority Support": "-",
-        "Training Sessions": "-",
+        "Priority Support": "✓",
+        "Training Sessions": "✓",
       },
     },
   },
@@ -144,7 +144,7 @@ export const getPaymentPlans = (userEmail?: string): PricingPlan[] => [
   },
   {
     ...pricingPlans.bulk,
-    link: `${pricingPlans.bulk.link}?prefilled_email=${encodeURIComponent(userEmail || '')}`,
+    link: `${pricingPlans.bulk.link}&prefilled_email=${encodeURIComponent(userEmail || '')}`,
   },
 ];
 

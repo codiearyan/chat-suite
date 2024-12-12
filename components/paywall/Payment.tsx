@@ -1,4 +1,3 @@
-import Section from "@/components/Section";
 import { CheckCircle2 } from "lucide-react";
 import { getPaymentPlans } from "@/config/pricing";
 
@@ -6,8 +5,8 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
   const pricingInfo = getPaymentPlans(userEmail);
 
   return (
-    <Section>
-      <div className="max-w-3xl mx-auto text-center">
+    <section className="w-full">
+      <div className="w-full mx-auto text-center">
         <h2 className="font-extrabold text-2xl sm:text-3xl md:text-4xl tracking-tight mb-2">
           You're out of
           <span className="bg-primary text-primary-foreground px-2 md:px-4 ml-1 md:ml-1.5 leading-relaxed whitespace-nowrap">
@@ -19,17 +18,17 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
           1 credit.
         </p>
 
-        <div className="mt-10 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {pricingInfo.map((plan, index) => (
+        <div className="mt-10 grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {pricingInfo.map((plan) => (
             <div
-              key={index}
+              key={plan.name}
               className={`rounded-xl shadow-lg bg-card relative flex flex-col ${
-                plan.isPopular
+                plan.name === "Pro Model"
                   ? "border-2 border-primary md:scale-[1.02] md:z-10"
                   : "border border-border"
               }`}
             >
-              {plan.isPopular && (
+              {plan.name === "Pro Model" && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                   <span className="bg-primary text-primary-foreground text-sm px-3 py-1 rounded-full">
                     Best Value
@@ -44,29 +43,46 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
                   </p>
                 </div>
                 <div className="flex items-baseline gap-x-1">
-                  <span className="text-3xl font-bold">{plan.price}</span>
+                  <span className="text-3xl font-bold">₹{plan.price}</span>
                   <span className="text-muted-foreground text-sm">
-                    {plan.period}
+                    {plan.period || "One-time"}
                   </span>
                 </div>
-                <ul className="space-y-2.5 text-sm">
-                  {Object.entries(plan.features).map(([key, value], i) => (
-                    <li key={i} className="flex items-center gap-x-2">
-                      <CheckCircle2
-                        className={`h-4 w-4 ${
-                          plan.isPopular
-                            ? "text-primary"
-                            : "text-muted-foreground"
-                        }`}
-                      />
-                      <span className="text-muted-foreground">{key}</span>
-                    </li>
+                <div className="space-y-4">
+                  {Object.entries(plan.features).map(([category, features]) => (
+                    <div key={category} className="space-y-2">
+                      <h4 className="text-sm font-semibold">{category}</h4>
+                      <ul className="space-y-2 text-sm">
+                        {Object.entries(features).map(([feature, value]) => (
+                          <li
+                            key={feature}
+                            className="flex items-center gap-x-2"
+                          >
+                            <CheckCircle2
+                              className={`h-4 w-4 ${
+                                value === "✓"
+                                  ? plan.name === "Pro Model"
+                                    ? "text-primary"
+                                    : "text-muted-foreground"
+                                  : "text-muted-foreground/50"
+                              }`}
+                            />
+                            <span className="text-muted-foreground">
+                              {feature}
+                              {value !== "✓" && value !== "-"
+                                ? `: ${value}`
+                                : ""}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
+                </div>
                 <a
                   href={plan.link}
                   className={`mt-4 block px-4 py-2.5 text-sm font-semibold rounded-lg text-center transition-all duration-200 ${
-                    plan.isPopular
+                    plan.name === "Pro Model"
                       ? "bg-primary text-primary-foreground hover:bg-primary/90"
                       : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                   }`}
@@ -88,6 +104,6 @@ export default function PaymentModal({ userEmail }: { userEmail: string }) {
           </a>
         </p>
       </div>
-    </Section>
+    </section>
   );
 }
