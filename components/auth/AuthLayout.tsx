@@ -81,7 +81,7 @@ export default function AuthComponent() {
 
           <GoogleSignInButton isTermsAccepted={isTermsAccepted} />
 
-          <div className="flex items-center my-4">
+          {/* <div className="flex items-center my-4">
             <div className="flex-grow h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
             <span className="px-4 text-sm text-white/50">OR</span>
             <div className="flex-grow h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
@@ -91,7 +91,7 @@ export default function AuthComponent() {
             onEmailSubmit={handleLogin}
             isLoading={isLoading}
             isTermsAccepted={isTermsAccepted}
-          />
+          /> */}
 
           <div className="mt-4 flex items-start gap-2">
             <input
