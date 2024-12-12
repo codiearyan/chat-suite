@@ -11,18 +11,19 @@ export const AI_MODEL_DISPLAY = {
     vision: true,
     isComingSoon: false,
   },
-  "llama-3.3-70b-versatile": {
-    name: "Llama 3.3 70b",
-    logo: "/providers/meta.png",
-    vision: false,
-    isComingSoon: false,
-  },
   "gemini-1.5-pro-latest": {
     name: "Gemini 1.5 Pro",
     logo: "/providers/gemini.png",
     vision: true,
     isComingSoon: false,
   },
+  "llama-3.3-70b-versatile": {
+    name: "Llama 3.3 70b",
+    logo: "/providers/meta.png",
+    vision: false,
+    isComingSoon: true,
+  },
+  
   "qwen-2.5-72b-instruct": {
     name: "Qwen 2.5 72b",
     logo: "/providers/qwen.png",
