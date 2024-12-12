@@ -82,7 +82,8 @@ const Navbar = () => {
         <div className="hidden md:flex items-center justify-center space-x-6">
           {navigationItems.map((item) => (
             <motion.div key={item.name}>
-              {item.href.startsWith("http") ? (
+              {item.href.startsWith("http") ||
+              item.href.startsWith("mailto") ? (
                 <a
                   href={item.href}
                   className="relative group px-4 py-2 rounded-full text-white flex items-center space-x-2 hover:bg-white/10 transition-all duration-300"
@@ -118,17 +119,24 @@ const Navbar = () => {
         >
           <div className="flex flex-col space-y-4">
             {navigationItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() =>
-                  item.href.startsWith("http")
-                    ? (window.location.href = item.href)
-                    : scrollToSection(item.sectionId)
-                }
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-white"
-              >
-                <span>{item.name}</span>
-              </button>
+              <motion.div key={item.name}>
+                {item.href.startsWith("http") ||
+                item.href.startsWith("mailto") ? (
+                  <a
+                    href={item.href}
+                    className="relative group px-4 py-2 rounded-full text-white flex items-center space-x-2 hover:bg-white/10 transition-all duration-300"
+                  >
+                    <span>{item.name}</span>
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-white"
+                  >
+                    <span>{item.name}</span>
+                  </Link>
+                )}
+              </motion.div>
             ))}
             <div className="pt-4 border-t border-white/10 flex flex-col space-y-4">
               {/* <motion.a

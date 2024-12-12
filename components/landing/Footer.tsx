@@ -8,6 +8,7 @@ import {
   Instagram,
   Youtube,
   ArrowRight,
+  Link,
 } from "lucide-react";
 import { companyConfig } from "@/config";
 
@@ -173,16 +174,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <button
-                    onClick={() =>
-                      link.href.startsWith("http")
-                        ? (window.location.href = link.href)
-                        : scrollToSection(link.sectionId)
-                    }
+                  <Link
+                    href={link.href}
                     className="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer"
                   >
                     {link.name}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
