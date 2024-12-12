@@ -15,13 +15,13 @@ export const AI_MODEL_DISPLAY = {
     name: "Llama 3.3 70b",
     logo: "/providers/meta.png",
     vision: false,
-    isComingSoon: true,
+    isComingSoon: false,
   },
   "gemini-1.5-pro-latest": {
     name: "Gemini 1.5 Pro",
     logo: "/providers/gemini.png",
     vision: true,
-    isComingSoon: true,
+    isComingSoon: false,
   },
   "qwen-2.5-72b-instruct": {
     name: "Qwen 2.5 72b",
