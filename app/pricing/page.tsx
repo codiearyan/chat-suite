@@ -1,9 +1,10 @@
 import { Metadata } from "next";
-import { getLandingPagePlans } from "@/config/pricing";
+import { getPaymentPlans } from "@/config/pricing";
 import { getSession } from "@/lib/db/cached-queries";
 import { PricingClient } from "@/components/pricing/PricingClient";
 import Navbar from "@/components/navbars/Navbar-1";
 import { companyConfig } from "@/config";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Pricing - ChatSuite",
@@ -12,8 +13,13 @@ export const metadata: Metadata = {
 };
 
 export default async function PricingPage() {
-  const pricingInfo = getLandingPagePlans();
   const user = await getSession();
+
+  if (!user) {
+    return redirect("/auth");
+  }
+
+  const pricingInfo = getPaymentPlans(user?.email);
 
   return (
     <>
@@ -41,7 +47,7 @@ export default async function PricingPage() {
         {/* Pricing Section */}
         <section className="py-4">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <PricingClient plans={pricingInfo} user={user} />
+            <PricingClient plans={pricingInfo} />
           </div>
         </section>
 

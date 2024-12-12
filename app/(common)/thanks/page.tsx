@@ -2,13 +2,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { getLandingPagePlans } from "@/config/pricing";
+import { getPaymentPlans } from "@/config/pricing";
 import { getSession } from "@/lib/db/cached-queries";
 import { PricingClient } from "@/components/pricing/PricingClient";
+import { redirect } from "next/navigation";
 
 export default async function ThanksPage() {
-  const pricingInfo = getLandingPagePlans();
   const user = await getSession();
+  if (!user) {
+    return redirect("/auth");
+  }
+  const pricingInfo = getPaymentPlans(user?.email);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -60,7 +64,7 @@ export default async function ThanksPage() {
             </h2>
             <section className="py-4">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <PricingClient plans={pricingInfo} user={user} />
+                <PricingClient plans={pricingInfo} />
               </div>
             </section>
           </div>

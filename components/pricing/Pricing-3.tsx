@@ -1,10 +1,16 @@
-import { getLandingPagePlans } from "@/config/pricing";
+import { getPaymentPlans } from "@/config/pricing";
 import { getSession } from "@/lib/db/cached-queries";
+import { redirect } from "next/navigation";
 import { PricingClient } from "./PricingClient";
 
 export default async function Pricing() {
-  const pricingInfo = getLandingPagePlans();
   const user = await getSession();
+
+  if (!user) {
+    return redirect("/auth");
+  }
+
+  const pricingInfo = getPaymentPlans(user?.email);
 
   const freePlan = {
     name: "Free Trial",
@@ -73,7 +79,7 @@ export default async function Pricing() {
           </p>
         </div>
 
-        <PricingClient plans={allPlans} user={user} />
+        <PricingClient plans={allPlans} />
       </div>
     </div>
   );

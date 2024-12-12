@@ -16,10 +16,9 @@ const categoryIcons: Record<string, React.ElementType> = {
 
 interface PricingClientProps {
   plans: PricingPlan[];
-  user?: User | null;
 }
 
-export function PricingClient({ plans, user }: PricingClientProps) {
+export function PricingClient({ plans }: PricingClientProps) {
   const router = useRouter();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -38,17 +37,6 @@ export function PricingClient({ plans, user }: PricingClientProps) {
     if (plan.name === "Free Trial") {
       router.push("/auth");
       return;
-    }
-
-    if (!user) {
-      router.push("/auth");
-      return;
-    }
-
-    if (plan.link) {
-      window.location.href = `${plan.link}?prefilled_email=${encodeURIComponent(
-        user?.email || ""
-      )}`;
     }
   }
 
