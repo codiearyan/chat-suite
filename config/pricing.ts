@@ -92,7 +92,7 @@ export const pricingPlans = {
   },
   bulk: {
     name: "Bulk Credits",
-    price: 2999,
+    price: 3999,
     credits: 2000,
     description: "Need More Credits? Save with Bulk Purchases!",
     ctaText: "Buy Bulk Credits",
