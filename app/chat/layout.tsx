@@ -1,15 +1,19 @@
-import { toolConfig } from "./toolConfig";
+import {
+  defaultTitle,
+  defaultDescription,
+  companyConfig,
+  defaultOgImage,
+  favicon,
+  defaultKeywords,
+} from "@/config";
 import { ClientLayout } from "@/app/chat/client-layout";
 import { getSession } from "@/lib/db/cached-queries";
-
 export const metadata = {
-  title: toolConfig.metadata.title,
-  description: toolConfig.metadata.description,
+  title: defaultTitle,
+  description: defaultDescription,
+  keywords: defaultKeywords,
   openGraph: {
-    images: [toolConfig.metadata.og_image],
-  },
-  alternates: {
-    canonical: toolConfig.metadata.canonical,
+    images: [defaultOgImage],
   },
 };
 
