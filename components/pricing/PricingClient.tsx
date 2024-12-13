@@ -38,6 +38,11 @@ export function PricingClient({ plans }: PricingClientProps) {
       router.push("/auth");
       return;
     }
+  // Redirect to Stripe payment link if available
+    if (plan.link) {
+      window.location.href = plan.link; // Using window.location for external URLs
+      return;
+    }
   }
 
   return (
