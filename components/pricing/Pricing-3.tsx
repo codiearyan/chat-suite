@@ -6,11 +6,11 @@ import { PricingClient } from "./PricingClient";
 export default async function Pricing() {
   const user = await getSession();
 
-  if (!user) {
-    return redirect("/auth");
-  }
+  // if (!user) {
+  //   return redirect("/auth");
+  // }
 
-  const pricingInfo = getPaymentPlans(user?.email);
+  const pricingInfo = getPaymentPlans(user?.email || "");
 
   const freePlan = {
     name: "Free Trial",
