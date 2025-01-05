@@ -4,6 +4,9 @@ const { withContentlayer } = require("next-contentlayer2");
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ['i.pravatar.cc', 'images.unsplash.com']
+  },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;
