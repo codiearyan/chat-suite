@@ -1,10 +1,10 @@
-<a href="https://anotherwrapper.com/">
-  <img alt="AnotherWrapper - Build your AI startup in hours." src="/public/og.png">
-  <h1 align="center">AnotherWrapper - 10+ AI Demo Apps</h1>
+<a href="https://pivotwithai.com/">
+  <img alt="ChatSuite - AI tools to make your life easier" src="/public/steps/step3.png">
+  <h1 align="center">ChatSuite - AI Tools Suite</h1>
 </a>
 
 <p align="center">
-  An all-in-one Next.js starter kit to build your AI app quickly. Build unlimited products, pay only once.
+  We provide AI tools to make your life easier
 </p>
 
 <p align="center">
@@ -60,7 +60,7 @@ Before we start coding, we need to set up a few things:
 
    First, fork the repository to your own GitHub account:
 
-   - Go to https://github.com/fdarkaou/anotherwrapper-premium
+   - Go to https://github.com/fdarkaou/chatsuite
    - Click the "Fork" button in the top right
    - Make sure to set visibility to "Private" in the fork settings
    - Click "Create fork"
@@ -69,8 +69,8 @@ Before we start coding, we need to set up a few things:
 
    ```bash
    # Clone your private fork (replace YOUR-USERNAME with your GitHub username)
-   git clone https://github.com/YOUR-USERNAME/anotherwrapper-premium
-   cd anotherwrapper-premium
+   git clone https://github.com/YOUR-USERNAME/chatsuite
+   cd chatsuite
 
    # Install pnpm if you haven't already
    npm install -g pnpm
@@ -85,8 +85,8 @@ Before we start coding, we need to set up a few things:
 
    ```bash
    # Configure your local repository
-   git remote add upstream https://github.com/fdarkaou/anotherwrapper-premium
-   git remote set-url origin https://github.com/YOUR-USERNAME/anotherwrapper-premium
+   git remote add upstream https://github.com/fdarkaou/chatsuite
+   git remote set-url origin https://github.com/YOUR-USERNAME/chatsuite
    ```
 
    > 💡 Pro Tip: You can verify your remotes are set correctly with `git remote -v`
@@ -137,7 +137,7 @@ Supabase is like a powerful, ready-to-use database for your app. We'll set it up
    Now let's create a new database project:
 
    ```bash
-   npx supabase projects create -i "anotherwrapper-premium-db"
+   npx supabase projects create -i "chatsuite-db"
    ```
 
    The tool will ask you a few questions:
@@ -150,11 +150,11 @@ Supabase is like a powerful, ready-to-use database for your app. We'll set it up
    After answering these, you'll see something like this:
 
    ```bash
-   Creating project:    anotherwrapper-premium-db
+   Creating project:    chatsuite-db
    Selected org-id:     uefyfzmrpgyuazwddyib
    Selected region:     eu-west-3
    Enter your database password (or leave blank to generate one):
-   Created a new project anotherwrapper-premium-db at https://supabase.com/dashboard/project/vpgxxpifhzqjvrhsinhe
+   Created a new project chatsuite-db at https://supabase.com/dashboard/project/vpgxxpifhzqjvrhsinhe
    ```
 
    > Important: Look at the URL in that last line. The part after "project/" is your project ID
@@ -278,17 +278,40 @@ Common issues and solutions:
 
 ### Configuration
 
-After basic setup, customize your website metadata in `config.ts`. This file controls your website's:
+After basic setup, customize your website metadata in `config.ts`. The current configuration includes:
 
-- Title, description, and branding
-- Theme settings
-- Navigation links
-- Authentication routes
-- Legal information
+```typescript
+// Core branding
+company: {
+  name: "Pivot With AI"
+  theme: "pivotwithai"
+  description: "Experience AI-powered conversations with ChatSuite"
+  logo: "/chatsuite_nobg.png"
+}
 
-<Warning>
-Ensure you properly configure the routing section in config.ts as it's critical for authentication redirects.
-</Warning>
+// Navigation
+navbarLinks: [
+  { label: "Features", href: "#features" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "NextGenAI School", href: "https://training.pivotwithai.com/" },
+  { label: "Community", href: "http://chat.whatsapp.com/BmJq5FSuK7wJ389m494UL8" },
+  { label: "Contact", href: "mailto:support@pivotwithai.com" },
+]
+
+// Legal pages
+legal: {
+  privacyPolicyUrl: "/privacy"
+  tosUrl: "/terms"
+  refundPolicyUrl: "/refund"
+}
+```
+
+### Support and Community
+
+Join our community:
+- WhatsApp Community: [Join here](http://chat.whatsapp.com/BmJq5FSuK7wJ389m494UL8)
+- Email Support: support@pivotwithai.com
+- Training: [NextGenAI School](https://training.pivotwithai.com/)
 
 ### Next Steps
 
@@ -316,7 +339,7 @@ Once your basic setup is complete:
 1. **Fork the Repository**
 
    ```bash
-   https://github.com/fdarkaou/anotherwrapper-premium
+   https://github.com/fdarkaou/chatsuite
    ```
 
 2. **Configure Vercel Project**
