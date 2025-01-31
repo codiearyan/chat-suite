@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 // Lazy load components below the fold
 const Marquee = dynamic(() => import("@/components/landing/Marquee"));
 const Benefits = dynamic(() => import("@/components/landing/Benefits"));
-const FoundersNote = dynamic(() => import("@/components/landing/FoundersNote"));
+// const FoundersNote = dynamic(() => import("@/components/landing/FoundersNote"));
 const Features = dynamic(() => import("@/components/landing/Features"));
 const HowItWorks = dynamic(() => import("@/components/landing/HowItWorks"));
 const Pricing = dynamic(() => import("@/components/pricing/Pricing-3"));
@@ -37,9 +37,9 @@ export default async function Home() {
         <Suspense fallback={<div className="h-20" />}>
           <Benefits />
         </Suspense>
-        <Suspense fallback={<div className="h-20" />}>
+        {/* <Suspense fallback={<div className="h-20" />}>
           <FoundersNote />
-        </Suspense>
+        </Suspense> */}
         <Suspense fallback={<div className="h-20" />}>
           <ComparisonTable />
         </Suspense>
