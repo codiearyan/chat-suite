@@ -8,7 +8,9 @@ import Logo from "@/components/Logo";
 import { tosUrl, privacyPolicyUrl } from "@/config";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function AuthComponent() {
+export default function AuthComponent(
+
+) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 

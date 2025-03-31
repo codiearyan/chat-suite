@@ -10,6 +10,15 @@ import {
   favicon,
   defaultKeywords,
 } from "@/config";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
+import { Plus } from "lucide-react";
+import { twMerge } from "tailwind-merge";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { UnifiedSidebar } from "@/components/dashboard/UnifiedSidebar";
+import { createClient } from "@/lib/utils/supabase/server";
+import { ClientSideLayout } from "./components/ClientSideLayout";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -17,31 +26,34 @@ const outfit = Outfit({
   display: "swap",
 });
 
-export const metadata = {
-  title: `${defaultTitle}`,
-  description: defaultDescription,
-  keywords: defaultKeywords,
-  icons: [{ rel: "icon", url: `${companyConfig.company.homeUrl}${favicon}` }],
-  openGraph: {
-    url: companyConfig.company.homeUrl,
-    title: `${defaultTitle} | ${companyConfig.company.name}`,
-    description: defaultDescription,
-    images: [
-      {
-        url: `${companyConfig.company.homeUrl}${defaultOgImage}`,
-        width: 800,
-        height: 600,
-        alt: `${companyConfig.company.name} logo`,
-      },
-    ],
-  },
-};
+// export const metadata = {
+//   title: `${defaultTitle}`,
+//   description: defaultDescription,
+//   keywords: defaultKeywords,
+//   icons: [{ rel: "icon", url: `${companyConfig.company.homeUrl}${favicon}` }],
+//   openGraph: {
+//     url: companyConfig.company.homeUrl,
+//     title: `${defaultTitle} | ${companyConfig.company.name}`,
+//     description: defaultDescription,
+//     images: [
+//       {
+//         url: `${companyConfig.company.homeUrl}${defaultOgImage}`,
+//         width: 800,
+//         height: 600,
+//         alt: `${companyConfig.company.name} logo`,
+//       },
+//     ],
+//   },
+// };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -52,11 +64,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
-            <main
-              className={`${outfit.className} overflow-hidden bg-background`}
-            >
-              {children}
-            </main>
+            <ClientSideLayout user={user}>{children}</ClientSideLayout>
           </Providers>
         </ThemeProvider>
       </body>

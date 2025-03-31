@@ -20,11 +20,6 @@ export function ClientLayout({ children, user }: ClientLayoutProps) {
 
   return (
     <SidebarProvider className="flex h-screen bg-background">
-      <UnifiedSidebar
-        user={user}
-        showChatHistory={true}
-        onCollapsedChange={setIsSidebarCollapsed}
-      />
       <div className="flex-1 flex flex-col bg-muted/50 transition-all duration-300">
         {isSidebarCollapsed && (
           <div
