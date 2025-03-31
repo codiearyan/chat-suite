@@ -6,27 +6,14 @@ import React, { useState } from "react";
 interface AuthFormProps {
   onEmailSubmit: (email: string) => void;
   isLoading: boolean;
-  isTermsAccepted: boolean;
 }
 
-export default function AuthForm({
-  onEmailSubmit,
-  isLoading,
-  isTermsAccepted,
-}: AuthFormProps) {
+export default function AuthForm({ onEmailSubmit, isLoading }: AuthFormProps) {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!isTermsAccepted) {
-      toast({
-        title: "Terms & Conditions Required",
-        description: "Please accept the terms and conditions to continue.",
-        variant: "destructive",
-      });
-      return;
-    }
     onEmailSubmit(email);
   };
 
