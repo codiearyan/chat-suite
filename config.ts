@@ -2,8 +2,8 @@
 export const companyConfig = {
   ////// Base config used mainly for layout (@/components/navbar/Navbar-1.tsx and @/components/footer/Footer-1.tsx)
   company: {
-    name: "Pivot With AI",
-    theme: "pivotwithai",
+    name: "ChatSuite",
+    theme: "chatsuite",
     homeUrl: "/",
     appUrl: "/",
     description: "Experience AI-powered conversations with ChatSuite",
@@ -13,7 +13,7 @@ export const companyConfig = {
       { label: "Pricing", href: "#pricing" },
       { label: "NextGenAI School", href: "https://training.pivotwithai.com/" },
       { label: "Community", href: "http://chat.whatsapp.com/BmJq5FSuK7wJ389m494UL8" },
-      { label: "Contact", href: "mailto:support@pivotwithai.com" },
+      { label: "Contact", href: "mailto:support@chatsuite.ai" },
     ],
   },
 
@@ -37,13 +37,12 @@ export const companyConfig = {
 };
 
 /// Core Website config
-export const companyName = "Pivot With AI";
-export const defaultTitle =
-  "Pivot with AI - AI tools to make your life easier";
-export const defaultDescription =
-  "We provide AI tools to make your life easier";
-export const defaultKeywords =
-  "ai, ai tools, ai apps, ai services, ai solutions, ai products, ai tools for life, ai tools for business, ai tools for marketing, ai tools for sales, ai tools for customer support, ai tools for product development, ai tools for research, ai tools for education, ai tools for healthcare, ai tools for finance, ai tools for legal, ai tools for creative, ai tools for entertainment, ai tools for travel, ai tools for personal, ai tools for small business, ai tools for enterprise, ai tools for startups, ai tools for non-profits, ai tools for government, ai tools for research, ai tools for education, ai tools for healthcare, ai tools for finance, ai tools for legal, ai tools for creative, ai tools for entertainment, ai tools for travel, ai tools for personal, ai tools for small business, ai tools for enterprise, ai tools for startups, ai tools for non-profits, ai tools for government";
+export const companyName = "ChatSuite";
+export const defaultTitle = "ChatSuite - All in One AI Workspace";
+export const defaultDescription = 
+  "ChatSuite - Your comprehensive AI workspace for intelligent conversations and productivity";
+export const defaultKeywords = 
+  "ai, chatbot, ai workspace, ai assistant, language models, chat interface, ai tools, productivity tools, ai solutions, business automation, natural language processing, ai communication, enterprise ai, chat automation, ai platform";
 export const defaultOgImage = "/steps/step1.png";
 export const favicon = "/favicon.ico";
 

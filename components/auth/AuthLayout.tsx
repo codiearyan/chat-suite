@@ -8,26 +8,13 @@ import Logo from "@/components/Logo";
 import { tosUrl, privacyPolicyUrl } from "@/config";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function AuthComponent(
-
-) {
+export default function AuthComponent() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
   const handleLogin = (email: string) => {
-    if (!isTermsAccepted) {
-      toast({
-        title: "Terms & Conditions Required",
-        description: "Please accept the terms and conditions to continue.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsLoading(true);
     fetch("/api/auth", {
       method: "POST",
@@ -81,7 +68,7 @@ export default function AuthComponent(
           </h2>
           <hr className="border-0 h-[1px] bg-gradient-to-r from-white/0 via-white/10 to-white/0 mb-2" />
 
-          <GoogleSignInButton isTermsAccepted={isTermsAccepted} />
+          <GoogleSignInButton />
 
           <div className="flex items-center my-4">
             <div className="flex-grow h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0"></div>
@@ -92,31 +79,7 @@ export default function AuthComponent(
            <AuthForm
             onEmailSubmit={handleLogin}
              isLoading={isLoading}
-             isTermsAccepted={isTermsAccepted}
           />
-
-          <div className="mt-4 flex items-start gap-2">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={isTermsAccepted}
-              onChange={(e) => setIsTermsAccepted(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-            />
-            <label htmlFor="terms" className="text-xs text-white/50">
-              When creating a new account, you agree to the
-              <a href={tosUrl} className="underline">
-                {" "}
-                terms & conditions
-              </a>{" "}
-              and
-              <a href={privacyPolicyUrl} className="underline">
-                {" "}
-                privacy policy
-              </a>
-              .
-            </label>
-          </div>
         </div>
       </div>
     </div>

@@ -26,25 +26,27 @@ const outfit = Outfit({
   display: "swap",
 });
 
-// export const metadata = {
-//   title: `${defaultTitle}`,
-//   description: defaultDescription,
-//   keywords: defaultKeywords,
-//   icons: [{ rel: "icon", url: `${companyConfig.company.homeUrl}${favicon}` }],
-//   openGraph: {
-//     url: companyConfig.company.homeUrl,
-//     title: `${defaultTitle} | ${companyConfig.company.name}`,
-//     description: defaultDescription,
-//     images: [
-//       {
-//         url: `${companyConfig.company.homeUrl}${defaultOgImage}`,
-//         width: 800,
-//         height: 600,
-//         alt: `${companyConfig.company.name} logo`,
-//       },
-//     ],
-//   },
-// };
+/* The commented out code block you provided is defining an object named `metadata` with various
+properties related to metadata for a web page. Here is a breakdown of what each property represents: */
+export const metadata = {
+  title: `${defaultTitle}`,
+  description: defaultDescription,
+  keywords: defaultKeywords,
+  icons: [{ rel: "icon", url: `${companyConfig.company.homeUrl}${favicon}` }],
+  openGraph: {
+    url: companyConfig.company.homeUrl,
+    title: `${defaultTitle} | ${companyConfig.company.name}`,
+    description: defaultDescription,
+    images: [
+      {
+        url: `${companyConfig.company.homeUrl}${defaultOgImage}`,
+        width: 800,
+        height: 600,
+        alt: `${companyConfig.company.name} logo`,
+      },
+    ],
+  },
+};
 
 export default async function RootLayout({
   children,
