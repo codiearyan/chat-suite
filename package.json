@@ -121,6 +121,7 @@
     "terser-webpack-plugin": "^5.3.10"
   },
   "overrides": {
-    "whatwg-url": "^13.0.0"
+    "whatwg-url": "^13.0.0",
+    "sharp": "$sharp"
   }
 }
