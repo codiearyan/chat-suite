@@ -1,6 +1,14 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export const STORAGE_KEY = "stored-api-keys";
+
+export type ApiKeys = {
+  google: string | null;
+  claude: string | null;
+  openai: string | null;
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

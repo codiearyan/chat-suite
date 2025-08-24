@@ -101,7 +101,6 @@ interface UploadQueueItem {
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
 
-// Extend the Message type to include attachments
 interface ExtendedMessage extends Message {
   attachments?: ExtendedAttachment[];
   experimental_attachments?: ExtendedAttachment[];
@@ -132,6 +131,12 @@ export function MultimodalInput({
   const { width } = useWindowSize();
   const router = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const data = localStorage.getItem("stored_api_keys");
+
+    console.log(data);
+  }, []);
 
   const [selectedModel, setSelectedModel] = useState<AIModelDisplayInfo>(
     () =>

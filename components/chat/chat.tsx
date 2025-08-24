@@ -17,6 +17,8 @@ import { setCookie } from "@/lib/utils/cookies";
 import { useToast } from "@/components/ui/use-toast";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Credits, CREDIT_UPDATE_EVENT } from "@/components/ui/credits";
+import { headers } from "next/headers";
+import { STORAGE_KEY } from "@/lib/utils";
 
 interface ExtendedMessage extends Message {
   attachments?: Attachment[];
@@ -84,8 +86,14 @@ export function Chat({
       selectedModelId: currentModelId,
       isBrowseEnabled,
     },
+    headers: {
+      api_keys:
+        typeof window !== "undefined"
+          ? localStorage.getItem(STORAGE_KEY) || ""
+          : "",
+    },
     initialMessages,
-    onError: (error) => {
+    onError: (error: any) => {
       if (error?.message?.includes("Insufficient credits")) {
         toast({
           variant: "destructive",
@@ -114,7 +122,7 @@ export function Chat({
         });
       }
     },
-    onResponse: (response) => {
+    onResponse: (response: Response) => {
       const creditUsageHeader = response.headers.get("x-credit-usage");
 
       if (creditUsageHeader) {
@@ -209,7 +217,7 @@ export function Chat({
   );
 
   const filteredMessages = useMemo(() => {
-    return messages.filter((message) => {
+    return messages.filter((message: ExtendedMessage) => {
       // Filter out fetch_document_content tool messages
       if (message.role === "tool") {
         try {
@@ -233,7 +241,7 @@ export function Chat({
           >
             {filteredMessages.length === 0 && <AppInfo />}
 
-            {filteredMessages.map((message, index) => (
+            {filteredMessages.map((message: ExtendedMessage, index: number) => (
               <PreviewMessage
                 key={message.id}
                 message={message}

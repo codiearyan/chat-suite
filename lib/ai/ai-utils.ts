@@ -1,10 +1,11 @@
 import { experimental_wrapLanguageModel as wrapLanguageModel } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { openai, createOpenAI } from "@ai-sdk/openai";
+import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { groq } from "@ai-sdk/groq";
 import { xai } from "@ai-sdk/xai";
 import { Experimental_LanguageModelV1Middleware } from "ai";
-import { google } from "@ai-sdk/google";
+import { google, createGoogleGenerativeAI } from "@ai-sdk/google";
+import { ApiKeys } from "../utils";
 
 export const customMiddleware: Experimental_LanguageModelV1Middleware = {};
 
@@ -21,19 +22,37 @@ function getProviderFromModelId(modelId: string): ModelProvider {
 }
 
 /**
- * Get model instance based on provider and model name
+ * Get model instance based on provider and model name with API keys
  */
-function getModelInstance(provider: ModelProvider, modelName: string) {
+function getModelInstance(provider: ModelProvider, modelName: string, apiKeys?: ApiKeys) {
   switch (provider) {
     case "openai":
+      if (apiKeys?.openai) {
+        const customOpenAI = createOpenAI({
+          apiKey: apiKeys.openai,
+        });
+        return customOpenAI(modelName);
+      }
       return openai(modelName);
     case "anthropic":
+      if (apiKeys?.claude) {
+        const customAnthropic = createAnthropic({
+          apiKey: apiKeys.claude,
+        });
+        return customAnthropic(modelName);
+      }
       return anthropic(modelName);
     case "groq":
       return groq(modelName);
     case "xai":
       return xai(modelName);
     case "google":
+      if (apiKeys?.google) {
+        const customGoogle = createGoogleGenerativeAI({
+          apiKey: apiKeys.google,
+        });
+        return customGoogle(modelName);
+      }
       return google(modelName);
     default:
       throw new Error(`Unsupported provider: ${provider}`);
@@ -43,14 +62,14 @@ function getModelInstance(provider: ModelProvider, modelName: string) {
 /**
  * Creates a customized AI model instance with specific settings
  */
-export function customModel(modelId: string) {
+export function customModel(modelId: string, apiKeys?: ApiKeys) {
   const provider = getProviderFromModelId(modelId);
   console.log(
     `Creating model instance for ${modelId} using ${provider} provider`
   );
 
   return wrapLanguageModel({
-    model: getModelInstance(provider, modelId),
+    model: getModelInstance(provider, modelId, apiKeys),
     middleware: customMiddleware,
   });
 }

@@ -27,7 +27,7 @@
  * - POST /api/chat: Process new messages, generate AI responses, handle credits
  * - DELETE /api/chat?id={chatId}: Delete an entire chat session
  */
-
+import { ApiKeys } from "@/lib/utils";
 import {
   convertToCoreMessages,
   CoreMessage,
@@ -75,13 +75,15 @@ export const maxDuration = 60;
 async function generateTitleFromUserMessage({
   message,
   modelId = "gpt-4o-mini",
+  apiKeys
 }: {
   message: CoreUserMessage;
   modelId?: string;
+  apiKeys?: ApiKeys;
 }) {
   console.log("Generating title using model:", modelId);
   const { text: title } = await generateText({
-    model: customModel(modelId),
+    model: customModel(modelId, apiKeys),
     system: `\n
     - you will generate a short title based on the first message a user begins a conversation with
     - ensure it is not more than 80 characters long
@@ -301,6 +303,19 @@ export async function POST(request: Request) {
     isBrowseEnabled: boolean;
   } = await request.json();
 
+  const reqHeaders = request.headers;
+  
+  // Parse API keys from headers
+  let userApiKeys: ApiKeys | undefined = undefined;
+  const apiKeysHeader = reqHeaders.get("api_keys");
+  if (apiKeysHeader && apiKeysHeader !== "undefined") {
+    try {
+      userApiKeys = JSON.parse(apiKeysHeader);
+    } catch (error) {
+      console.error("Failed to parse API keys from header:", error);
+    }
+  }
+
   // Add validation early in the function
   const cleanedMessages = validateAndCleanMessages(messages);
   
@@ -364,6 +379,7 @@ export async function POST(request: Request) {
       const title = await generateTitleFromUserMessage({
         message: userMessage as CoreUserMessage,
         modelId: selectedModelId,
+        apiKeys: userApiKeys,
       });
       await saveChat({ id, userId: user.id, title });
     } else if (chat.user_id !== user.id) {
@@ -373,6 +389,7 @@ export async function POST(request: Request) {
       const title = await generateTitleFromUserMessage({
         message: userMessage as CoreUserMessage,
         modelId: selectedModelId,
+        apiKeys: userApiKeys,
       });
       await supabase
         .from("chats")
@@ -438,7 +455,7 @@ export async function POST(request: Request) {
     }
 
     const result = await streamText({
-      model: customModel(modelToUse),
+      model: customModel(modelToUse, userApiKeys),
       system: createSystemPrompt(isBrowseEnabled, fileContext || undefined),
       messages: normalizedMessages,
       maxSteps: 5,
@@ -504,7 +521,7 @@ export async function POST(request: Request) {
     await reduceUserCredits(user.email, usageCheck.requiredCredits);
     const updatedCredits = await getUserCreditsQuery(supabase, user.id);
     
-    const headers: Record<string, string> = {
+    const responseHeaders: Record<string, string> = {
       "x-credit-usage": JSON.stringify({
         cost: usageCheck.requiredCredits,
         remaining: updatedCredits,
@@ -518,7 +535,7 @@ export async function POST(request: Request) {
 
     return result.toDataStreamResponse({
       data: streamingData,
-      headers,
+      headers: responseHeaders,
     });
   } catch (error) {
     // Improve error logging

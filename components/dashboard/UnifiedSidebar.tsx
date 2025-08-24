@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import AddYourOwnKeys from "../chat/add-api-keys";
 
 interface UnifiedSidebarProps {
   user: User | null;
@@ -145,12 +146,14 @@ export function UnifiedSidebar({
 
               <div className="px-3 pb-4 mt-auto border-t border-border/50">
                 <Credits user={user} />
+
                 <button
                   onClick={() => router.push("/pricing")}
                   className="w-full text-sm text-muted-foreground/70 hover:text-primary mt-1 transition-colors"
                 >
                   Need more credits?
                 </button>
+                <AddYourOwnKeys />
                 <div className="flex justify-center w-full mt-2">
                   <AuthButton
                     user={user}
