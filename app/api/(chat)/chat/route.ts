@@ -517,7 +517,6 @@ export async function POST(request: Request) {
       },
     });
 
-    // Deduct credits and update headers
     await reduceUserCredits(user.email, usageCheck.requiredCredits);
     const updatedCredits = await getUserCreditsQuery(supabase, user.id);
     

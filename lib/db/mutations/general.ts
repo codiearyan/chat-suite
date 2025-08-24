@@ -31,7 +31,7 @@ export async function reduceUserCredits(email: string, credits: number) {
 
   let result: any[] | null = null;
   await mutateQuery(
-    async (client, email, credits: number) => {
+    async (client, email: string, credits: number) => {
       const { data: userData, error: userError } = await client
         .from("profiles")
         .select("credits")
